@@ -1,5 +1,5 @@
 Summary: 	The Tomcat Servlet/JSP Container
-Summary(pl):	The Tomcat Servlet/JSP Container
+Summary(pl):	Tomcat - Zasobnik servletów/JSP
 Name:		jakarta-tomcat
 Version:	4.0
 Release:	1
@@ -39,24 +39,32 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Tomcat 4.0, a server that implements the Servlet 2.3 
 and JSP 1.2 Specifications from Java Software. 
 
+%description -l pl
+Tomcat 4.0 - serwer implementuj±cy specyfikacje Servlet 2.3
+oraz JSP 1.2.
 
 %package doc
+Summary: 	The Tomcat Servlet/JSP Container documentation
+Summary(pl):	Dokumentacja do Tomcata.
 Group:		Development/Languages/Java
 Group(de):	Entwicklung/Sprachen/Java
 Group(pl):	Programowanie/Jêzyki/Java
-Summary: 	The Tomcat Servlet/JSP Container documentation
 
 %description doc
-The Tomcat Servlet/JSP Container documentation
+The Tomcat Servlet/JSP Container documentation.
+
+%description doc -l pl
+Dokumentacja do Tomcata.
 
 %prep
 %setup -q -n %{name}-%{version}-src
 
 %build
-export JAVA_HOME="/usr/lib/IBMJava2-13"
-export ANT_HOME=%{_javalibdir}
+JAVA_HOME="/usr/lib/IBMJava2-13"
+ANT_HOME=%{_javalibdir}
+export JAVA_HOME ANT_HOME
 
-cat > $RPM_BUILD_DIR/%{name}-%{version}-src/build.properties << EOF
+cat > build.properties << EOF
 # ----- Compile Control Flags -----
 compile.debug=on
 compile.deprecation=off
@@ -131,39 +139,39 @@ tyrex.lib=\${tyrex.home}
 tyrex.jar=\${tyrex.lib}/tyrex.jar
 EOF
 
-install -d $RPM_BUILD_DIR/%{name}-%{version}-src/doc/docs/api
+install -d doc/docs/api
 
 ant dist
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-install -d $RPM_BUILD_ROOT/%{_bindir}
-install -d $RPM_BUILD_ROOT/%{_javalibdir}
-install -d $RPM_BUILD_ROOT/%{_tomcatdir}/classes
-install -d $RPM_BUILD_ROOT/%{_tomcatdir}/common/classes
-install -d $RPM_BUILD_ROOT/%{_sysconfdir}/tomcat
-install -d $RPM_BUILD_ROOT/%{_logdir}/tomcat
-install -d $RPM_BUILD_ROOT/%{_tomcatdir}/server/classes
-install -d $RPM_BUILD_ROOT/%{_tomcatdir}/webapps
-install -d $RPM_BUILD_ROOT/%{_tomcatdir}/work
+install -d $RPM_BUILD_ROOT%{_bindir}
+install -d $RPM_BUILD_ROOT%{_javalibdir}
+install -d $RPM_BUILD_ROOT%{_tomcatdir}/classes
+install -d $RPM_BUILD_ROOT%{_tomcatdir}/common/classes
+install -d $RPM_BUILD_ROOT%{_sysconfdir}/tomcat
+install -d $RPM_BUILD_ROOT%{_logdir}/tomcat
+install -d $RPM_BUILD_ROOT%{_tomcatdir}/server/classes
+install -d $RPM_BUILD_ROOT%{_tomcatdir}/webapps
+install -d $RPM_BUILD_ROOT%{_tomcatdir}/work
 
-cp dist/bin/*.sh $RPM_BUILD_ROOT/%{_bindir}
-cp dist/bin/*.jar $RPM_BUILD_ROOT/%{_bindir}
-cp dist/common/lib/naming-*.jar $RPM_BUILD_ROOT/%{_javalibdir}
-cp dist/conf/* $RPM_BUILD_ROOT/%{_sysconfdir}/tomcat
-cp dist/jasper/jasper-*.jar $RPM_BUILD_ROOT/%{_javalibdir}
-cp dist/server/lib/[!r]*.jar $RPM_BUILD_ROOT/%{_javalibdir}
-cp dist/lib/*.jar $RPM_BUILD_ROOT/%{_javalibdir}
-cp -r dist/webapps $RPM_BUILD_ROOT/%{_tomcatdir}
+install dist/bin/*.sh $RPM_BUILD_ROOT%{_bindir}
+install dist/bin/*.jar $RPM_BUILD_ROOT%{_bindir}
+install dist/common/lib/naming-*.jar $RPM_BUILD_ROOT%{_javalibdir}
+install dist/conf/* $RPM_BUILD_ROOT%{_sysconfdir}/tomcat
+install dist/jasper/jasper-*.jar $RPM_BUILD_ROOT%{_javalibdir}
+install dist/server/lib/[!r]*.jar $RPM_BUILD_ROOT%{_javalibdir}
+install dist/lib/*.jar $RPM_BUILD_ROOT%{_javalibdir}
+cp -rf dist/webapps $RPM_BUILD_ROOT%{_tomcatdir}
 
-ln -sf %{_bindir} $RPM_BUILD_ROOT/%{_tomcatdir}/bin
-ln -sf %{_javalibdir} $RPM_BUILD_ROOT/%{_tomcatdir}/common/lib
-ln -sf %{_javalibdir} $RPM_BUILD_ROOT/%{_tomcatdir}/jasper
-ln -sf %{_javalibdir} $RPM_BUILD_ROOT/%{_tomcatdir}/lib
-ln -sf %{_javalibdir} $RPM_BUILD_ROOT/%{_tomcatdir}/server/lib
-ln -sf %{_logdir}/tomcat $RPM_BUILD_ROOT/%{_tomcatdir}/logs
-ln -sf %{_sysconfdir}/tomcat $RPM_BUILD_ROOT/%{_tomcatdir}/conf
+ln -sf %{_bindir} $RPM_BUILD_ROOT%{_tomcatdir}/bin
+ln -sf %{_javalibdir} $RPM_BUILD_ROOT%{_tomcatdir}/common/lib
+ln -sf %{_javalibdir} $RPM_BUILD_ROOT%{_tomcatdir}/jasper
+ln -sf %{_javalibdir} $RPM_BUILD_ROOT%{_tomcatdir}/lib
+ln -sf %{_javalibdir} $RPM_BUILD_ROOT%{_tomcatdir}/server/lib
+ln -sf %{_logdir}/tomcat $RPM_BUILD_ROOT%{_tomcatdir}/logs
+ln -sf %{_sysconfdir}/tomcat $RPM_BUILD_ROOT%{_tomcatdir}/conf
 
 gzip -9nf *.txt LICENSE
 
