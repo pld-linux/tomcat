@@ -7,7 +7,9 @@ Release:	2
 License:	Apache
 Group:		Development/Languages/Java
 Source0:	http://jakarta.apache.org/builds/%{name}-%{base_version}/release/v%{version}/src/%{name}-%{version}-src.tar.gz
+# Source0-md5:	9a8c5c250d7f3d34442b58de89c1af28
 Source1:	http://jakarta.apache.org/builds/%{name}-%{base_version}/release/v%{version}/src/%{name}-connectors-%{version}-src.tar.gz
+# Source1-md5:	a53f5dc7c04e5988c85ec4ee8e8b92d7
 Source2:	%{name}.init
 Patch0:		%{name}-fixes.patch
 Patch1:		%{name}-JAVA_HOME.patch
