@@ -320,7 +320,7 @@ rm -rf $RPM_BUILD_ROOT
 %pre
 if [ -n "`getgid http`" ]; then
        if [ "`getgid http`" != "51" ]; then
-               echo "Error: group http doesn't have gid=51. Correct this before installing apache." 1>&2
+               echo "Error: group http doesn't have gid=51. Correct this before installing tomcat." 1>&2
                exit 1
        fi
 else
@@ -328,7 +328,7 @@ else
 fi
 if [ -n "`id -u http 2>/dev/null`" ]; then
        if [ "`id -u http`" != "51" ]; then
-               echo "Error: user http doesn't have uid=51. Correct this before installing apache." 1>&2
+               echo "Error: user http doesn't have uid=51. Correct this before installing tomcat." 1>&2
                exit 1
        fi
 else
