@@ -8,7 +8,6 @@ Group:		Development/Languages/Java
 Group(de):	Entwicklung/Sprachen/Java
 Group(pl):	Programowanie/Jêzyki/Java
 Source0:	http://jakarta.apache.org/dist/jakarta/%{name}-%{version}/release/v%{version}/src/%{name}-%{version}-src.tar.gz
-Source1:	build.properties
 URL:		http://jakarta.apache.org/tomcat/index.html
 Requires:	ibm-java-sdk
 Requires:	crimson
