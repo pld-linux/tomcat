@@ -16,9 +16,8 @@ Patch1:		%{name}-JAVA_HOME.patch
 Patch2:		%{name}-fileupload.patch
 URL:		http://jakarta.apache.org/tomcat/index.html
 # required:
-BuildRequires:	jdk >= 1.2
+BuildRequires:	jaas
 BuildRequires:	jakarta-ant >= 1.5.3
-BuildRequires:	jaxp_parser_impl
 BuildRequires:	jakarta-servletapi >= 4
 BuildRequires:	jakarta-commons-collections
 BuildRequires:	jakarta-commons-beanutils
@@ -26,23 +25,25 @@ BuildRequires:	jakarta-commons-digester
 BuildRequires:	jakarta-commons-logging
 BuildRequires:	jakarta-commons-fileupload
 BuildRequires:	jakarta-regexp
-BuildRequires:	jaas
+BuildRequires:	jakarta-struts >= 1.0.2
+BuildRequires:	jaxp_parser_impl
+BuildRequires:	jdk >= 1.2
 BuildRequires:	mx4j >= 1.1.1
 BuildRequires:	puretls
-BuildRequires:	jakarta-struts >= 1.0.2
+BuildRequires:	rpmbuild(macros) >= 1.159
 # optional:
+BuildRequires:	jaf >= 1.0.1
 BuildRequires:	jakarta-commons-daemon
 BuildRequires:	jakarta-commons-dbcp
 BuildRequires:	jakarta-commons-modeler
 BuildRequires:	jakarta-commons-pool
+BuildRequires:	javamail >= 1.2
 BuildRequires:	jdbc-stdext >= 2.0
 BuildRequires:	jndi >= 1.2.1
-BuildRequires:	jaf >= 1.0.1
-BuildRequires:	javamail >= 1.2
 BuildRequires:	jsse >= 1.0.2
 BuildRequires:	jta >= 1.0.1
-BuildRequires:	tyrex >= 1.0
 BuildRequires:	junit >= 3.7
+BuildRequires:	tyrex >= 1.0
 BuildRequires:	xml-commons
 Requires:	jre >= 1.2
 Requires:	jakarta-servletapi >= 4
@@ -67,10 +68,12 @@ Requires(pre):	/usr/bin/getgid
 Requires(pre):	/bin/id
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
-Requires(postun):	/usr/sbin/userdel
 Requires(postun):	/usr/sbin/groupdel
+Requires(postun):	/usr/sbin/userdel
 Requires(post,preun):	/sbin/chkconfig
 Requires(post,postun):	/sbin/ldconfig
+Provides:	group(http)
+Provides:	user(http)
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -272,8 +275,8 @@ fi
 
 %postun
 if [ "$1" = "0" ]; then
-	/usr/sbin/userdel http
-	/usr/sbin/groupdel http
+	%userremove http
+	%groupremove http
 fi
 
 %files
