@@ -50,10 +50,10 @@ case "$1" in
 		msg_already_running tomcat
 		exit 1
 	fi
-        ;;
+	;;
   stop)
-        # Stop daemons.
-        # show "Stopping %s service" tomcat
+	# Stop daemons.
+	# show "Stopping %s service" tomcat
 	if [ -f /var/lock/subsys/tomcat ]; then
 		msg_stopping tomcat
 		busy
@@ -70,19 +70,19 @@ case "$1" in
 		msg_not_running tomcat
 		exit 1
 	fi	
-        ;;
+	;;
   restart|reload|force-reload)
-        $0 stop
+	$0 stop
 	$0 start
-        ;;
+	;;
   status)
 	echo "Not supported (yet?)"
 	RETVAL=0
-        ;;
+	;;
   *)
-        # show "Usage: %s {start|stop|status|restart|reload|force-reload}" $0
-	msg_usage "$0 {start|stop|status|restart|reload|force-reload}"
-        exit 1
+	# show "Usage: %s {start|stop|restart|reload|force-reload|status}"
+	msg_usage "$0 {start|stop|restart|reload|force-reload|status}"
+	exit 1
 esac
 
 exit $RETVAL
