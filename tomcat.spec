@@ -3,7 +3,7 @@ Summary(pl):	Tomcat - Zasobnik servletów/JSP
 Name:		jakarta-tomcat
 Version:	4.0.1
 %define		base_version 4.0
-Release:	1
+Release:	2
 License:	Apache Software License
 Group:		Development/Languages/Java
 Source0:	http://jakarta.apache.org/builds/%{name}-%{base_version}/release/v%{version}/src/%{name}-%{version}-src.tar.gz
@@ -69,9 +69,9 @@ Dokumentacja do Tomcata.
 %setup -q -n %{name}-%{version}-src
 
 %build
-JAVA_HOME="%{_libdir}/IBMJava2-13"
 ANT_HOME=%{_javalibdir}
-export JAVA_HOME ANT_HOME
+JAVA_HOME=%{_libdir}/java
+export ANT_HOME JAVA_HOME
 
 cat > build.properties << EOF
 # ----- Compile Control Flags -----
