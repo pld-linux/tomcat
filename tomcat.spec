@@ -1,4 +1,4 @@
-Summary: 	The Tomcat Servlet/JSP Container
+Summary:	The Tomcat Servlet/JSP Container
 Summary(pl):	Tomcat - Zasobnik servletów/JSP
 Name:		jakarta-tomcat
 Version:	4.0.1
@@ -47,15 +47,15 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define 	_logdir		%{_var}/log
 
 %description
-Tomcat 4.0, a server that implements the Servlet 2.3 
-and JSP 1.2 Specifications from Java Software. 
+Tomcat 4.0, a server that implements the Servlet 2.3 and JSP 1.2
+Specifications from Java Software.
 
 %description -l pl
-Tomcat 4.0 - serwer implementuj±cy specyfikacje Servlet 2.3
-oraz JSP 1.2.
+Tomcat 4.0 - serwer implementuj±cy specyfikacje Servlet 2.3 oraz JSP
+1.2.
 
 %package doc
-Summary: 	The Tomcat Servlet/JSP Container documentation
+Summary:	The Tomcat Servlet/JSP Container documentation
 Summary(pl):	Dokumentacja do Tomcata.
 Group:		Development/Languages/Java
 
@@ -69,7 +69,7 @@ Dokumentacja do Tomcata.
 %setup -q -n %{name}-%{version}-src
 
 %build
-JAVA_HOME="/usr/lib/IBMJava2-13"
+JAVA_HOME="%{_libdir}/IBMJava2-13"
 ANT_HOME=%{_javalibdir}
 export JAVA_HOME ANT_HOME
 
@@ -80,7 +80,7 @@ compile.deprecation=off
 compile.optimize=on
 
 # ----- Default Base Path for Dependent Packages -----
-base.path=/usr
+base.path=%{_prefix}
 
 # ----- Jakarta Regular Expressions Library, version 1.2 -----
 regexp.home=%{_javalibdir}
@@ -225,5 +225,5 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/tomcat/*
 
 %files doc
-%defattr(644 root root 755)
+%defattr(644,root,root,755)
 %doc catalina/docs/*
