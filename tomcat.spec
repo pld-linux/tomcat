@@ -154,7 +154,7 @@ jaas.jar=%{_javalibdir}/jaas.jar
 tyrex.jar=%{_javalibdir}/tyrex.jar
 EOBP
 
-JAVA_HOME=/usr/lib/java
+JAVA_HOME=%{_libdir}/java
 ant -Djava.home=$JAVA_HOME
 
 %install
