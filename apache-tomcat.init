@@ -29,6 +29,7 @@ else
 	exit 0
 fi
 
+RETVAL=0
 # See how we were called.
 case "$1" in
   start)
@@ -38,51 +39,41 @@ case "$1" in
 		msg_starting tomcat
 		busy
 		su - http -s /bin/sh -c /usr/lib/tomcat/bin/startup.sh >/dev/null 2>&1
-		RETVAL=$?
-		if [ $RETVAL -eq 0 ]; then
-			ok
-		else
-			fail
-		fi
+		[ $? -ne 0 ] && RETVAL=1
+		[ $RETVAL -eq 0 ] && ok || fail
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/tomcat
 	else
 		# show "%s service is already running." tomcat
 		msg_already_running tomcat
-		exit 1
 	fi
 	;;
   stop)
-	# Stop daemons.
-	# show "Stopping %s service" tomcat
 	if [ -f /var/lock/subsys/tomcat ]; then
+		# Stop daemons.
+		# show "Stopping %s service" tomcat
 		msg_stopping tomcat
 		busy
 		su - http -s /bin/sh -c /usr/lib/tomcat/bin/shutdown.sh >/dev/null 2>&1
-		RETVAL=$?
-		if [ $RETVAL -eq 0 ]; then
-			ok
-		else
-			fail
-		fi
+		[ $? -eq 0 ] && ok || fail
 		rm -f /var/lock/subsys/tomcat
 	else
 		# show "%s service is not running." tomcat
 		msg_not_running tomcat
-		exit 1
 	fi	
 	;;
-  restart|reload|force-reload)
+  restart|force-reload)
 	$0 stop
 	$0 start
+	exit $?
 	;;
   status)
 	echo "Not supported (yet?)"
 	RETVAL=0
 	;;
   *)
-	# show "Usage: %s {start|stop|restart|reload|force-reload|status}"
-	msg_usage "$0 {start|stop|restart|reload|force-reload|status}"
-	exit 1
+	# show "Usage: %s {start|stop|restart|force-reload|status}"
+	msg_usage "$0 {start|stop|restart|force-reload|status}"
+	exit 3
 esac
 
 exit $RETVAL
