@@ -9,7 +9,7 @@ Group:		Development/Languages/Java
 Source0:	http://jakarta.apache.org/builds/%{name}-%{base_version}/release/v%{version}/src/%{name}-%{version}-src.tar.gz
 Source1:	%{name}.init
 Patch0:		%{name}-fixes.patch
-Patch1:         %{name}-JAVA_HOME.patch
+Patch1:		%{name}-JAVA_HOME.patch
 URL:		http://jakarta.apache.org/tomcat/index.html
 # required:
 BuildRequires:	jdk >= 1.2
@@ -77,7 +77,7 @@ Dokumentacja do Tomcata.
 
 %build
 if [ -z "$JAVA_HOME" ]; then
-	JAVA_HOME=/usr/lib/java
+	JAVA_HOME=%{_libdir}/java
 fi
 ANT_HOME=%{_javalibdir}
 export JAVA_HOME ANT_HOME
