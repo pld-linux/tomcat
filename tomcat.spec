@@ -2,12 +2,13 @@ Summary: 	The Tomcat Servlet/JSP Container
 Summary(pl):	Tomcat - Zasobnik servletów/JSP
 Name:		jakarta-tomcat
 Version:	4.0.1
+%define		base_version 4.0
 Release:	1
 License:	Apache Software License
 Group:		Development/Languages/Java
 Group(de):	Entwicklung/Sprachen/Java
 Group(pl):	Programowanie/Jêzyki/Java
-Source0:	http://jakarta.apache.org/dist/jakarta/%{name}-%{version}/release/v%{version}/src/%{name}-%{version}-src.tar.gz
+Source0:	http://jakarta.apache.org/builds/%{name}-%{base_version}/release/v%{version}/src/%{name}-%{version}-src.tar.gz
 URL:		http://jakarta.apache.org/tomcat/index.html
 Requires:	jre
 Requires:	jaxp
