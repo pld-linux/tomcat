@@ -24,6 +24,10 @@ BuildRequires:	jakarta-commons-digester
 BuildRequires:	jakarta-commons-logging
 BuildRequires:	jakarta-regexp
 # optional:
+BuildRequires:	jakarta-commons-daemon
+BuildRequires:	jakarta-commons-dbcp
+BuildRequires:	jakarta-commons-modeler
+BuildRequires:	jakarta-commons-pool
 BuildRequires:	jdbc-stdext >= 2.0
 BuildRequires:	jmx >= 1.0
 BuildRequires:	jndi >= 1.2.1
@@ -190,6 +194,27 @@ commons-logging.home=%{_javalibdir}
 commons-logging.lib=\${commons-logging.home}
 commons-logging-api.jar=\${commons-logging.lib}/commons-logging-api.jar
 commons-logging.jar=\${commons-logging.lib}/commons-logging.jar
+
+# ----- Commons Daemon, version 20020219 or later -----
+commons-daemon.home=%{_javalibdir}
+commons-daemon.lib=\${commons-daemon.home}
+commons-daemon.jar=\${commons-daemon.lib}/commons-daemon.jar
+
+# ----- Commons DBCP, version 1.0 or later -----
+commons-dbcp.home=%{_javalibdir}
+commons-dbcp.lib=\${commons-dbcp.home}
+commons-dbcp.jar=\${commons-dbcp.lib}/commons-dbcp.jar
+
+# ----- Commons Modeler, version 1.0 or later -----
+commons-modeler.home=%{_javalibdir}
+commons-modeler.lib=\${commons-modeler.home}
+commons-modeler.jar=\${commons-modeler.lib}/commons-modeler.jar
+
+# ----- Commons Pool, version 1.0 or later -----
+commons-pool.home=%{_javalibdir}
+commons-pool.lib=\${commons-pool.home}
+commons-pool.jar=\${commons-pool.lib}/commons-pool.jar
+
 
 jasper.home=jasper
 jtc.home=../jakarta-tomcat-connectors-%{version}-src
