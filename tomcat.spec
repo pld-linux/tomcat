@@ -6,8 +6,6 @@ Version:	4.0.1
 Release:	1
 License:	Apache Software License
 Group:		Development/Languages/Java
-Group(de):	Entwicklung/Sprachen/Java
-Group(pl):	Programowanie/Jêzyki/Java
 Source0:	http://jakarta.apache.org/builds/%{name}-%{base_version}/release/v%{version}/src/%{name}-%{version}-src.tar.gz
 URL:		http://jakarta.apache.org/tomcat/index.html
 Requires:	jre
@@ -60,8 +58,6 @@ oraz JSP 1.2.
 Summary: 	The Tomcat Servlet/JSP Container documentation
 Summary(pl):	Dokumentacja do Tomcata.
 Group:		Development/Languages/Java
-Group(de):	Entwicklung/Sprachen/Java
-Group(pl):	Programowanie/Jêzyki/Java
 
 %description doc
 The Tomcat Servlet/JSP Container documentation.
