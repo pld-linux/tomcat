@@ -3,7 +3,7 @@ Summary(pl):	Tomcat - Zasobnik servletów/JSP
 Name:		jakarta-tomcat
 Version:	4.1.24
 %define		base_version 4.0
-Release:	2
+Release:	3
 License:	Apache
 Group:		Development/Languages/Java
 Source0:	http://jakarta.apache.org/builds/%{name}-%{base_version}/release/v%{version}/src/%{name}-%{version}-src.tar.gz
@@ -61,6 +61,14 @@ Requires:	javamail >= 1.2
 Requires:	jsse >= 1.0.2
 Requires:	jta >= 1.0.1
 Requires:	tyrex >= 1.0
+Requires(pre): /usr/bin/getgid
+Requires(pre): /bin/id
+Requires(pre): /usr/sbin/groupadd
+Requires(pre): /usr/sbin/useradd
+Requires(postun):      /usr/sbin/userdel
+Requires(postun):      /usr/sbin/groupdel
+Requires(post,preun):	/sbin/chkconfig
+Requires(post,postun):	/sbin/ldconfig
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -245,9 +253,7 @@ ant dist
 rm -rf $RPM_BUILD_ROOT
 
 install -d $RPM_BUILD_ROOT%{_tomcatdir}/bin \
-	    $RPM_BUILD_ROOT%{_tomcatdir}/classes \
-	    $RPM_BUILD_ROOT%{_tomcatdir}/common/{lib,classes} \
-	    $RPM_BUILD_ROOT%{_tomcatdir}/lib \
+	    $RPM_BUILD_ROOT%{_tomcatdir}/common/{lib,classes,endorsed} \
 	    $RPM_BUILD_ROOT%{_tomcatdir}/server/{lib,classes} \
 	    $RPM_BUILD_ROOT%{_tomcatdir}/webapps \
 	    $RPM_BUILD_ROOT%{_sysconfdir}/tomcat \
@@ -263,8 +269,13 @@ install build/common/lib/jasper-*.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib
 install build/conf/* $RPM_BUILD_ROOT%{_sysconfdir}/tomcat
 install build/server/lib/catalina*.jar $RPM_BUILD_ROOT%{_tomcatdir}/server/lib
 install build/server/lib/servlets*.jar $RPM_BUILD_ROOT%{_tomcatdir}/server/lib
+install build/server/lib/servlets-cgi.renametojar $RPM_BUILD_ROOT%{_tomcatdir}/server/lib/servlets-cgi.jar
+install build/server/lib/servlets-ssi.renametojar $RPM_BUILD_ROOT%{_tomcatdir}/server/lib/servlets-ssi.jar
 install build/server/lib/tomcat*.jar $RPM_BUILD_ROOT%{_tomcatdir}/server/lib
+cp -rf  build/server/webapps $RPM_BUILD_ROOT%{_tomcatdir}/server
 cp -rf  build/webapps $RPM_BUILD_ROOT%{_tomcatdir}
+cp -rf	build/shared $RPM_BUILD_ROOT%{_tomcatdir}
+cp -rf	build/temp $RPM_BUILD_ROOT%{_tomcatdir}
 
 ln -sf %{_logdir}/tomcat $RPM_BUILD_ROOT%{_tomcatdir}/logs
 ln -sf %{_vardir}/work $RPM_BUILD_ROOT%{_tomcatdir}/work
@@ -297,6 +308,7 @@ ln -sf %{_javalibdir}/commons-beanutils.jar $RPM_BUILD_ROOT%{_tomcatdir}/server/
 ln -sf %{_javalibdir}/commons-digester.jar $RPM_BUILD_ROOT%{_tomcatdir}/server/lib/commons-digester.jar
 ln -sf %{_javalibdir}/commons-logging.jar $RPM_BUILD_ROOT%{_tomcatdir}/server/lib/commons-logging.jar
 ln -sf %{_javalibdir}/commons-modeler.jar $RPM_BUILD_ROOT%{_tomcatdir}/server/lib/commons-modeler.jar
+ln -sf %{_javalibdir}/commons-fileupload.jar $RPM_BUILD_ROOT%{_tomcatdir}/server/lib/commons-fileupload.jar
 
 ln -sf %{_javalibdir}/commons-daemon.jar $RPM_BUILD_ROOT%{_tomcatdir}/bin/commons-daemon.jar
 
@@ -305,6 +317,46 @@ install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/tomcat
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%pre
+if [ -n "`getgid http`" ]; then
+       if [ "`getgid http`" != "51" ]; then
+               echo "Error: group http doesn't have gid=51. Correct this before installing apache." 1>&2
+               exit 1
+       fi
+else
+       /usr/sbin/groupadd -g 51 -r -f http
+fi
+if [ -n "`id -u http 2>/dev/null`" ]; then
+       if [ "`id -u http`" != "51" ]; then
+               echo "Error: user http doesn't have uid=51. Correct this before installing apache." 1>&2
+               exit 1
+       fi
+else
+       /usr/sbin/useradd -u 51 -r -d /home/services/httpd -s /bin/false -c "HTTP User" -g http http 1>&2
+fi
+
+%post
+/sbin/chkconfig --add tomcat
+if [ -f /var/lock/subsys/tomcat ]; then
+	/etc/rc.d/init.d/tomcat restart 1>&2
+else
+	echo "Run \"/etc/rc.d/init.d/tomcat start\" to start tomcat daemon."
+fi
+
+%preun
+if [ "$1" = "0" ]; then
+	if [ -f /var/lock/subsys/tomcat ]; then
+		/etc/rc.d/init.d/tomcat stop 1>&2
+	fi
+	/sbin/chkconfig --del tomcat
+fi
+
+%postun
+if [ "$1" = "0" ]; then
+       /usr/sbin/userdel http
+       /usr/sbin/groupdel http
+fi
+
 %files
 %defattr(644,root,root,755)
 %doc *.txt LICENSE
@@ -312,18 +364,20 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_tomcatdir}/bin
 %attr(755,root,root) %{_tomcatdir}/bin/*.sh
 %{_tomcatdir}/bin/*.jar
-%dir %{_tomcatdir}/classes
 %dir %{_tomcatdir}/common
 %dir %{_tomcatdir}/common/classes
+%dir %{_tomcatdir}/common/endorsed
 %{_tomcatdir}/common/lib
 %{_tomcatdir}/conf
-%{_tomcatdir}/lib
 %{_tomcatdir}/logs
 %dir %{_tomcatdir}/server
 %dir %{_tomcatdir}/server/classes
 %{_tomcatdir}/server/lib
+%{_tomcatdir}/server/webapps
 %{_tomcatdir}/webapps
 %{_tomcatdir}/work
+%{_tomcatdir}/shared
+%{_tomcatdir}/temp
 # tomcat wants to regenerate tomcat-users.xml
 %attr(775,root,http) %dir %{_sysconfdir}/tomcat
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/tomcat/*
