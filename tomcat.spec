@@ -3,7 +3,7 @@ Summary(pl):	Tomcat - Zasobnik servletów/JSP
 Name:		jakarta-tomcat
 Version:	4.1.18
 %define		base_version 4.0
-Release:	1
+Release:	2
 License:	Apache
 Group:		Development/Languages/Java
 Source0:	http://jakarta.apache.org/builds/%{name}-%{base_version}/release/v%{version}/src/%{name}-%{version}-src.tar.gz
@@ -245,17 +245,22 @@ install -d $RPM_BUILD_ROOT%{_tomcatdir}/bin \
 	    $RPM_BUILD_ROOT/etc/rc.d/init.d
 
 install build/bin/*.sh $RPM_BUILD_ROOT%{_tomcatdir}/bin
-install build/bin/*.jar $RPM_BUILD_ROOT%{_tomcatdir}/bin
+install build/bin/bootstrap*.jar $RPM_BUILD_ROOT%{_tomcatdir}/bin
+install build/bin/tomcat*.jar $RPM_BUILD_ROOT%{_tomcatdir}/bin
 install build/common/lib/naming-*.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib
+install build/common/lib/jasper-*.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib
 install build/conf/* $RPM_BUILD_ROOT%{_sysconfdir}/tomcat
-install build/server/lib/[!r]*.jar $RPM_BUILD_ROOT%{_tomcatdir}/server/lib
+install build/server/lib/catalina*.jar $RPM_BUILD_ROOT%{_tomcatdir}/server/lib
+install build/server/lib/servlets*.jar $RPM_BUILD_ROOT%{_tomcatdir}/server/lib
+install build/server/lib/tomcat*.jar $RPM_BUILD_ROOT%{_tomcatdir}/server/lib
 cp -rf  build/webapps $RPM_BUILD_ROOT%{_tomcatdir}
 
 ln -sf %{_logdir}/tomcat $RPM_BUILD_ROOT%{_tomcatdir}/logs
 ln -sf %{_vardir}/work $RPM_BUILD_ROOT%{_tomcatdir}/work
 ln -sf %{_sysconfdir}/tomcat $RPM_BUILD_ROOT%{_tomcatdir}/conf
 
-
+# symlinks instead of copies
+ln -sf %{_javalibdir}/ant.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib/ant.jar
 ln -sf %{_javalibdir}/jaxp.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib/jaxp.jar
 ln -sf %{_javalibdir}/xerces.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib/xerces.jar
 ln -sf %{_javalibdir}/servlet.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib/servlet.jar
@@ -270,7 +275,19 @@ ln -sf %{_javalibdir}/jsse.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib/jsse.jar
 
 ln -sf %{_javalibdir}/tyrex.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib/tyrex.jar
 ln -sf %{_javalibdir}/junit.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib/junit.jar
-ln -sf %{_javalibdir}/regexp.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib/regexp.jar
+
+ln -sf %{_javalibdir}/commons-collections.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib/commons-collections.jar
+ln -sf %{_javalibdir}/commons-dbcp.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib/commons-dbcp.jar
+ln -sf %{_javalibdir}/commons-logging-api.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib/commons-logging-api.jar
+ln -sf %{_javalibdir}/commons-pool.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib/commons-pool.jar
+
+ln -sf %{_javalibdir}/regexp.jar $RPM_BUILD_ROOT%{_tomcatdir}/server/lib/regexp.jar
+ln -sf %{_javalibdir}/commons-beanutils.jar $RPM_BUILD_ROOT%{_tomcatdir}/server/lib/commons-beanutils.jar
+ln -sf %{_javalibdir}/commons-digester.jar $RPM_BUILD_ROOT%{_tomcatdir}/server/lib/commons-digester.jar
+ln -sf %{_javalibdir}/commons-logging.jar $RPM_BUILD_ROOT%{_tomcatdir}/server/lib/commons-logging.jar
+ln -sf %{_javalibdir}/commons-modeler.jar $RPM_BUILD_ROOT%{_tomcatdir}/server/lib/commons-modeler.jar
+
+ln -sf %{_javalibdir}/commons-daemon.jar $RPM_BUILD_ROOT%{_tomcatdir}/bin/commons-daemon.jar
 
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/tomcat
 
@@ -296,7 +313,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_tomcatdir}/server/lib
 %{_tomcatdir}/webapps
 %{_tomcatdir}/work
-%dir %{_sysconfdir}/tomcat
+# tomcat wants to regenerate tomcat-users.xml
+%attr(775,root,http) %dir %{_sysconfdir}/tomcat
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/tomcat/*
 %attr(754,root,root) /etc/rc.d/init.d/tomcat
 %dir %{_vardir}
