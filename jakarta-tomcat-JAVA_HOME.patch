@@ -1,0 +1,30 @@
+--- jakarta-tomcat-4.0.1-src/catalina/src/bin/catalina.sh.orig	Tue Nov 13 03:02:50 2001
++++ jakarta-tomcat-4.0.1-src/catalina/src/bin/catalina.sh	Sat Aug 24 18:35:45 2002
+@@ -62,8 +62,12 @@
+ fi
+ 
+ if [ -z "$JAVA_HOME" ] ; then
++  if [ -x /usr/lib/java/bin/java ]; then
++    JAVA_HOME=/usr/lib/java
++  else
+   echo You must set JAVA_HOME to point at your Java Development Kit installation
+   exit 1
++  fi
+ fi
+ 
+ 
+--- jakarta-tomcat-4.0.1-src/catalina/src/bin/digest.sh.orig	Tue Nov 13 03:02:50 2001
++++ jakarta-tomcat-4.0.1-src/catalina/src/bin/digest.sh	Sat Aug 24 18:36:05 2002
+@@ -40,8 +40,12 @@
+ fi
+ 
+ if [ -z "$JAVA_HOME" ] ; then
++  if [ -x /usr/lib/java/bin/java ]; then
++    JAVA_HOME=/usr/lib/java
++  else
+   echo You must set JAVA_HOME to point at your Java Development Kit installation
+   exit 1
++  fi
+ fi
+ 
+ 

@@ -7,44 +7,49 @@ Release:	3
 License:	Apache
 Group:		Development/Languages/Java
 Source0:	http://jakarta.apache.org/builds/%{name}-%{base_version}/release/v%{version}/src/%{name}-%{version}-src.tar.gz
+Source1:	%{name}.init
+Patch0:		%{name}-fixes.patch
+Patch1:		%{name}-JAVA_HOME.patch
 URL:		http://jakarta.apache.org/tomcat/index.html
-Requires:	jre
-Requires:	jaxp
-Requires:	xerces-j
-Requires:	jakarta-servletapi
-Requires:	jdbc-stdext
-Requires:	jmx
-Requires:	jndi
-Requires:	jaf
-Requires:	javamail
-Requires:	jta
-Requires:	jsse
-Requires:	tyrex
-Requires:	jakarta-regexp
-Requires:	junit
-Requires:	ldap
-BuildRequires:	jdk
-BuildRequires:	jakarta-ant
-BuildRequires:	jaxp
-BuildRequires:	xerces-j
-BuildRequires:	jakarta-servletapi
-BuildRequires:	jdbc-stdext
-BuildRequires:	jmx
-BuildRequires:	jndi
-BuildRequires:	jaf
-BuildRequires:	javamail
-BuildRequires:	jta
-BuildRequires:	jsse
-BuildRequires:	tyrex
+# required:
+BuildRequires:	jdk >= 1.2
+BuildRequires:	jakarta-ant >= 1.4
+BuildRequires:	jaxp >= 1.1
+BuildRequires:	xerces-j >= 1
+BuildRequires:	jakarta-servletapi >= 4
 BuildRequires:	jakarta-regexp
-BuildRequires:	junit
-BuildRequires:	ldap
+# optional:
+BuildRequires:	jdbc-stdext >= 2.0
+BuildRequires:	jmx >= 1.0
+BuildRequires:	jndi >= 1.2.1
+BuildRequires:	jndi-provider-ldap
+BuildRequires:	jaf >= 1.0.1
+BuildRequires:	javamail >= 1.2
+BuildRequires:	jsse >= 1.0.2
+BuildRequires:	jta >= 1.0.1
+BuildRequires:	tyrex >= 0.9.7
+BuildRequires:	junit >= 3.7
+Requires:	jre >= 1.2
+Requires:	jaxp >= 1.1
+Requires:	xerces-j >= 1
+Requires:	jakarta-servletapi >= 4
+Requires:	jakarta-regexp
+Requires:	jdbc-stdext >= 2.0
+Requires:	jmx >= 1.0
+Requires:	jndi >= 1.2.1
+Requires:	jndi-provider-ldap
+Requires:	jaf >= 1.0.1
+Requires:	javamail >= 1.2
+Requires:	jsse >= 1.0.2
+Requires:	jta >= 1.0.1
+Requires:	tyrex >= 0.9.7
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_javalibdir	/usr/share/java
 %define		_tomcatdir	%{_libdir}/tomcat
 %define 	_logdir		%{_var}/log
+%define		_vardir		%{_var}/lib/tomcat
 
 %description
 Tomcat 4.0, a server that implements the Servlet 2.3 and JSP 1.2
@@ -67,15 +72,15 @@ Dokumentacja do Tomcata.
 
 %prep
 %setup -q -n %{name}-%{version}-src
+%patch0 -p1
+%patch1 -p1
 
 %build
-if [ ! `echo $JAVA_HOME` ]; then
-	echo "You haven't JAVA_HOME variable set. Can't continue."
-	exit 1
+if [ -z "$JAVA_HOME" ]; then
+	JAVA_HOME=/usr/lib/java
 fi
-		
 ANT_HOME=%{_javalibdir}
-export ANT_HOME
+export JAVA_HOME ANT_HOME
 
 cat > build.properties << EOF
 # ----- Compile Control Flags -----
@@ -152,7 +157,7 @@ tyrex.lib=\${tyrex.home}
 tyrex.jar=\${tyrex.lib}/tyrex.jar
 
 # ----- Xerces XML Parser, version 1.4.3 or later -----
-xerces.home=%{_javalibdir}/classes
+xerces.home=%{_javalibdir}
 xerces.lib=\${xerces.home}
 xerces.jar=\${xerces.lib}/xerces.jar
 EOF
@@ -170,9 +175,10 @@ install -d $RPM_BUILD_ROOT%{_tomcatdir}/bin \
 	    $RPM_BUILD_ROOT%{_tomcatdir}/lib \
 	    $RPM_BUILD_ROOT%{_tomcatdir}/server/{lib,classes} \
 	    $RPM_BUILD_ROOT%{_tomcatdir}/webapps \
-	    $RPM_BUILD_ROOT%{_tomcatdir}/work \
 	    $RPM_BUILD_ROOT%{_sysconfdir}/tomcat \
-	    $RPM_BUILD_ROOT%{_logdir}/tomcat
+	    $RPM_BUILD_ROOT%{_logdir}/tomcat \
+	    $RPM_BUILD_ROOT%{_vardir}/work \
+	    $RPM_BUILD_ROOT/etc/rc.d/init.d
 
 install build/bin/*.sh $RPM_BUILD_ROOT%{_tomcatdir}/bin
 install build/bin/*.jar $RPM_BUILD_ROOT%{_tomcatdir}/bin
@@ -183,11 +189,12 @@ install build/lib/*.jar $RPM_BUILD_ROOT%{_tomcatdir}/lib
 cp -rf  build/webapps $RPM_BUILD_ROOT%{_tomcatdir}
 
 ln -sf %{_logdir}/tomcat $RPM_BUILD_ROOT%{_tomcatdir}/logs
+ln -sf %{_vardir}/work $RPM_BUILD_ROOT%{_tomcatdir}/work
 ln -sf %{_sysconfdir}/tomcat $RPM_BUILD_ROOT%{_tomcatdir}/conf
 
 
 ln -sf %{_javalibdir}/jaxp.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib/jaxp.jar
-ln -sf %{_javalibdir}/classes/xerces.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib/xerces.jar
+ln -sf %{_javalibdir}/xerces.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib/xerces.jar
 ln -sf %{_javalibdir}/servlet.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib/servlet.jar
 ln -sf %{_javalibdir}/jdbc2_0-stdext.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib/jdbc2_0.jar
 ln -sf %{_javalibdir}/jmxri.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib/jmxri.jar
@@ -202,29 +209,36 @@ ln -sf %{_javalibdir}/tyrex.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib/tyrex.ja
 ln -sf %{_javalibdir}/junit.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib/junit.jar
 ln -sf %{_javalibdir}/regexp.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib/regexp.jar
 
+install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/tomcat
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
 %doc *.txt LICENSE
+%dir %{_tomcatdir}
+%dir %{_tomcatdir}/bin
 %attr(755,root,root) %{_tomcatdir}/bin/*.sh
-%dir %{_tomcatdir}/common/classes
-%dir %{_tomcatdir}/classes
-%dir %{_tomcatdir}/server
-%dir %{_tomcatdir}/server/classes
-%dir %{_tomcatdir}/webapps
-%dir %{_tomcatdir}/work
-%dir %{_sysconfdir}/tomcat
-%dir %{_logdir}/tomcat
 %{_tomcatdir}/bin/*.jar
+%dir %{_tomcatdir}/classes
+%dir %{_tomcatdir}/common
+%dir %{_tomcatdir}/common/classes
 %{_tomcatdir}/common/lib
 %{_tomcatdir}/conf
 %{_tomcatdir}/lib
 %{_tomcatdir}/logs
+%dir %{_tomcatdir}/server
+%dir %{_tomcatdir}/server/classes
 %{_tomcatdir}/server/lib
-%{_tomcatdir}/webapps/*
-%{_sysconfdir}/tomcat/*
+%{_tomcatdir}/webapps
+%{_tomcatdir}/work
+%dir %{_sysconfdir}/tomcat
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/tomcat/*
+%attr(754,root,root) /etc/rc.d/init.d/tomcat
+%dir %{_vardir}
+%attr(1730,root,http) %dir %{_vardir}/work
+%attr(1730,root,http) %dir %{_logdir}/tomcat
 
 %files doc
 %defattr(644,root,root,755)

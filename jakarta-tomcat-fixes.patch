@@ -1,0 +1,22 @@
+--- jakarta-tomcat-4.0.1-src/webapps/examples/build.xml.orig	Tue Nov 13 03:02:50 2001
++++ jakarta-tomcat-4.0.1-src/webapps/examples/build.xml	Sat Aug 24 15:22:07 2002
+@@ -70,7 +70,7 @@
+ 
+ 
+   <!-- ================= BUILD: Compile Server Components ================= -->
+-  <target name="build-main" depends="build-static">
++  <target name="build-main" depends="flags,build-static">
+ 
+     <javac   srcdir="WEB-INF/classes" 
+              destdir="${webapps.build}/${webapp.name}/WEB-INF/classes"
+--- jakarta-tomcat-4.0.1-src/webapps/examples/jsp/index.html.orig	Tue Nov 13 03:02:50 2001
++++ jakarta-tomcat-4.0.1-src/webapps/examples/jsp/index.html	Sat Aug 24 15:22:47 2002
+@@ -112,7 +112,7 @@
+ <tr VALIGN=TOP>
+ <td>Include&nbsp;</td>
+ 
+-<td VALIGN=TOP WIDTH="30%"><a href="/include/include.jsp"><img SRC="../images/execute.gif" HSPACE=4 BORDER=0  align=TOP></a><a href="include/include.jsp">Execute</a></td>
++<td VALIGN=TOP WIDTH="30%"><a href="include/include.jsp"><img SRC="../images/execute.gif" HSPACE=4 BORDER=0  align=TOP></a><a href="include/include.jsp">Execute</a></td>
+ 
+ <td WIDTH="30%"><a href="include/inc.html"><img SRC="../images/code.gif" HSPACE=4 BORDER=0 height=24 width=24 align=TOP></a><a href="include/inc.html">Source</a></td>
+ </tr>
