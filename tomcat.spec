@@ -1,7 +1,7 @@
 Summary: 	The Tomcat Servlet/JSP Container
 Summary(pl):	Tomcat - Zasobnik servletów/JSP
 Name:		jakarta-tomcat
-Version:	4.0
+Version:	4.0.1
 Release:	1
 License:	Apache Software License
 Group:		Development/Languages/Java
@@ -9,25 +9,37 @@ Group(de):	Entwicklung/Sprachen/Java
 Group(pl):	Programowanie/Jêzyki/Java
 Source0:	http://jakarta.apache.org/dist/jakarta/%{name}-%{version}/release/v%{version}/src/%{name}-%{version}-src.tar.gz
 URL:		http://jakarta.apache.org/tomcat/index.html
-Requires:	ibm-java-sdk
-Requires:	crimson
-Requires:	xalan-j
+Requires:	jre
 Requires:	jaxp
-Requires:	jakarta-regexp
+Requires:	xerces-j
 Requires:	jakarta-servletapi
 Requires:	jdbc-stdext
-Requires:	javamail
-Requires:	jaf
 Requires:	jmx
-Requires:	jsse
-Requires:	junit
-Requires:	jta
-Requires:	tyrex
-Requires:	ldap
 Requires:	jndi
-Requires:	jdbc-stdext
+Requires:	jaf
+Requires:	javamail
+Requires:	jta
+Requires:	jsse
+Requires:	tyrex
+Requires:	jakarta-regexp
+Requires:	junit
+Requires:	ldap
+BuildRequires:	jdk
 BuildRequires:	jakarta-ant
-BuildRequires:	ibm-java-sdk
+BuildRequires:	jaxp
+BuildRequires:	xerces-j
+BuildRequires:	jakarta-servletapi
+BuildRequires:	jdbc-stdext
+BuildRequires:	jmx
+BuildRequires:	jndi
+BuildRequires:	jaf
+BuildRequires:	javamail
+BuildRequires:	jta
+BuildRequires:	jsse
+BuildRequires:	tyrex
+BuildRequires:	jakarta-regexp
+BuildRequires:	junit
+BuildRequires:	ldap
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -137,6 +149,11 @@ junit.jar=\${junit.lib}/junit.jar
 tyrex.home=%{_javalibdir}
 tyrex.lib=\${tyrex.home}
 tyrex.jar=\${tyrex.lib}/tyrex.jar
+
+# ----- Xerces XML Parser, version 1.4.3 or later -----
+xerces.home=%{_javalibdir}/classes
+xerces.lib=\${xerces.home}
+xerces.jar=\${xerces.lib}/xerces.jar
 EOF
 
 install -d doc/docs/api
@@ -146,32 +163,43 @@ ant dist
 %install
 rm -rf $RPM_BUILD_ROOT
 
-install -d $RPM_BUILD_ROOT%{_bindir}
-install -d $RPM_BUILD_ROOT%{_javalibdir}
-install -d $RPM_BUILD_ROOT%{_tomcatdir}/classes
-install -d $RPM_BUILD_ROOT%{_tomcatdir}/common/classes
-install -d $RPM_BUILD_ROOT%{_sysconfdir}/tomcat
-install -d $RPM_BUILD_ROOT%{_logdir}/tomcat
-install -d $RPM_BUILD_ROOT%{_tomcatdir}/server/classes
-install -d $RPM_BUILD_ROOT%{_tomcatdir}/webapps
-install -d $RPM_BUILD_ROOT%{_tomcatdir}/work
+install -d $RPM_BUILD_ROOT%{_tomcatdir}/bin \
+	    $RPM_BUILD_ROOT%{_tomcatdir}/classes \
+	    $RPM_BUILD_ROOT%{_tomcatdir}/common/{lib,classes} \
+	    $RPM_BUILD_ROOT%{_tomcatdir}/lib \
+	    $RPM_BUILD_ROOT%{_tomcatdir}/server/{lib,classes} \
+	    $RPM_BUILD_ROOT%{_tomcatdir}/webapps \
+	    $RPM_BUILD_ROOT%{_tomcatdir}/work \
+	    $RPM_BUILD_ROOT%{_sysconfdir}/tomcat \
+	    $RPM_BUILD_ROOT%{_logdir}/tomcat
 
-install dist/bin/*.sh $RPM_BUILD_ROOT%{_bindir}
-install dist/bin/*.jar $RPM_BUILD_ROOT%{_bindir}
-install dist/common/lib/naming-*.jar $RPM_BUILD_ROOT%{_javalibdir}
-install dist/conf/* $RPM_BUILD_ROOT%{_sysconfdir}/tomcat
-install dist/jasper/jasper-*.jar $RPM_BUILD_ROOT%{_javalibdir}
-install dist/server/lib/[!r]*.jar $RPM_BUILD_ROOT%{_javalibdir}
-install dist/lib/*.jar $RPM_BUILD_ROOT%{_javalibdir}
-cp -rf dist/webapps $RPM_BUILD_ROOT%{_tomcatdir}
+install build/bin/*.sh $RPM_BUILD_ROOT%{_tomcatdir}/bin
+install build/bin/*.jar $RPM_BUILD_ROOT%{_tomcatdir}/bin
+install build/common/lib/naming-*.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib
+install build/conf/* $RPM_BUILD_ROOT%{_sysconfdir}/tomcat
+install build/server/lib/[!r]*.jar $RPM_BUILD_ROOT%{_tomcatdir}/server/lib
+install build/lib/*.jar $RPM_BUILD_ROOT%{_tomcatdir}/lib
+cp -rf  build/webapps $RPM_BUILD_ROOT%{_tomcatdir}
 
-ln -sf %{_bindir} $RPM_BUILD_ROOT%{_tomcatdir}/bin
-ln -sf %{_javalibdir} $RPM_BUILD_ROOT%{_tomcatdir}/common/lib
-ln -sf %{_javalibdir} $RPM_BUILD_ROOT%{_tomcatdir}/jasper
-ln -sf %{_javalibdir} $RPM_BUILD_ROOT%{_tomcatdir}/lib
-ln -sf %{_javalibdir} $RPM_BUILD_ROOT%{_tomcatdir}/server/lib
 ln -sf %{_logdir}/tomcat $RPM_BUILD_ROOT%{_tomcatdir}/logs
 ln -sf %{_sysconfdir}/tomcat $RPM_BUILD_ROOT%{_tomcatdir}/conf
+
+
+ln -sf %{_javalibdir}/jaxp.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib/jaxp.jar
+ln -sf %{_javalibdir}/classes/xerces.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib/xerces.jar
+ln -sf %{_javalibdir}/servlet.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib/servlet.jar
+ln -sf %{_javalibdir}/jdbc2_0-stdext.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib/jdbc2_0.jar
+ln -sf %{_javalibdir}/jmxri.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib/jmxri.jar
+ln -sf %{_javalibdir}/jndi.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib/jndi.jar
+ln -sf %{_javalibdir}/ldap.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib/ldap.jar
+ln -sf %{_javalibdir}/activation.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib/activation.jar
+ln -sf %{_javalibdir}/jta.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib/jta.jar
+ln -sf %{_javalibdir}/mail.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib/mail.jar
+ln -sf %{_javalibdir}/jsse.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib/jsse.jar
+
+ln -sf %{_javalibdir}/tyrex.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib/tyrex.jar
+ln -sf %{_javalibdir}/junit.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib/junit.jar
+ln -sf %{_javalibdir}/regexp.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib/regexp.jar
 
 gzip -9nf *.txt LICENSE
 
@@ -181,7 +209,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc *.gz
-%attr(755,root,root) %{_bindir}/*.sh
+%attr(755,root,root) %{_tomcatdir}/bin/*.sh
 %dir %{_tomcatdir}/common/classes
 %dir %{_tomcatdir}/classes
 %dir %{_tomcatdir}/server
@@ -190,12 +218,9 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_tomcatdir}/work
 %dir %{_sysconfdir}/tomcat
 %dir %{_logdir}/tomcat
-%{_bindir}/*.jar
-%{_javalibdir}/*.jar
-%{_tomcatdir}/bin
+%{_tomcatdir}/bin/*.jar
 %{_tomcatdir}/common/lib
 %{_tomcatdir}/conf
-%{_tomcatdir}/jasper
 %{_tomcatdir}/lib
 %{_tomcatdir}/logs
 %{_tomcatdir}/server/lib
