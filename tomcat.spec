@@ -77,7 +77,7 @@ Provides:	user(http)
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_javalibdir	/usr/share/java
+%define		_javalibdir	%{_datadir}/java
 %define		_tomcatdir	%{_libdir}/tomcat
 %define 	_logdir		%{_var}/log
 %define		_vardir		%{_var}/lib/tomcat
