@@ -152,7 +152,7 @@ tyrex.jar=%{_javalibdir}/tyrex.jar
 EOBP
 
 JAVA_HOME=/usr/lib/java
-ant -Djava.home=$JAVA_HOME 
+ant -Djava.home=$JAVA_HOME
 
 %install
 rm -rf $RPM_BUILD_ROOT
