@@ -61,7 +61,7 @@ Tomcat 4.0 - serwer implementuj±cy specyfikacje Servlet 2.3 oraz JSP
 
 %package doc
 Summary:	The Tomcat Servlet/JSP Container documentation
-Summary(pl):	Dokumentacja do Tomcata.
+Summary(pl):	Dokumentacja do Tomcata
 Group:		Development/Languages/Java
 
 %description doc
