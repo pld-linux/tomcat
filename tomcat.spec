@@ -51,7 +51,7 @@ Requires:	jaf >= 1.0.1
 Requires:	javamail >= 1.2
 Requires:	jsse >= 1.0.2
 Requires:	jta >= 1.0.1
-Requires:	tyrex >= 0.9.7
+Requires:	tyrex >= 1.0
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -191,14 +191,15 @@ commons-logging.lib=\${commons-logging.home}
 commons-logging-api.jar=\${commons-logging.lib}/commons-logging-api.jar
 commons-logging.jar=\${commons-logging.lib}/commons-logging.jar
 
-jasper.home=../jasper
+jasper.home=jasper
 jtc.home=../jakarta-tomcat-connectors-%{version}-src
-jakarta-tomcat-connectors-jk2-%{jtc_ver}-src
 EOF
 
 install -d doc/docs/api
 
+ln -s ../jakarta-tomcat-connectors-%{version}-src  webapps/jakarta-tomcat-connectors-%{version}-src
 cd jakarta-tomcat-connectors-%{version}-src
+ln -s . jakarta-tomcat-connectors-%{version}-src
 ant
 cd ..
 
@@ -223,7 +224,6 @@ install build/bin/*.jar $RPM_BUILD_ROOT%{_tomcatdir}/bin
 install build/common/lib/naming-*.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib
 install build/conf/* $RPM_BUILD_ROOT%{_sysconfdir}/tomcat
 install build/server/lib/[!r]*.jar $RPM_BUILD_ROOT%{_tomcatdir}/server/lib
-install build/lib/*.jar $RPM_BUILD_ROOT%{_tomcatdir}/lib
 cp -rf  build/webapps $RPM_BUILD_ROOT%{_tomcatdir}
 
 ln -sf %{_logdir}/tomcat $RPM_BUILD_ROOT%{_tomcatdir}/logs
