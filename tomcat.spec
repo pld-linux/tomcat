@@ -1,22 +1,23 @@
 Summary:	The Tomcat Servlet/JSP Container
 Summary(pl):	Tomcat - Zasobnik servletów/JSP
 Name:		jakarta-tomcat
-Version:	4.1.18
+Version:	4.1.24
 %define		base_version 4.0
 Release:	2
 License:	Apache
 Group:		Development/Languages/Java
 Source0:	http://jakarta.apache.org/builds/%{name}-%{base_version}/release/v%{version}/src/%{name}-%{version}-src.tar.gz
-# Source0-md5:	9a8c5c250d7f3d34442b58de89c1af28
+# Source0-md5:	bdcdf1091ff942f378b1e6f402e44a67
 Source1:	http://jakarta.apache.org/builds/%{name}-%{base_version}/release/v%{version}/src/%{name}-connectors-%{version}-src.tar.gz
-# Source1-md5:	a53f5dc7c04e5988c85ec4ee8e8b92d7
+# Source1-md5:	0daa701e51d04570006abce1ac580aed
 Source2:	%{name}.init
 Patch0:		%{name}-fixes.patch
 Patch1:		%{name}-JAVA_HOME.patch
+Patch2:		%{name}-fileupload.patch
 URL:		http://jakarta.apache.org/tomcat/index.html
 # required:
 BuildRequires:	jdk >= 1.2
-BuildRequires:	jakarta-ant >= 1.4
+BuildRequires:	jakarta-ant >= 1.5.3
 BuildRequires:	jaxp >= 1.1
 BuildRequires:	xerces-j >= 1
 BuildRequires:	jakarta-servletapi >= 4
@@ -24,6 +25,7 @@ BuildRequires:	jakarta-commons-collections
 BuildRequires:	jakarta-commons-beanutils
 BuildRequires:	jakarta-commons-digester
 BuildRequires:	jakarta-commons-logging
+BuildRequires:	jakarta-commons-fileupload
 BuildRequires:	jakarta-regexp
 # optional:
 BuildRequires:	jakarta-commons-daemon
@@ -38,7 +40,7 @@ BuildRequires:	jaf >= 1.0.1
 BuildRequires:	javamail >= 1.2
 BuildRequires:	jsse >= 1.0.2
 BuildRequires:	jta >= 1.0.1
-BuildRequires:	tyrex >= 0.9.7
+BuildRequires:	tyrex >= 1.0
 BuildRequires:	junit >= 3.7
 Requires:	jre >= 1.2
 Requires:	jaxp >= 1.1
@@ -48,6 +50,7 @@ Requires:	jakarta-commons-collections
 Requires:	jakarta-commons-beanutils
 Requires:	jakarta-commons-digester
 Requires:	jakarta-commons-logging
+Requires:	jakarta-commons-fileupload
 Requires:	jakarta-regexp
 Requires:	jdbc-stdext >= 2.0
 Requires:	jmx >= 1.0
@@ -89,6 +92,7 @@ Dokumentacja do Tomcata.
 %setup -q -n %{name}-%{version}-src -a1
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 if [ -z "$JAVA_HOME" ]; then
@@ -206,6 +210,11 @@ commons-daemon.jar=\${commons-daemon.lib}/commons-daemon.jar
 commons-dbcp.home=%{_javalibdir}
 commons-dbcp.lib=\${commons-dbcp.home}
 commons-dbcp.jar=\${commons-dbcp.lib}/commons-dbcp.jar
+
+# ----- Commons FileUpload, nightly build -----
+commons-fileupload.home=%{_javalibdir}
+commons-fileupload.lib=\${commons-fileupload.home}
+commons-fileupload.jar=\${commons-fileupload.lib}/commons-fileupload.jar
 
 # ----- Commons Modeler, version 1.0 or later -----
 commons-modeler.home=%{_javalibdir}
