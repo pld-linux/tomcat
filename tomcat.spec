@@ -1,13 +1,14 @@
 Summary:	The Tomcat Servlet/JSP Container
 Summary(pl):	Tomcat - Zasobnik servletów/JSP
 Name:		jakarta-tomcat
-Version:	4.0.6
+Version:	4.1.18
 %define		base_version 4.0
 Release:	1
 License:	Apache
 Group:		Development/Languages/Java
 Source0:	http://jakarta.apache.org/builds/%{name}-%{base_version}/release/v%{version}/src/%{name}-%{version}-src.tar.gz
-Source1:	%{name}.init
+Source1:	http://jakarta.apache.org/builds/%{name}-%{base_version}/release/v%{version}/src/%{name}-connectors-%{version}-src.tar.gz
+Source2:	%{name}.init
 Patch0:		%{name}-fixes.patch
 Patch1:		%{name}-JAVA_HOME.patch
 URL:		http://jakarta.apache.org/tomcat/index.html
@@ -17,6 +18,10 @@ BuildRequires:	jakarta-ant >= 1.4
 BuildRequires:	jaxp >= 1.1
 BuildRequires:	xerces-j >= 1
 BuildRequires:	jakarta-servletapi >= 4
+BuildRequires:	jakarta-commons-collections
+BuildRequires:	jakarta-commons-beanutils
+BuildRequires:	jakarta-commons-digester
+BuildRequires:	jakarta-commons-logging
 BuildRequires:	jakarta-regexp
 # optional:
 BuildRequires:	jdbc-stdext >= 2.0
@@ -33,6 +38,10 @@ Requires:	jre >= 1.2
 Requires:	jaxp >= 1.1
 Requires:	xerces-j >= 1
 Requires:	jakarta-servletapi >= 4
+Requires:	jakarta-commons-collections
+Requires:	jakarta-commons-beanutils
+Requires:	jakarta-commons-digester
+Requires:	jakarta-commons-logging
 Requires:	jakarta-regexp
 Requires:	jdbc-stdext >= 2.0
 Requires:	jmx >= 1.0
@@ -71,7 +80,7 @@ The Tomcat Servlet/JSP Container documentation.
 Dokumentacja do Tomcata.
 
 %prep
-%setup -q -n %{name}-%{version}-src
+%setup -q -n %{name}-%{version}-src -a1
 %patch0 -p1
 %patch1 -p1
 
@@ -160,9 +169,38 @@ tyrex.jar=\${tyrex.lib}/tyrex.jar
 xerces.home=%{_javalibdir}
 xerces.lib=\${xerces.home}
 xerces.jar=\${xerces.lib}/xerces.jar
+
+# ----- Commons Collections, version 1.0 or later -----
+commons-collections.home=%{_javalibdir}
+commons-collections.lib=\${commons-collections.home}
+commons-collections.jar=\${commons-collections.lib}/commons-collections.jar
+
+# ----- Commons Beanutils, version 1.1 or later -----
+commons-beanutils.home=%{_javalibdir}
+commons-beanutils.lib=\${commons-beanutils.home}
+commons-beanutils.jar=\${commons-beanutils.lib}/commons-beanutils.jar
+
+# ----- Commons Digester, version 1.1.1 or later -----
+commons-digester.home=%{_javalibdir}
+commons-digester.lib=\${commons-digester.home}
+commons-digester.jar=\${commons-digester.lib}/commons-digester.jar
+
+# ----- Commons Logging, version 1.0.1 or later -----
+commons-logging.home=%{_javalibdir}
+commons-logging.lib=\${commons-logging.home}
+commons-logging-api.jar=\${commons-logging.lib}/commons-logging-api.jar
+commons-logging.jar=\${commons-logging.lib}/commons-logging.jar
+
+jasper.home=../jasper
+jtc.home=../jakarta-tomcat-connectors-%{version}-src
+jakarta-tomcat-connectors-jk2-%{jtc_ver}-src
 EOF
 
 install -d doc/docs/api
+
+cd jakarta-tomcat-connectors-%{version}-src
+ant
+cd ..
 
 ant dist
 
@@ -209,7 +247,7 @@ ln -sf %{_javalibdir}/tyrex.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib/tyrex.ja
 ln -sf %{_javalibdir}/junit.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib/junit.jar
 ln -sf %{_javalibdir}/regexp.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib/regexp.jar
 
-install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/tomcat
+install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/tomcat
 
 %clean
 rm -rf $RPM_BUILD_ROOT
