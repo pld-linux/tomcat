@@ -3,8 +3,8 @@ Summary(pl):	Tomcat - Zasobnik servletów/JSP
 Name:		jakarta-tomcat
 Version:	4.0.1
 %define		base_version 4.0
-Release:	2
-License:	Apache Software License
+Release:	3
+License:	Apache
 Group:		Development/Languages/Java
 Source0:	http://jakarta.apache.org/builds/%{name}-%{base_version}/release/v%{version}/src/%{name}-%{version}-src.tar.gz
 URL:		http://jakarta.apache.org/tomcat/index.html
@@ -202,14 +202,12 @@ ln -sf %{_javalibdir}/tyrex.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib/tyrex.ja
 ln -sf %{_javalibdir}/junit.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib/junit.jar
 ln -sf %{_javalibdir}/regexp.jar $RPM_BUILD_ROOT%{_tomcatdir}/common/lib/regexp.jar
 
-gzip -9nf *.txt LICENSE
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc *.gz
+%doc *.txt LICENSE
 %attr(755,root,root) %{_tomcatdir}/bin/*.sh
 %dir %{_tomcatdir}/common/classes
 %dir %{_tomcatdir}/classes
