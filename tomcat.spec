@@ -30,7 +30,7 @@ BuildRequires:	jaxp_parser_impl
 BuildRequires:	jdk >= 1.2
 BuildRequires:	mx4j >= 1.1.1
 BuildRequires:	puretls
-BuildRequires:	rpmbuild(macros) >= 1.159
+BuildRequires:	rpmbuild(macros) >= 1.202
 # optional:
 BuildRequires:	jaf >= 1.0.1
 BuildRequires:	jakarta-commons-daemon
@@ -109,8 +109,8 @@ Dokumentacja do Tomcata.
 
 %build
 CLASSPATH=%{_javalibdir}/xml-commons-apis.jar
-CLASSPATH=$CLASSPAHT:%{_javalibdir}/xalan.jar
-CLASSPATH=%{_javalibdir}/servlet.jar
+CLASSPATH=$CLASSPATH:%{_javalibdir}/xalan.jar
+CLASSPATH=$CLASSPATH:%{_javalibdir}/servlet.jar
 export CLASSPATH
 
 rm -f lib/*.jar
@@ -240,22 +240,8 @@ install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/tomcat
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-if [ -n "`getgid http`" ]; then
-	if [ "`getgid http`" != "51" ]; then
-		echo "Error: group http doesn't have gid=51. Correct this before installing tomcat." 1>&2
-		exit 1
-	fi
-else
-	/usr/sbin/groupadd -g 51 -r -f http
-fi
-if [ -n "`id -u http 2>/dev/null`" ]; then
-	if [ "`id -u http`" != "51" ]; then
-		echo "Error: user http doesn't have uid=51. Correct this before installing tomcat." 1>&2
-		exit 1
-	fi
-else
-	/usr/sbin/useradd -u 51 -r -d /home/services/httpd -s /bin/false -c "HTTP User" -g http http 1>&2
-fi
+%groupadd -g 51 -r -f http
+%useradd -u 51 -r -d /home/services/httpd -s /bin/false -c "HTTP User" -g http http
 
 %post
 /sbin/chkconfig --add tomcat
