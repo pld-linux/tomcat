@@ -14,7 +14,6 @@ Source2:	%{name}.init
 Patch0:		%{name}-fixes.patch
 Patch1:		%{name}-JAVA_HOME.patch
 Patch2:		%{name}-fileupload.patch
-Patch3:		%{name}-java15.patch
 URL:		http://jakarta.apache.org/tomcat/index.html
 # required:
 BuildRequires:	jaas
@@ -107,7 +106,6 @@ Dokumentacja do Tomcata.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p0
 
 %build
 CLASSPATH=%{_javalibdir}/xml-commons-apis.jar
