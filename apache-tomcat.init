@@ -54,7 +54,7 @@ case "$1" in
 		rm -f /var/lock/subsys/tomcat
 	else
 		msg_not_running tomcat
-	fi	
+	fi
 	;;
   restart|force-reload)
 	$0 stop
