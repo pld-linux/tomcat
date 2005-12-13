@@ -6,9 +6,9 @@ Version:	4.1.24
 Release:	4
 License:	Apache
 Group:		Development/Languages/Java
-Source0:	http://jakarta.apache.org/builds/%{name}-%{base_version}/release/v%{version}/src/%{name}-%{version}-src.tar.gz
+Source0:	http://jakarta.apache.org/builds/jakarta-tomcat-%{base_version}/release/v%{version}/src/%{name}-%{version}-src.tar.gz
 # Source0-md5:	bdcdf1091ff942f378b1e6f402e44a67
-Source1:	http://jakarta.apache.org/builds/%{name}-%{base_version}/release/v%{version}/src/%{name}-connectors-%{version}-src.tar.gz
+Source1:	http://jakarta.apache.org/builds/jakarta-tomcat-%{base_version}/release/v%{version}/src/%{name}-connectors-%{version}-src.tar.gz
 # Source1-md5:	0daa701e51d04570006abce1ac580aed
 Source2:	%{name}.init
 Patch0:		%{name}-fixes.patch
@@ -18,13 +18,13 @@ URL:		http://jakarta.apache.org/tomcat/index.html
 # required:
 BuildRequires:	jaas
 BuildRequires:	jakarta-ant >= 1.5.3
-BuildRequires:	jakarta-servletapi >= 4
-BuildRequires:	jakarta-commons-collections
 BuildRequires:	jakarta-commons-beanutils
+BuildRequires:	jakarta-commons-collections
 BuildRequires:	jakarta-commons-digester
-BuildRequires:	jakarta-commons-logging
 BuildRequires:	jakarta-commons-fileupload
+BuildRequires:	jakarta-commons-logging
 BuildRequires:	jakarta-regexp
+BuildRequires:	jakarta-servletapi >= 4
 BuildRequires:	jakarta-struts >= 1.0.2
 BuildRequires:	jaxp_parser_impl
 BuildRequires:	jdk >= 1.2
@@ -45,33 +45,33 @@ BuildRequires:	jta >= 1.0.1
 BuildRequires:	junit >= 3.7
 BuildRequires:	tyrex >= 1.0
 BuildRequires:	xml-commons
-Requires:	jre >= 1.2
-Requires:	jakarta-servletapi >= 4
-Requires:	jakarta-commons-collections
-Requires:	jakarta-commons-beanutils
-Requires:	jakarta-commons-digester
-Requires:	jakarta-commons-logging
-Requires:	jakarta-commons-fileupload
-Requires:	jakarta-regexp
-Requires:	jdbc-stdext >= 2.0
-Requires:	jndi >= 1.2.1
-Requires:	jaf >= 1.0.1
-Requires:	javamail >= 1.2
-Requires:	jsse >= 1.0.2
-Requires:	jta >= 1.0.1
-Requires:	tyrex >= 1.0
-Requires:	jaxp_parser_impl
-Requires:	xml-commons
-Requires:	jaas
-Requires:	mx4j >= 1.1.1
-Requires(pre):	/usr/bin/getgid
-Requires(pre):	/bin/id
-Requires(pre):	/usr/sbin/groupadd
-Requires(pre):	/usr/sbin/useradd
+Requires(post,postun):	/sbin/ldconfig
+Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
-Requires(post,preun):	/sbin/chkconfig
-Requires(post,postun):	/sbin/ldconfig
+Requires(pre):	/bin/id
+Requires(pre):	/usr/bin/getgid
+Requires(pre):	/usr/sbin/groupadd
+Requires(pre):	/usr/sbin/useradd
+Requires:	jaas
+Requires:	jaf >= 1.0.1
+Requires:	jakarta-commons-beanutils
+Requires:	jakarta-commons-collections
+Requires:	jakarta-commons-digester
+Requires:	jakarta-commons-fileupload
+Requires:	jakarta-commons-logging
+Requires:	jakarta-regexp
+Requires:	jakarta-servletapi >= 4
+Requires:	javamail >= 1.2
+Requires:	jaxp_parser_impl
+Requires:	jdbc-stdext >= 2.0
+Requires:	jndi >= 1.2.1
+Requires:	jre >= 1.2
+Requires:	jsse >= 1.0.2
+Requires:	jta >= 1.0.1
+Requires:	mx4j >= 1.1.1
+Requires:	tyrex >= 1.0
+Requires:	xml-commons
 Provides:	group(http)
 Provides:	user(http)
 BuildArch:	noarch
@@ -289,7 +289,7 @@ fi
 %{_tomcatdir}/temp
 # tomcat wants to regenerate tomcat-users.xml
 %attr(775,root,http) %dir %{_sysconfdir}/tomcat
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/tomcat/*
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/tomcat/*
 %attr(754,root,root) /etc/rc.d/init.d/tomcat
 %dir %{_vardir}
 %attr(1730,root,http) %dir %{_vardir}/work
