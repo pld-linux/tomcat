@@ -1,19 +1,21 @@
+# Conditional build:
+%bcond_with	binary	# build from binary source
+%bcond_without	javadoc	# skip building javadocs
+#
+
 Summary:	The Tomcat Servlet/JSP Container
 Summary(pl):	Tomcat - Zasobnik servletów/JSP
 Name:		jakarta-tomcat
-Version:	4.1.24
-%define		base_version 4.0
-Release:	4
+Version:	5.0.30
+Release:	0.1
 License:	Apache
 Group:		Development/Languages/Java
-Source0:	http://jakarta.apache.org/builds/jakarta-tomcat-%{base_version}/release/v%{version}/src/%{name}-%{version}-src.tar.gz
-# Source0-md5:	bdcdf1091ff942f378b1e6f402e44a67
-Source1:	http://jakarta.apache.org/builds/jakarta-tomcat-%{base_version}/release/v%{version}/src/%{name}-connectors-%{version}-src.tar.gz
-# Source1-md5:	0daa701e51d04570006abce1ac580aed
-Source2:	%{name}.init
-Patch0:		%{name}-fixes.patch
-Patch1:		%{name}-JAVA_HOME.patch
-Patch2:		%{name}-fileupload.patch
+Source0:	http://www.apache.org/dist/tomcat/tomcat-5/v5.0.30/src/%{name}-%{version}-src.tar.gz
+# Source0-md5:	13fa1b56779c7b258c95266f69b22437
+Source1:	%{name}.init
+#Patch0:		%{name}-fixes.patch
+#Patch1:		%{name}-JAVA_HOME.patch
+#Patch2:		%{name}-fileupload.patch
 URL:		http://jakarta.apache.org/tomcat/index.html
 # required:
 BuildRequires:	jaas
@@ -102,10 +104,10 @@ The Tomcat Servlet/JSP Container documentation.
 Dokumentacja do Tomcata.
 
 %prep
-%setup -q -n %{name}-%{version}-src -a1
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
+%setup -q -n %{name}-%{version}-src
+#%patch0 -p1
+#%patch1 -p1
+#%patch2 -p1
 
 %build
 CLASSPATH=%{_javalibdir}/xml-commons-apis.jar
@@ -234,7 +236,7 @@ ln -sf %{_javalibdir}/xml-commons-apis.jar	$DEST/common/endorsed
 
 ln -sf %{_javalibdir}/struts.jar $DEST/server/webapps/admin/WEB-INF/lib
 
-install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/tomcat
+install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/tomcat
 
 %clean
 rm -rf $RPM_BUILD_ROOT
