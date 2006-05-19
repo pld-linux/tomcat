@@ -17,7 +17,7 @@ Patch2:		%{name}-fileupload.patch
 URL:		http://jakarta.apache.org/tomcat/index.html
 # required:
 BuildRequires:	jaas
-BuildRequires:	jakarta-ant >= 1.5.3
+BuildRequires:	ant >= 1.5.3
 BuildRequires:	jakarta-commons-beanutils
 BuildRequires:	jakarta-commons-collections
 BuildRequires:	jakarta-commons-digester
