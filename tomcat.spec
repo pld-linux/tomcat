@@ -82,7 +82,6 @@ Provides:	user(http)
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_javalibdir	%{_datadir}/java
 %define		_tomcatdir	%{_libdir}/tomcat
 %define 	_logdir		%{_var}/log
 %define		_vardir		%{_var}/lib/tomcat
@@ -112,55 +111,50 @@ Dokumentacja do Tomcata.
 #%patch1 -p1
 #%patch2 -p1
 
-%build
-CLASSPATH=%{_javalibdir}/xml-commons-apis.jar
-CLASSPATH=$CLASSPATH:%{_javalibdir}/xalan.jar
-CLASSPATH=$CLASSPATH:%{_javalibdir}/servlet.jar
-export CLASSPATH
-
 rm -f lib/*.jar
 rm -f %{name}-connectors-%{version}-src/lib/*.jar
 
 cat >> build.properties <<EOBP
-ant.jar=%{_javalibdir}/ant.jar
+ant.jar=%{_javadir}/ant.jar
 jtc.home=$RPM_BUILD_DIR/%{name}-%{version}-src/%{name}-connectors-%{version}-src/
 jasper.home=./jasper
-commons-beanutils.jar=%{_javalibdir}/commons-beanutils.jar
-commons-fileupload.jar=%{_javalibdir}/commons-fileupload.jar
-commons-collections.jar=%{_javalibdir}/commons-collections.jar
-commons-daemon.jar=%{_javalibdir}/commons-daemon.jar
-commons-dbcp.jar=%{_javalibdir}/commons-dbcp.jar
-commons-digester.jar=%{_javalibdir}/commons-digester.jar
-commons-logging.jar=%{_javalibdir}/commons-logging.jar
-commons-logging-api.jar=%{_javalibdir}/commons-logging-api.jar
-commons-modeler.jar=%{_javalibdir}/commons-modeler.jar
-commons-pool.jar=%{_javalibdir}/commons-pool.jar
-jcert.jar=%{_javalibdir}/jcert.jar
-jnet.jar=%{_javalibdir}/jnet.jar
-jsse.jar=%{_javalibdir}/jsse.jar
-jmx.jar=%{_javalibdir}/mx4j-jmx.jar
-jmxri.jar=%{_javalibdir}/mx4j-jmx.jar
-junit.jar=%{_javalibdir}/junit.jar
-regexp.jar=%{_javalibdir}/regexp.jar
-servlet.jar=%{_javalibdir}/servlet.jar
+commons-beanutils.jar=%{_javadir}/commons-beanutils.jar
+commons-fileupload.jar=%{_javadir}/commons-fileupload.jar
+commons-collections.jar=%{_javadir}/commons-collections.jar
+commons-daemon.jar=%{_javadir}/commons-daemon.jar
+commons-dbcp.jar=%{_javadir}/commons-dbcp.jar
+commons-digester.jar=%{_javadir}/commons-digester.jar
+commons-logging.jar=%{_javadir}/commons-logging.jar
+commons-logging-api.jar=%{_javadir}/commons-logging-api.jar
+commons-modeler.jar=%{_javadir}/commons-modeler.jar
+commons-pool.jar=%{_javadir}/commons-pool.jar
+jcert.jar=%{_javadir}/jcert.jar
+jnet.jar=%{_javadir}/jnet.jar
+jsse.jar=%{_javadir}/jsse.jar
+jmx.jar=%{_javadir}/mx4j-jmx.jar
+jmxri.jar=%{_javadir}/mx4j-jmx.jar
+junit.jar=%{_javadir}/junit.jar
+regexp.jar=%{_javadir}/regexp.jar
+servlet.jar=%{_javadir}/servlet.jar
 #servlet.doc=%{javadocdir}/servletapi4
-xercesImpl.jar=%{_javalibdir}/jaxp_parser_impl.jar
-xmlParserAPIs.jar=%{_javalibdir}/xml-commons-apis.jar
-puretls.jar=%{_javalibdir}/puretls.jar
-jmx.jar=%{_javalibdir}/mx4j-jmx.jar
-struts.jar=%{_javalibdir}/struts.jar
+xercesImpl.jar=%{_javadir}/jaxp_parser_impl.jar
+xmlParserAPIs.jar=%{_javadir}/xml-commons-apis.jar
+puretls.jar=%{_javadir}/puretls.jar
+jmx.jar=%{_javadir}/mx4j-jmx.jar
+struts.jar=%{_javadir}/struts.jar
 struts.lib=%{_datadir}/jakarta-struts
-jdbc20ext.jar=%{_javalibdir}/jdbc-stdext.jar
-activation.jar=%{_javalibdir}/activation.jar
-mail.jar=%{_javalibdir}/mailapi.jar
-jndi.jar=%{_javalibdir}/jndi.jar
-jta.jar=%{_javalibdir}/jta.jar
-jaas.jar=%{_javalibdir}/jaas.jar
-tyrex.jar=%{_javalibdir}/tyrex.jar
+jdbc20ext.jar=%{_javadir}/jdbc-stdext.jar
+activation.jar=%{_javadir}/activation.jar
+mail.jar=%{_javadir}/mailapi.jar
+jndi.jar=%{_javadir}/jndi.jar
+jta.jar=%{_javadir}/jta.jar
+jaas.jar=%{_javadir}/jaas.jar
+tyrex.jar=%{_javadir}/tyrex.jar
 EOBP
 
-JAVA_HOME=%{_libdir}/java
-%ant -Djava.home=$JAVA_HOME
+%build
+export CLASSPATH=%(build-classpath xml-commons-apis xalan)
+%ant
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -197,47 +191,47 @@ ln -sf %{_vardir}/work		$DEST/work
 ln -sf %{_sysconfdir}/tomcat	$DEST/conf
 
 # symlinks instead of copies
-ln -sf %{_javalibdir}/commons-daemon.jar	$DEST/bin
+ln -sf %{_javadir}/commons-daemon.jar	$DEST/bin
 
-ln -sf %{_javalibdir}/activation.jar		$DEST/common/lib
-ln -sf %{_javalibdir}/ant.jar			$DEST/common/lib
-ln -sf %{_javalibdir}/commons-collections.jar	$DEST/common/lib
-ln -sf %{_javalibdir}/commons-dbcp.jar		$DEST/common/lib
-ln -sf %{_javalibdir}/commons-logging-api.jar	$DEST/common/lib
-ln -sf %{_javalibdir}/commons-pool.jar		$DEST/common/lib
-ln -sf %{_javalibdir}/servlet.jar		$DEST/common/lib
-ln -sf %{_javalibdir}/servlet.jar		$DEST/common/lib/servletapi4.jar
-ln -sf %{_javalibdir}/jdbc-stdext.jar		$DEST/common/lib/jdbc2_0-stdext.jar
-ln -sf %{_javalibdir}/jdbc-stdext.jar		$DEST/common/lib/jdbc-stdext-2.0.jar
-ln -sf %{_javalibdir}/jmxri.jar			$DEST/common/lib
-ln -sf %{_javalibdir}/jndi.jar			$DEST/common/lib
-ln -sf %{_javalibdir}/jta.jar			$DEST/common/lib
-ln -sf %{_javalibdir}/mail.jar			$DEST/common/lib
-ln -sf %{_javalibdir}/jsse.jar			$DEST/common/lib
-ln -sf %{_javalibdir}/tyrex.jar			$DEST/common/lib
-ln -sf %{_javalibdir}/junit.jar			$DEST/common/lib
+ln -sf %{_javadir}/activation.jar		$DEST/common/lib
+ln -sf %{_javadir}/ant.jar			$DEST/common/lib
+ln -sf %{_javadir}/commons-collections.jar	$DEST/common/lib
+ln -sf %{_javadir}/commons-dbcp.jar		$DEST/common/lib
+ln -sf %{_javadir}/commons-logging-api.jar	$DEST/common/lib
+ln -sf %{_javadir}/commons-pool.jar		$DEST/common/lib
+ln -sf %{_javadir}/servlet.jar		$DEST/common/lib
+ln -sf %{_javadir}/servlet.jar		$DEST/common/lib/servletapi4.jar
+ln -sf %{_javadir}/jdbc-stdext.jar		$DEST/common/lib/jdbc2_0-stdext.jar
+ln -sf %{_javadir}/jdbc-stdext.jar		$DEST/common/lib/jdbc-stdext-2.0.jar
+ln -sf %{_javadir}/jmxri.jar			$DEST/common/lib
+ln -sf %{_javadir}/jndi.jar			$DEST/common/lib
+ln -sf %{_javadir}/jta.jar			$DEST/common/lib
+ln -sf %{_javadir}/mail.jar			$DEST/common/lib
+ln -sf %{_javadir}/jsse.jar			$DEST/common/lib
+ln -sf %{_javadir}/tyrex.jar			$DEST/common/lib
+ln -sf %{_javadir}/junit.jar			$DEST/common/lib
 
-ln -sf %{_javalibdir}/mailapi.jar		$DEST/common/lib
-ln -sf %{_javalibdir}/pop3.jar			$DEST/common/lib
-ln -sf %{_javalibdir}/pop3.jar			$DEST/common/lib/pop.jar
-ln -sf %{_javalibdir}/smtp.jar			$DEST/common/lib
-ln -sf %{_javalibdir}/imap.jar			$DEST/common/lib
+ln -sf %{_javadir}/mailapi.jar		$DEST/common/lib
+ln -sf %{_javadir}/pop3.jar			$DEST/common/lib
+ln -sf %{_javadir}/pop3.jar			$DEST/common/lib/pop.jar
+ln -sf %{_javadir}/smtp.jar			$DEST/common/lib
+ln -sf %{_javadir}/imap.jar			$DEST/common/lib
 
-ln -sf %{_javalibdir}/commons-beanutils.jar	$DEST/server/lib
-ln -sf %{_javalibdir}/commons-digester.jar	$DEST/server/lib
-ln -sf %{_javalibdir}/commons-fileupload.jar	$DEST/server/lib
-ln -sf %{_javalibdir}/commons-logging.jar	$DEST/server/lib
-ln -sf %{_javalibdir}/commons-modeler.jar	$DEST/server/lib
-ln -sf %{_javalibdir}/jaas.jar			$DEST/server/lib/jaas.jar
-ln -sf %{_javalibdir}/mx4j-jmx.jar		$DEST/server/lib
-ln -sf %{_javalibdir}/regexp.jar		$DEST/server/lib
-ln -sf %{_javalibdir}/regexp.jar		$DEST/server/lib/jakarta-regexp-1.2.jar
-ln -sf %{_javalibdir}/regexp.jar		$DEST/server/lib/regexp-1.2.jar
+ln -sf %{_javadir}/commons-beanutils.jar	$DEST/server/lib
+ln -sf %{_javadir}/commons-digester.jar	$DEST/server/lib
+ln -sf %{_javadir}/commons-fileupload.jar	$DEST/server/lib
+ln -sf %{_javadir}/commons-logging.jar	$DEST/server/lib
+ln -sf %{_javadir}/commons-modeler.jar	$DEST/server/lib
+ln -sf %{_javadir}/jaas.jar			$DEST/server/lib/jaas.jar
+ln -sf %{_javadir}/mx4j-jmx.jar		$DEST/server/lib
+ln -sf %{_javadir}/regexp.jar		$DEST/server/lib
+ln -sf %{_javadir}/regexp.jar		$DEST/server/lib/jakarta-regexp-1.2.jar
+ln -sf %{_javadir}/regexp.jar		$DEST/server/lib/regexp-1.2.jar
 
-ln -sf %{_javalibdir}/jaxp_parser_impl.jar	$DEST/common/endorsed
-ln -sf %{_javalibdir}/xml-commons-apis.jar	$DEST/common/endorsed
+ln -sf %{_javadir}/jaxp_parser_impl.jar	$DEST/common/endorsed
+ln -sf %{_javadir}/xml-commons-apis.jar	$DEST/common/endorsed
 
-ln -sf %{_javalibdir}/struts.jar $DEST/server/webapps/admin/WEB-INF/lib
+ln -sf %{_javadir}/struts.jar $DEST/server/webapps/admin/WEB-INF/lib
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/tomcat
 
