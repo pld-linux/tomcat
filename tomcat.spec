@@ -13,13 +13,13 @@ Group:		Development/Languages/Java
 Source0:	http://www.apache.org/dist/tomcat/tomcat-5/v5.0.30/src/%{name}-%{version}-src.tar.gz
 # Source0-md5:	13fa1b56779c7b258c95266f69b22437
 Source1:	%{name}.init
-#Patch0:		%{name}-fixes.patch
-#Patch1:		%{name}-JAVA_HOME.patch
-#Patch2:		%{name}-fileupload.patch
+#Patch0:	%{name}-fixes.patch
+#Patch1:	%{name}-JAVA_HOME.patch
+#Patch2:	%{name}-fileupload.patch
 URL:		http://jakarta.apache.org/tomcat/index.html
 # required:
+BuildRequires:	ant >= 1.5.3
 BuildRequires:	jaas
-BuildRequires:	jakarta-ant >= 1.5.3
 BuildRequires:	jakarta-commons-beanutils
 BuildRequires:	jakarta-commons-collections
 BuildRequires:	jakarta-commons-digester
@@ -30,9 +30,10 @@ BuildRequires:	jakarta-servletapi >= 4
 BuildRequires:	jakarta-struts >= 1.0.2
 BuildRequires:	jaxp_parser_impl
 BuildRequires:	jdk >= 1.2
+BuildRequires:	jpackage-utils
 BuildRequires:	mx4j >= 1.1.1
 BuildRequires:	puretls
-BuildRequires:	rpmbuild(macros) >= 1.202
+BuildRequires:	rpmbuild(macros) >= 1.300
 # optional:
 BuildRequires:	jaf >= 1.0.1
 BuildRequires:	jakarta-commons-daemon
@@ -45,6 +46,7 @@ BuildRequires:	jndi >= 1.2.1
 BuildRequires:	jsse >= 1.0.2
 BuildRequires:	jta >= 1.0.1
 BuildRequires:	junit >= 3.7
+BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	tyrex >= 1.0
 BuildRequires:	xml-commons
 Requires(post,postun):	/sbin/ldconfig
@@ -72,6 +74,7 @@ Requires:	jre >= 1.2
 Requires:	jsse >= 1.0.2
 Requires:	jta >= 1.0.1
 Requires:	mx4j >= 1.1.1
+Requires:	rc-scripts
 Requires:	tyrex >= 1.0
 Requires:	xml-commons
 Provides:	group(http)
@@ -157,7 +160,7 @@ tyrex.jar=%{_javalibdir}/tyrex.jar
 EOBP
 
 JAVA_HOME=%{_libdir}/java
-ant -Djava.home=$JAVA_HOME
+%ant -Djava.home=$JAVA_HOME
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -247,17 +250,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 /sbin/chkconfig --add tomcat
-if [ -f /var/lock/subsys/tomcat ]; then
-	/etc/rc.d/init.d/tomcat restart 1>&2
-else
-	echo "Run \"/etc/rc.d/init.d/tomcat start\" to start tomcat daemon."
-fi
+%service tomcat restart
 
 %preun
 if [ "$1" = "0" ]; then
-	if [ -f /var/lock/subsys/tomcat ]; then
-		/etc/rc.d/init.d/tomcat stop 1>&2
-	fi
+	%service tomcat stop
 	/sbin/chkconfig --del tomcat
 fi
 
