@@ -2,7 +2,6 @@
 %bcond_with	binary	# build from binary source
 %bcond_without	javadoc	# skip building javadocs
 #
-
 Summary:	The Tomcat Servlet/JSP Container
 Summary(pl):	Tomcat - Zasobnik servletów/JSP
 Name:		jakarta-tomcat
@@ -13,9 +12,6 @@ Group:		Development/Languages/Java
 Source0:	http://www.apache.org/dist/tomcat/tomcat-5/v5.0.30/src/%{name}-%{version}-src.tar.gz
 # Source0-md5:	13fa1b56779c7b258c95266f69b22437
 Source1:	%{name}.init
-#Patch0: %{name}-fixes.patch
-#Patch1: %{name}-JAVA_HOME.patch
-#Patch2: %{name}-fileupload.patch
 URL:		http://jakarta.apache.org/tomcat/index.html
 # required:
 BuildRequires:	ant >= 1.5.3
@@ -107,61 +103,18 @@ Dokumentacja do Tomcata.
 
 %prep
 %setup -q -n %{name}-%{version}-src
-#%patch0 -p1
-#%patch1 -p1
-#%patch2 -p1
 
 # Remove pre-built jars
 find $dir -name '*.jar' | xargs rm -f
 
 cp jakarta-tomcat-5/LICENSE .
 
-cat >> zzzbuild.properties.tmp <<EOBP
-ant.jar=%{_javadir}/ant.jar
-jtc.home=$RPM_BUILD_DIR/%{name}-%{version}-src/%{name}-connectors-%{version}-src/
-jasper.home=./jasper
-commons-beanutils.jar=%{_javadir}/commons-beanutils.jar
-commons-fileupload.jar=%{_javadir}/commons-fileupload.jar
-commons-collections.jar=%{_javadir}/commons-collections.jar
-commons-daemon.jar=%{_javadir}/commons-daemon.jar
-commons-dbcp.jar=%{_javadir}/commons-dbcp.jar
-commons-digester.jar=%{_javadir}/commons-digester.jar
-commons-logging.jar=%{_javadir}/commons-logging.jar
-commons-logging-api.jar=%{_javadir}/commons-logging-api.jar
-commons-modeler.jar=%{_javadir}/commons-modeler.jar
-commons-pool.jar=%{_javadir}/commons-pool.jar
-jcert.jar=%{_javadir}/jcert.jar
-jnet.jar=%{_javadir}/jnet.jar
-jsse.jar=%{_javadir}/jsse.jar
-jmx.jar=%{_javadir}/mx4j-jmx.jar
-jmxri.jar=%{_javadir}/mx4j-jmx.jar
-junit.jar=%{_javadir}/junit.jar
-regexp.jar=%{_javadir}/regexp.jar
-servlet.jar=%{_javadir}/servlet.jar
-#servlet.doc=%{javadocdir}/servletapi4
-xercesImpl.jar=%{_javadir}/jaxp_parser_impl.jar
-xmlParserAPIs.jar=%{_javadir}/xml-commons-apis.jar
-puretls.jar=%{_javadir}/puretls.jar
-jmx.jar=%{_javadir}/mx4j-jmx.jar
-struts.jar=%{_javadir}/struts.jar
-struts.lib=%{_datadir}/jakarta-struts
-jdbc20ext.jar=%{_javadir}/jdbc-stdext.jar
-activation.jar=%{_javadir}/activation.jar
-mail.jar=%{_javadir}/mailapi.jar
-jndi.jar=%{_javadir}/jndi.jar
-jta.jar=%{_javadir}/jta.jar
-jaas.jar=%{_javadir}/jaas.jar
-tyrex.jar=%{_javadir}/tyrex.jar
-EOBP
-
 %build
 export CLASSPATH=%(build-classpath xml-commons-apis xalan)
 TOPDIR=$(pwd)
 
 # build jsp-api, servlet-api as ant dist will later on require them for webapps
-cd jakarta-servletapi-5
-
-cd jsr154
+cd jakarta-servletapi-5/jsr154
 %ant -Dservletapi.build=build -Dservletapi.dist=dist -Dbuild.compiler=modern dist
 
 cd ../jsr152
@@ -169,7 +122,6 @@ cd ../jsr152
 
 # build tomcat 5
 cd ../../jakarta-tomcat-5
-
 cat >> build.properties <<EOBP
 ant.jar=%{_javadir}/ant.jar
 ant-launcher.jar=%{_javadir}/ant-launcher.jar
