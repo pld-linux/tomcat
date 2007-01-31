@@ -13,9 +13,9 @@ Group:		Development/Languages/Java
 Source0:	http://www.apache.org/dist/tomcat/tomcat-5/v5.0.30/src/%{name}-%{version}-src.tar.gz
 # Source0-md5:	13fa1b56779c7b258c95266f69b22437
 Source1:	%{name}.init
-#Patch0:	%{name}-fixes.patch
-#Patch1:	%{name}-JAVA_HOME.patch
-#Patch2:	%{name}-fileupload.patch
+#Patch0: %{name}-fixes.patch
+#Patch1: %{name}-JAVA_HOME.patch
+#Patch2: %{name}-fileupload.patch
 URL:		http://jakarta.apache.org/tomcat/index.html
 # required:
 BuildRequires:	ant >= 1.5.3
@@ -111,10 +111,12 @@ Dokumentacja do Tomcata.
 #%patch1 -p1
 #%patch2 -p1
 
-rm -f lib/*.jar
-rm -f %{name}-connectors-%{version}-src/lib/*.jar
+# Remove pre-built jars
+find $dir -name '*.jar' | xargs rm -f
 
-cat >> build.properties <<EOBP
+cp jakarta-tomcat-5/LICENSE .
+
+cat >> zzzbuild.properties.tmp <<EOBP
 ant.jar=%{_javadir}/ant.jar
 jtc.home=$RPM_BUILD_DIR/%{name}-%{version}-src/%{name}-connectors-%{version}-src/
 jasper.home=./jasper
@@ -154,7 +156,109 @@ EOBP
 
 %build
 export CLASSPATH=%(build-classpath xml-commons-apis xalan)
-%ant
+TOPDIR=$(pwd)
+
+# build jsp-api, servlet-api as ant dist will later on require them for webapps
+cd jakarta-servletapi-5
+
+cd jsr154
+%ant -Dservletapi.build=build -Dservletapi.dist=dist -Dbuild.compiler=modern dist
+
+cd ../jsr152
+%ant -Dservletapi.build=build -Dservletapi.dist=dist -Dbuild.compiler=modern dist
+
+# build tomcat 5
+cd ../../jakarta-tomcat-5
+
+cat >> build.properties <<EOBP
+ant.jar=%{_javadir}/ant.jar
+ant-launcher.jar=%{_javadir}/ant-launcher.jar
+jtc.home=$TOPDIR/jakarta-tomcat-connectors/
+jasper.home=$TOPDIR/jakarta-tomcat-jasper/jasper2
+commons-beanutils.jar=$(build-classpath commons-beanutils)
+commons-fileupload.jar=$(build-classpath commons-fileupload)
+commons-collections.jar=$(build-classpath commons-collections)
+commons-dbcp.jar=$(build-classpath commons-dbcp)
+commons-digester.jar=$(build-classpath commons-digester)
+commons-el.jar=$(build-classpath commons-el)
+commons-launcher.jar=$(build-classpath commons-launcher)
+commons-logging.jar=$(build-classpath commons-logging)
+commons-logging-api.jar=$(build-classpath commons-logging-api)
+commons-modeler.jar=$(build-classpath commons-modeler)
+commons-pool.jar=$(build-classpath commons-pool)
+jmx.jar=$(build-classpath mx4j/mx4j)
+jmx-tools.jar=$(build-classpath mx4j/mx4j-tools)
+jmxri.jar=$(build-classpath mx4j/mx4j-jmx)
+junit.jar=$(build-classpath junit)
+regexp.jar=$(build-classpath regexp)
+servlet-api.jar=$TOPDIR/jakarta-servletapi-5/jsr154/dist/lib/servlet-api.jar
+jsp-api.jar=$TOPDIR/jakarta-servletapi-5/jsr152/dist/lib/jsp-api.jar
+servlet.doc=$TOPDIR/jakarta-servletapi-5/jsr154/dist/docs/api
+xercesImpl.jar=$(build-classpath jaxp_parser_impl)
+xml-apis.jar=$(build-classpath xml-commons-apis)
+struts.jar=$(build-classpath struts)
+struts.lib=%{_datadir}/struts
+activation.jar=$(build-classpath jaf)
+mail.jar=$(build-classpath javamail/mailapi)
+jta.jar=$(build-classpath jta)
+tyrex.jar=$(build-classpath tyrex)
+jaas.jar=$(build-classpath jaas)
+jndi.jar=$(build-classpath jndi)
+jdbc20ext.jar=$(build-classpath jdbc-stdext)
+puretls.jar=$(build-classpath puretls)
+jcert.jar=$(build-classpath jsse/jcert)
+jnet.jar=$(build-classpath jsse/jnet)
+jsse.jar=$(build-classpath jsse/jsse)
+servletapi.build.notrequired=true
+jspapi.build.notrequired=true
+taglibs-core.jar=$(build-classpath taglibs-core)
+taglibs-standard.jar=$(build-classpath taglibs-standard)
+EOBP
+
+# can't use jikes to build tomcat5 (strange)
+%ant -Dbuild.compiler=modern -Djava.home=%{java_home} build
+
+# build the connectors
+cd ../jakarta-tomcat-connectors
+
+# this is just plain and simply evil but something changed in a major way between 5.0.16 and 5.0.18
+oldclasspath=$CLASSPATH
+export CLASSPATH=$TOPDIR/jakarta-servletapi-5/jsr154/dist/lib/servlet-api.jar:\
+$TOPDIR/jakarta-tomcat-5/build/server/lib/catalina.jar
+
+cat > build.properties <<EOBP
+activation.jar=$(build-classpath jaf)
+ant.jar=%{_javadir}/ant.jar
+junit.jar=$(build-classpath junit)
+commons-beanutils.jar=$(build-classpath commons-beanutils)
+commons-collections.jar=$(build-classpath commons-collections)
+commons-digester.jar=$(build-classpath commons-digester)
+commons-fileupload.jar=$(build-classpath commons-fileupload)
+commons-logging.jar=$(build-classpath commons-logging)
+commons-logging-api.jar=$(build-classpath commons-logging-api)
+commons-modeler.jar=$(build-classpath commons-modeler)
+commons-pool.jar=$(build-classpath commons-pool)
+regexp.jar=$(build-classpath regexp)
+jmx.jar=$(build-classpath mx4j/mx4j)
+puretls=$(build-classpath puretls)
+activation.jar=$(build-classpath jaf)
+mail.jar=$(build-classpath javamail/mailapi)
+jta.jar=$(build-classpath jta)
+tyrex.jar=$(build-classpath tyrex)
+jaas.jar=$(build-classpath jaas)
+jndi.jar=$(build-classpath jndi)
+jdbc20ext.jar=$(build-classpath jdbc-stdext)
+puretls.jar=$(build-classpath puretls)
+jcert.jar=$(build-classpath jsse/jcert)
+jnet.jar=$(build-classpath jsse/jnet)
+jsse.jar=$(build-classpath jsse/jsse)
+EOBP
+ant -Dbuild.compiler=modern -Djava.home=%{java_home} build
+export CLASSPATH=$oldclasspath
+
+# build the webapps and make the tree ready to install
+cd ../jakarta-tomcat-5
+ant -Dbuild.compiler=modern -Djava.home=%{java_home} dist
 
 %install
 rm -rf $RPM_BUILD_ROOT
