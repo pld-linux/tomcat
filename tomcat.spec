@@ -1,5 +1,5 @@
 Summary:	The Tomcat Servlet/JSP Container
-Summary(pl.UTF-8):   Tomcat - Zasobnik servletów/JSP
+Summary(pl.UTF-8):	Tomcat - Zasobnik servletów/JSP
 Name:		jakarta-tomcat
 Version:	4.1.24
 %define		base_version 4.0
@@ -92,7 +92,7 @@ Tomcat 4.0 - serwer implementujący specyfikacje Servlet 2.3 oraz JSP
 
 %package doc
 Summary:	The Tomcat Servlet/JSP Container documentation
-Summary(pl.UTF-8):   Dokumentacja do Tomcata
+Summary(pl.UTF-8):	Dokumentacja do Tomcata
 Group:		Development/Languages/Java
 
 %description doc
