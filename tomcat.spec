@@ -1,8 +1,8 @@
+%define		base_version 4.0
 Summary:	The Tomcat Servlet/JSP Container
 Summary(pl.UTF-8):	Tomcat - Zasobnik servletów/JSP
 Name:		jakarta-tomcat
 Version:	4.1.24
-%define		base_version 4.0
 Release:	4
 License:	Apache
 Group:		Development/Languages/Java
@@ -16,8 +16,8 @@ Patch1:		%{name}-JAVA_HOME.patch
 Patch2:		%{name}-fileupload.patch
 URL:		http://jakarta.apache.org/tomcat/index.html
 # required:
-BuildRequires:	jaas
 BuildRequires:	ant >= 1.5.3
+BuildRequires:	jaas
 BuildRequires:	jakarta-commons-beanutils
 BuildRequires:	jakarta-commons-collections
 BuildRequires:	jakarta-commons-digester
@@ -28,9 +28,10 @@ BuildRequires:	jakarta-servletapi >= 4
 BuildRequires:	jakarta-struts >= 1.0.2
 BuildRequires:	jaxp_parser_impl
 BuildRequires:	jdk >= 1.2
+BuildRequires:	jpackage-utils
 BuildRequires:	mx4j >= 1.1.1
 BuildRequires:	puretls
-BuildRequires:	rpmbuild(macros) >= 1.202
+BuildRequires:	rpmbuild(macros) >= 1.300
 # optional:
 BuildRequires:	jaf >= 1.0.1
 BuildRequires:	jakarta-commons-daemon
@@ -245,17 +246,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 /sbin/chkconfig --add tomcat
-if [ -f /var/lock/subsys/tomcat ]; then
-	/etc/rc.d/init.d/tomcat restart 1>&2
-else
-	echo "Run \"/etc/rc.d/init.d/tomcat start\" to start tomcat daemon."
-fi
+%service tomcat restart
 
 %preun
 if [ "$1" = "0" ]; then
-	if [ -f /var/lock/subsys/tomcat ]; then
-		/etc/rc.d/init.d/tomcat stop 1>&2
-	fi
+	%service tomcat stop
 	/sbin/chkconfig --del tomcat
 fi
 
