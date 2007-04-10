@@ -30,6 +30,7 @@ BuildRequires:	jpackage-utils
 BuildRequires:	mx4j >= 1.1.1
 BuildRequires:	puretls
 BuildRequires:	rpmbuild(macros) >= 1.300
+BuildRequires:	xerces-j
 # optional:
 BuildRequires:	jaf >= 1.0.1
 BuildRequires:	jakarta-commons-daemon
@@ -138,9 +139,9 @@ commons-logging.jar=$(build-classpath commons-logging)
 commons-logging-api.jar=$(build-classpath commons-logging-api)
 commons-modeler.jar=$(build-classpath commons-modeler)
 commons-pool.jar=$(build-classpath commons-pool)
-jmx.jar=$(build-classpath mx4j/mx4j)
-jmx-tools.jar=$(build-classpath mx4j/mx4j-tools)
-jmxri.jar=$(build-classpath mx4j/mx4j-jmx)
+jmx.jar=$(build-classpath jre/jmx)
+jmx-tools.jar=$(build-classpath jre/jmx)
+jmxri.jar=$(build-classpath jre/jmx)
 junit.jar=$(build-classpath junit)
 regexp.jar=$(build-classpath regexp)
 servlet-api.jar=$TOPDIR/jakarta-servletapi-5/jsr154/dist/lib/servlet-api.jar
@@ -154,21 +155,22 @@ activation.jar=$(build-classpath jaf)
 mail.jar=$(build-classpath javamail/mailapi)
 jta.jar=$(build-classpath jta)
 tyrex.jar=$(build-classpath tyrex)
-jaas.jar=$(build-classpath jaas)
-jndi.jar=$(build-classpath jndi)
+jaas.jar=$(build-classpath jre/jaas)
+jndi.jar=$(build-classpath jre/jndi)
 jdbc20ext.jar=$(build-classpath jdbc-stdext)
 puretls.jar=$(build-classpath puretls)
-jcert.jar=$(build-classpath jsse/jcert)
-jnet.jar=$(build-classpath jsse/jnet)
-jsse.jar=$(build-classpath jsse/jsse)
+jcert.jar=$(build-classpath java/jcert)
+jnet.jar=$(build-classpath java/jnet)
+jsse.jar=$(build-classpath java/jsse)
 servletapi.build.notrequired=true
 jspapi.build.notrequired=true
 taglibs-core.jar=$(build-classpath taglibs-core)
 taglibs-standard.jar=$(build-classpath taglibs-standard)
 EOBP
 
-# can't use jikes to build tomcat5 (strange)
-%ant -Dbuild.compiler=modern -Djava.home=%{java_home} build
+%ant \
+	-Dbuild.compiler=modern \
+	-Djava.home=%{java_home} build
 
 # build the connectors
 cd ../jakarta-tomcat-connectors
@@ -199,18 +201,18 @@ jta.jar=$(build-classpath jta)
 tyrex.jar=$(build-classpath tyrex)
 jaas.jar=$(build-classpath jaas)
 jndi.jar=$(build-classpath jndi)
-jdbc20ext.jar=$(build-classpath jdbc-stdext)
+jdbc20ext.jar=$(build-classpath java/jdbc-stdext)
 puretls.jar=$(build-classpath puretls)
 jcert.jar=$(build-classpath jsse/jcert)
 jnet.jar=$(build-classpath jsse/jnet)
 jsse.jar=$(build-classpath jsse/jsse)
 EOBP
-ant -Dbuild.compiler=modern -Djava.home=%{java_home} build
+%ant -Dbuild.compiler=modern -Djava.home=%{java_home} build
 export CLASSPATH=$oldclasspath
 
 # build the webapps and make the tree ready to install
 cd ../jakarta-tomcat-5
-ant -Dbuild.compiler=modern -Djava.home=%{java_home} dist
+%ant -Dbuild.compiler=modern -Djava.home=%{java_home} dist
 
 %install
 rm -rf $RPM_BUILD_ROOT
