@@ -1,5 +1,26 @@
---- apache-tomcat-5.5.23-src/build/build.xml~	2007-04-12 01:18:08.380139595 +0300
-+++ apache-tomcat-5.5.23-src/build/build.xml	2007-04-12 02:27:57.484292902 +0300
+--- apache-tomcat-5.5.23-src/build/build.xml	2007-04-12 02:29:47.766778367 +0300
++++ apache-tomcat-5.5.23-src/build/build.xml	2007-04-12 02:31:55.729662406 +0300
+@@ -62,9 +62,9 @@
+   <property name="tomcat-dbcp.home" value="${base.path}/tomcat-deps" />
+   <property name="tomcat-dbcp.jar"
+        value="${tomcat-dbcp.home}/naming-factory-dbcp.jar"/>
+-  <property name="jasper-compiler-jdt.home" value="${base.path}/tomcat-deps" />
++   <!--<property name="jasper-compiler-jdt.home" value="${base.path}/tomcat-deps" />
+   <property name="jasper-compiler-jdt.jar"
+-       value="${jasper-compiler-jdt.home}/jasper-compiler-jdt.jar"/>
++	  value="${jasper-compiler-jdt.home}/jasper-compiler-jdt.jar"/>-->
+ 
+   <!-- Some compilers will disable debugging if true. And it doesn't do anything
+        in most cases -->
+@@ -154,7 +154,7 @@
+ 
+     <!-- <copy todir="${tomcat.build}/common/lib" file="${ant.jar}"/>
+     <copy todir="${tomcat.build}/common/lib" file="${ant-launcher.jar}"/> -->
+-    <copy todir="${tomcat.build}/common/lib" file="${jasper-compiler-jdt.jar}"/>
++	<!--<copy todir="${tomcat.build}/common/lib" file="${jasper-compiler-jdt.jar}"/>-->
+   </target>
+ 
+   <!-- ====================== Build all components =================== -->
 @@ -665,7 +665,9 @@
        <param name="destfile" value="${jdt.jar}"/>
        <param name="destdir" value="${base.path}"/>
@@ -11,3 +32,27 @@
    </target>
  
    <target name="build-tomcat-dbcp">
+@@ -725,12 +727,14 @@
+     </jar>
+   </target>
+ 
++  <!--
+       <target name="build-jasper-compiler-jdt">
+        <mkdir dir="${jasper-compiler-jdt.home}"/>
+        <antcall target="-build-jasper-compiler-jdt">
+           <param name="basedir" value="${jasper-compiler-jdt.home}" />
+        </antcall>
+       </target>
++	-->
+ 
+       <target name="-build-jasper-compiler-jdt">
+         <unjar src="${jdt.jar}" dest="${jasper-compiler-jdt.home}" />
+@@ -944,7 +948,7 @@
+     <copy todir="embed/lib">
+       <fileset dir="build/common/lib">
+         <include name="jasper-compiler.jar"/>
+-        <include name="jasper-compiler-jdt.jar"/>
++		<!--<include name="jasper-compiler-jdt.jar"/>-->
+       </fileset>
+     </copy>
+ 
