@@ -14,30 +14,43 @@ Source0:	http://www.apache.org/dist/tomcat/tomcat-5/v%{version}/src/apache-tomca
 # Source0-md5:	362d1d8b15dc09882440dcab8c592dd7
 #Source0:	http://apache.zone-h.org/
 Source1:	%{name}.init
+Patch0:		apache-tomcat-skip-servletapi.patch
+Patch1:		apache-tomcat-nsis.patch
+Patch2:		apache-tomcat-native.patch
+Patch3:		apache-tomcat-skip-jdt.patch
 URL:		http://tomcat.apache.org/
 # required:
 BuildRequires:	ant >= 1.5.3
 BuildRequires:	jaas
 BuildRequires:	jakarta-commons-beanutils
 BuildRequires:	jakarta-commons-collections
+BuildRequires:	jakarta-commons-collections-source
+BuildRequires:	jakarta-commons-daemon
+BuildRequires:	jakarta-commons-dbcp
+BuildRequires:	jakarta-commons-dbcp-source
 BuildRequires:	jakarta-commons-digester
 BuildRequires:	jakarta-commons-fileupload
+BuildRequires:	jakarta-commons-httpclient
 BuildRequires:	jakarta-commons-logging
+BuildRequires:	jakarta-commons-modeler >= 2.0
+BuildRequires:	jakarta-commons-pool
+BuildRequires:	jakarta-commons-pool-source
 BuildRequires:	jakarta-regexp
-BuildRequires:	jakarta-servletapi >= 4
+BuildRequires:	jakarta-servletapi5
 BuildRequires:	jakarta-struts >= 1.0.2
 BuildRequires:	jaxp_parser_impl
-BuildRequires:	jdk >= 1.2
+BuildRequires:	jdk >= 1.5
 BuildRequires:	jpackage-utils
 BuildRequires:	mx4j >= 1.1.1
 BuildRequires:	puretls
 BuildRequires:	rpmbuild(macros) >= 1.300
 BuildRequires:	xerces-j
+%if %{with javadoc}
+BuildRequires:	commons-el
+%endif
 # optional:
 BuildRequires:	jaf >= 1.0.1
-BuildRequires:	jakarta-commons-daemon
 BuildRequires:	jakarta-commons-dbcp
-BuildRequires:	jakarta-commons-modeler
 BuildRequires:	jakarta-commons-pool
 BuildRequires:	javamail >= 1.2
 BuildRequires:	jdbc-stdext >= 2.0
@@ -112,105 +125,164 @@ The Tomcat Servlet/JSP Container documentation.
 Dokumentacja do Tomcata.
 
 %prep
-%setup -q -n apache-tomcat-%{version}-src/
+%setup -q -n apache-tomcat-%{version}-src
+%patch0 -p1
+%patch1 -p1
+%patch2 -p1
+%patch3 -p1
+
+# servletapi built from jakarta-servletapi5
+rm -rf servletapi
 
 # Remove pre-built jars
 find -name '*.jar' | xargs rm -fv
 
 %build
 TOPDIR=$(pwd)
+#xerces.jar=$(build-classpath xerces)
+#jasper-compiler-jdt.jar=$(build-classpath jdtcore)
 
-# build jsp-api, servlet-api as ant dist will later on require them for webapps
-cd servletapi/jsr154
-%ant -Dservletapi.build=build -Dservletapi.dist=dist -Dbuild.compiler=modern dist
+mkdir -p tomcat-deps
+> tomcat-deps/tomcat-dbcp.jar
 
-cd ../jsr152
-%ant -Dservletapi.build=build -Dservletapi.dist=dist -Dbuild.compiler=modern dist
-
-# build jasper subpackage
-cd ../../jasper
-CLASSPATH=$(build-classpath xml-commons-apis xalan)
-export CLASSPATH=$CLASSPATH:$TOPDIR/servletapi/jsr154/dist/lib/servlet-api.jar
+%if 0
+# build jasper javadocs
+cd jasper
+CLASSPATH=$(build-classpath xml-commons-apis)
 cat > build.properties <<EOF
 ant.jar=$(build-classpath ant)
-servlet-api.jar=$TOPDIR/servletapi/jsr154/dist/lib/servlet-api.jar
-jsp-api.jar=$TOPDIR/servletapi/jsr152/dist/lib/jsp-api.jar
+servlet-api.jar=$(build-classpath servlet-api)
+jsp-api.jar=$(build-classpath jsp-api)
 tools.jar=%{java_home}/lib/tools.jar
-xerces.jar=$(build-classpath xerces)
 xercesImpl.jar=$(build-classpath jaxp_parser_impl)
 xmlParserAPIs.jar=$(build-classpath xml-commons-apis)
-commons-el.jar=$(build-classpath commons-el)
 commons-collections.jar=$(build-classpath commons-collections)
 commons-logging.jar=$(build-classpath commons-logging)
 commons-daemon.jar=$(build-classpath commons-daemon)
 junit.jar=$(build-classpath junit)
-jasper-compiler-jdt.jar=$(build-classpath jdtcore)
+commons-el.jar=$(build-classpath commons-el)
 EOF
-%ant -Dbuild.compiler=modern javadoc
+# building jasper needs eclipse classes
+#%ant dist
+
+%if %{with javadoc}
+%ant javadoc \
+	-Dcompile.source=1.4 \
+	-Dbuild.compiler=modern \
+
+%endif
+cd -
+%endif
 
 # build tomcat 5.5
-cd ../build
-cat >> build.properties <<EOF
+#cd build
+cat > build.properties <<EOF
+commons-beanutils.jar=$(build-classpath commons-beanutils)
+commons-launcher.jar=$(build-classpath commons-launcher)
+commons-daemon.jar=$(build-classpath commons-daemon)
+commons-digester.jar=$(build-classpath commons-digester)
+commons-el.jar=$(build-classpath commons-el)
+commons-logging-api.jar=$(build-classpath commons-logging-api)
+commons-logging.jar=$(build-classpath commons-logging)
+commons-modeler.jar=$(build-classpath commons-modeler)
+xercesImpl.jar=$(build-classpath jaxp_parser_impl)
+xml-apis.jar=$(build-classpath xml-commons-apis)
+%if 0
+jdt.jar=${jdt.lib}/org.eclipse.jdt.core_3.1.2.jar
+log4j.jar=${log4j.lib}/dist/lib/log4j-1.2.12.jar
+%endif
+commons-httpclient.jar=$(build-classpath commons-httpclient)
+commons-collections.jar=$(build-classpath commons-collections)
+commons-fileupload.jar=$(build-classpath commons-fileupload)
+
+
+%if 0
+jmx.jar=${jmx.lib}/mx4j.jar
+%endif
+jmx.jar=$(build-classpath jre/jmx)
+%if 0
+jmx-tools.jar=${jmx.lib}/mx4j-tools.jar
+%endif
+jmx-tools.jar=$(build-classpath jre/jmx)
+%if 0
+jmx-remote.jar=${jmx.lib}/mx4j-remote.jar
+%endif
+junit.jar=$(build-classpath junit)
+%if 0
+rhino.jar=${rhino.home}/js.jar
+%endif
+struts.jar=$(build-classpath struts)
+activation.jar=$(build-classpath jaf)
+jcert.jar=$(build-classpath java/jcert)
+jnet.jar=$(build-classpath java/jnet)
+jsse.jar=$(build-classpath java/jsse)
+jta.jar=$(build-classpath jta)
+mail.jar=$(build-classpath javamail/mailapi)
+puretls.jar=$(build-classpath puretls)
+
+servlet-api.jar=$(build-classpath servlet-api)
+# how the fck those bools work
+# build.xml:103: servletapi/jsr154/src not found.
+servletapi.build.notrequired=true
+
+jsp-api.jar=$(build-classpath jsp-api)
+jspapi.build.notrequired=true
+
+log4j.jar=$(build-classpath logging-log4j)
+#log4j.loc=%{_javadir}
+
+# source is needed because source is copied modified and recompiled as tomcat jar
+# see <target name="-build-tomcat-dbcp"> in build/build.xml
+tomcat-dbcp.home=
+commons-collections.home=%{_prefix}/src/jakarta-commons-collections-3.1
+commons-pool.home=%{_prefix}/src/jakarta-commons-pool-1.3
+commons-dbcp.home=%{_prefix}/src/jakarta-commons-dbcp-1.2.1
+tomcat-dbcp.home=$TOPDIR/tomcat-deps
+# err, it compiles three above and then appends to the jar, so the file should exist
+tomcat-dbcp.jar=$TOPDIR/tomcat-deps/tomcat-dbcp.jar
+
+%if 0
 ant.jar=%{_javadir}/ant.jar
 ant-launcher.jar=%{_javadir}/ant-launcher.jar
 jtc.home=$TOPDIR/jakarta-tomcat-connectors/
 jasper.home=$TOPDIR/jakarta-tomcat-jasper/jasper2
-commons-beanutils.jar=$(build-classpath commons-beanutils)
-commons-fileupload.jar=$(build-classpath commons-fileupload)
-commons-collections.jar=$(build-classpath commons-collections)
 commons-dbcp.jar=$(build-classpath commons-dbcp)
-commons-digester.jar=$(build-classpath commons-digester)
-commons-el.jar=$(build-classpath commons-el)
-commons-launcher.jar=$(build-classpath commons-launcher)
-commons-logging.jar=$(build-classpath commons-logging)
-commons-logging-api.jar=$(build-classpath commons-logging-api)
-commons-modeler.jar=$(build-classpath commons-modeler)
 commons-pool.jar=$(build-classpath commons-pool)
-jmx.jar=$(build-classpath jre/jmx)
-jmx-tools.jar=$(build-classpath jre/jmx)
 jmxri.jar=$(build-classpath jre/jmx)
-junit.jar=$(build-classpath junit)
 regexp.jar=$(build-classpath regexp)
-servlet-api.jar=$TOPDIR/jakarta-servletapi-5/jsr154/dist/lib/servlet-api.jar
 jsp-api.jar=$TOPDIR/jakarta-servletapi-5/jsr152/dist/lib/jsp-api.jar
 servlet.doc=$TOPDIR/jakarta-servletapi-5/jsr154/dist/docs/api
-xercesImpl.jar=$(build-classpath jaxp_parser_impl)
-xml-apis.jar=$(build-classpath xml-commons-apis)
-struts.jar=$(build-classpath struts)
 struts.lib=%{_datadir}/struts
-activation.jar=$(build-classpath jaf)
-mail.jar=$(build-classpath javamail/mailapi)
-jta.jar=$(build-classpath jta)
+servletapi.build.notrequired=true
 tyrex.jar=$(build-classpath tyrex)
 jaas.jar=$(build-classpath jre/jaas)
 jndi.jar=$(build-classpath jre/jndi)
 jdbc20ext.jar=$(build-classpath jdbc-stdext)
-puretls.jar=$(build-classpath puretls)
-jcert.jar=$(build-classpath java/jcert)
-jnet.jar=$(build-classpath java/jnet)
-jsse.jar=$(build-classpath java/jsse)
-servletapi.build.notrequired=true
 jspapi.build.notrequired=true
 taglibs-core.jar=$(build-classpath taglibs-core)
 taglibs-standard.jar=$(build-classpath taglibs-standard)
+%endif
+
 EOF
 
-%ant build
+%ant
 
 exit 1
 
-%if 0
-# build tomcat 5
-
 # build the connectors
-cd ../jakarta-tomcat-connectors
+cd connectors
+
+%if 0
 
 # this is just plain and simply evil but something changed in a major way between 5.0.16 and 5.0.18
 oldclasspath=$CLASSPATH
 export CLASSPATH=$TOPDIR/jakarta-servletapi-5/jsr154/dist/lib/servlet-api.jar:\
 $TOPDIR/jakarta-tomcat-5/build/server/lib/catalina.jar
+%endif
 
-cat > build.properties <<EOBP
+%if 0
+cat > build.properties <<EOF
+
 activation.jar=$(build-classpath jaf)
 ant.jar=%{_javadir}/ant.jar
 junit.jar=$(build-classpath junit)
@@ -236,8 +308,55 @@ puretls.jar=$(build-classpath puretls)
 jcert.jar=$(build-classpath jsse/jcert)
 jnet.jar=$(build-classpath jsse/jnet)
 jsse.jar=$(build-classpath jsse/jsse)
-EOBP
-%ant -Dbuild.compiler=modern -Djava.home=%{java_home} build
+
+%endif
+
+%if 0
+commons-beanutils.jar=${commons-beanutils.lib}/commons-beanutils.jar
+commons-collections.jar=${commons-collections.lib}/commons-collections.jar
+commons-digester.jar=${commons-digester.lib}/commons-digester.jar
+commons-fileupload.jar=${commons-fileupload.lib}/commons-fileupload-1.0-beta-1.jar
+commons-logging-api.jar=${commons-logging.lib}/commons-logging-api.jar
+commons-logging.jar=${commons-logging.lib}/commons-logging.jar
+jndi.jar=${jndi.lib}/jndi.jar
+ldap.jar=${jndi.lib}/ldap.jar
+jaas.jar=${jndi.lib}/jaas.jar
+regexp.jar=${regexp.lib}/jakarta-regexp-1.4.jar
+servlet.jar=${servlet.lib}/servlet.jar
+#xerces.jar=${xerces.lib}/xerces.jar
+xercesImpl.jar=${xerces.lib}/xercesImpl.jar
+xml-apis.jar=${xerces.lib}/xml-apis.jar
+activation.jar=${activation.lib}/activation.jar
+commons-daemon.jar=${commons-daemon.lib}/commons-daemon.jar
+commons-dbcp.jar=${commons-dbcp.lib}/commons-dbcp.jar
+commons-modeler.jar=${commons-modeler.lib}/commons-modeler.jar
+commons-pool.jar=${commons-pool.lib}/commons-pool.jar
+jdbc20ext.jar=${jdbc20ext.lib}/jdbc2_0-stdext.jar
+jmx.jar=${jmx.lib}/mx4j-jmx.jar
+jcert.jar=${jsse.lib}/jcert.jar
+jnet.jar=${jsse.lib}/jnet.jar
+jsse.jar=${jsse.lib}/jsse.jar
+jta.jar=${jta.lib}/jta.jar
+junit.jar=${junit.lib}/junit.jar
+mail.jar=${mail.lib}/mail.jar
+puretls.jar=${puretls.lib}/puretls.jar
+struts.jar=${struts.lib}/struts.jar
+tyrex.jar=${tyrex.lib}/tyrex-1.0.jar
+tomcat5.jar=${tomcat5.home}/server/lib/catalina.jar
+servlet-api.jar=${tomcat5.home}/common/lib/servlet-api.jar
+tomcat41.jar=${tomcat41.home}/server/lib/catalina.jar
+servlet-api.jar=${tomcat41.home}/common/lib/servlet.jar
+tomcat33.jar=${tomcat33.home}/lib/common/tomcat_core.jar
+%endif
+
+
+%if 0
+EOF
+%ant build \
+	-Dbuild.compiler=modern \
+	-Djava.home=%{java_home}
+%endif
+%if 0
 export CLASSPATH=$oldclasspath
 
 # build the webapps and make the tree ready to install
