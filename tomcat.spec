@@ -2,17 +2,19 @@
 %bcond_with	binary	# build from binary source
 %bcond_without	javadoc	# skip building javadocs
 #
-Summary:	The Tomcat Servlet/JSP Container
+Summary:	Apache Servlet/JSP Engine, RI for Servlet 2.4/JSP 2.0 API
 Summary(pl):	Tomcat - Zasobnik servletów/JSP
 Name:		jakarta-tomcat
-Version:	5.0.30
+Version:	5.5.23
 Release:	0.1
 License:	Apache
 Group:		Development/Languages/Java
-Source0:	http://www.apache.org/dist/tomcat/tomcat-5/v5.0.30/src/%{name}-%{version}-src.tar.gz
-# Source0-md5:	13fa1b56779c7b258c95266f69b22437
+#Source0:	http://www.apache.org/dist/tomcat/tomcat-5/v5.0.30/src/%{name}-%{version}-src.tar.gz
+Source0:	http://www.apache.org/dist/tomcat/tomcat-5/v%{version}/src/apache-tomcat-%{version}-src.tar.gz
+# Source0-md5:	362d1d8b15dc09882440dcab8c592dd7
+#Source0:	http://apache.zone-h.org/
 Source1:	%{name}.init
-URL:		http://jakarta.apache.org/tomcat/index.html
+URL:		http://tomcat.apache.org/
 # required:
 BuildRequires:	ant >= 1.5.3
 BuildRequires:	jaas
@@ -84,8 +86,15 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_vardir		%{_var}/lib/tomcat
 
 %description
-Tomcat 4.0, a server that implements the Servlet 2.3 and JSP 1.2
-Specifications from Java Software.
+Tomcat is the servlet container that is used in the official Reference
+Implementation for the Java Servlet and JavaServer Pages technologies.
+The Java Servlet and JavaServer Pages specifications are developed by
+Sun under the Java Community Process.
+
+Tomcat is developed in an open and participatory environment and
+released under the Apache Software License. Tomcat is intended to be a
+collaboration of the best-of-breed developers from around the world.
+We invite you to participate in this open development project.
 
 %description -l pl
 Tomcat 4.0 - serwer implementuj±cy specyfikacje Servlet 2.3 oraz JSP
@@ -103,27 +112,45 @@ The Tomcat Servlet/JSP Container documentation.
 Dokumentacja do Tomcata.
 
 %prep
-%setup -q -n %{name}-%{version}-src
+%setup -q -n apache-tomcat-%{version}-src/
 
 # Remove pre-built jars
-find $dir -name '*.jar' | xargs rm -f
-
-cp jakarta-tomcat-5/LICENSE .
+find -name '*.jar' | xargs rm -fv
 
 %build
-export CLASSPATH=%(build-classpath xml-commons-apis xalan)
 TOPDIR=$(pwd)
 
 # build jsp-api, servlet-api as ant dist will later on require them for webapps
-cd jakarta-servletapi-5/jsr154
+cd servletapi/jsr154
 %ant -Dservletapi.build=build -Dservletapi.dist=dist -Dbuild.compiler=modern dist
 
 cd ../jsr152
 %ant -Dservletapi.build=build -Dservletapi.dist=dist -Dbuild.compiler=modern dist
 
-# build tomcat 5
-cd ../../jakarta-tomcat-5
-cat >> build.properties <<EOBP
+# build jasper subpackage
+cd ../../jasper
+CLASSPATH=$(build-classpath xml-commons-apis xalan)
+export CLASSPATH=$CLASSPATH:$TOPDIR/servletapi/jsr154/dist/lib/servlet-api.jar
+cat > build.properties <<EOF
+ant.jar=$(build-classpath ant)
+servlet-api.jar=$TOPDIR/servletapi/jsr154/dist/lib/servlet-api.jar
+jsp-api.jar=$TOPDIR/servletapi/jsr152/dist/lib/jsp-api.jar
+tools.jar=%{java_home}/lib/tools.jar
+xerces.jar=$(build-classpath xerces)
+xercesImpl.jar=$(build-classpath jaxp_parser_impl)
+xmlParserAPIs.jar=$(build-classpath xml-commons-apis)
+commons-el.jar=$(build-classpath commons-el)
+commons-collections.jar=$(build-classpath commons-collections)
+commons-logging.jar=$(build-classpath commons-logging)
+commons-daemon.jar=$(build-classpath commons-daemon)
+junit.jar=$(build-classpath junit)
+jasper-compiler-jdt.jar=$(build-classpath jdtcore)
+EOF
+%ant -Dbuild.compiler=modern javadoc
+
+# build tomcat 5.5
+cd ../build
+cat >> build.properties <<EOF
 ant.jar=%{_javadir}/ant.jar
 ant-launcher.jar=%{_javadir}/ant-launcher.jar
 jtc.home=$TOPDIR/jakarta-tomcat-connectors/
@@ -166,11 +193,14 @@ servletapi.build.notrequired=true
 jspapi.build.notrequired=true
 taglibs-core.jar=$(build-classpath taglibs-core)
 taglibs-standard.jar=$(build-classpath taglibs-standard)
-EOBP
+EOF
 
-%ant \
-	-Dbuild.compiler=modern \
-	-Djava.home=%{java_home} build
+%ant build
+
+exit 1
+
+%if 0
+# build tomcat 5
 
 # build the connectors
 cd ../jakarta-tomcat-connectors
@@ -213,6 +243,7 @@ export CLASSPATH=$oldclasspath
 # build the webapps and make the tree ready to install
 cd ../jakarta-tomcat-5
 %ant -Dbuild.compiler=modern -Djava.home=%{java_home} dist
+%endif
 
 %install
 rm -rf $RPM_BUILD_ROOT
