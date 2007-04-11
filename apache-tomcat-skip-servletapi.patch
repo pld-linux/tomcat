@@ -1,6 +1,23 @@
---- apache-tomcat-5.5.23-src/build/build.xml~	2007-03-05 17:27:32.000000000 +0200
-+++ apache-tomcat-5.5.23-src/build/build.xml	2007-04-12 00:29:27.044280476 +0300
-@@ -649,8 +649,8 @@
+--- apache-tomcat-5.5.23-src/build/build.xml~	2007-04-12 00:32:27.088341587 +0300
++++ apache-tomcat-5.5.23-src/build/build.xml	2007-04-12 00:32:28.698377904 +0300
+@@ -99,16 +99,6 @@
+     <mkdir dir="${tomcat.build}/server/lib" />
+     <mkdir dir="${tomcat.build}/common/lib" />
+ 
+-    <uptodate property="servletapi.build.notrequired"
+-              targetfile="${servlet-api.jar}">
+-      <srcfiles dir="${api.home}/jsr154/src" includes="**" />
+-    </uptodate>
+-
+-    <uptodate property="jspapi.build.notrequired"
+-              targetfile="${jsp-api.jar}">
+-      <srcfiles dir="${api.home}/jsr152/src" includes="**" />
+-    </uptodate>
+-
+     <uptodate property="tomcatutil.build.notrequired"
+               targetfile="${tomcat.build}/server/lib/tomcat-util.jar">
+       <srcfiles dir="${jtc.home}/util/java" includes="**" />
+@@ -649,8 +639,8 @@
  
    <target name="build-depends" depends="init"
            description="Builds various dependent components - APIs, commons-el, commons-modeler, daemon">
