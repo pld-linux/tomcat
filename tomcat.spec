@@ -14,7 +14,7 @@ Source2:	%{name}.init
 Patch0:		%{name}-fixes.patch
 Patch1:		%{name}-JAVA_HOME.patch
 Patch2:		%{name}-fileupload.patch
-URL:		http://jakarta.apache.org/tomcat/index.html
+URL:		http://tomcat.apache.org/
 # required:
 BuildRequires:	ant >= 1.5.3
 BuildRequires:	jaas
