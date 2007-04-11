@@ -1,0 +1,13 @@
+--- apache-tomcat-5.5.23-src/build/build.xml~	2007-03-05 17:27:32.000000000 +0200
++++ apache-tomcat-5.5.23-src/build/build.xml	2007-04-12 00:29:27.044280476 +0300
+@@ -649,8 +649,8 @@
+ 
+   <target name="build-depends" depends="init"
+           description="Builds various dependent components - APIs, commons-el, commons-modeler, daemon">
+-    <antcall target="build-servletapi"/>
+-    <antcall target="build-jspapi"/>
++    <!-- <antcall target="build-servletapi"/> -->
++    <!-- <antcall target="build-jspapi"/> -->
+ 
+     <!-- <antcall target="build-commons-modeler" /> -->
+     <!-- <antcall target="build-commons-daemon"  /> -->
