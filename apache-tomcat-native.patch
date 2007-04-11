@@ -1,0 +1,16 @@
+--- apache-tomcat-5.5.23-src/build/build.xml~	2007-04-12 01:16:15.447593367 +0300
++++ apache-tomcat-5.5.23-src/build/build.xml	2007-04-12 01:16:40.598160416 +0300
+@@ -1970,11 +1973,13 @@
+       <param name="destfile" value="${commons-daemon.jar}"/>
+     </antcall>
+ 
++	<!--
+     <antcall target="downloadfile">
+       <param name="sourcefile" value="${tomcat-native.loc}"/>
+       <param name="destfile" value="${tomcat-native.tar.gz}"/>
+       <param name="destdir" value="${tomcat-native.home}"/>
+     </antcall>
++	-->
+ 
+     <!-- Build the dependencies that are not yet released -->
+     <antcall target="build-depends"/>
