@@ -1,0 +1,13 @@
+--- apache-tomcat-5.5.23-src/build/build.xml~	2007-04-12 01:18:08.380139595 +0300
++++ apache-tomcat-5.5.23-src/build/build.xml	2007-04-12 02:27:57.484292902 +0300
+@@ -665,7 +665,9 @@
+       <param name="destfile" value="${jdt.jar}"/>
+       <param name="destdir" value="${base.path}"/>
+     </antcall>
+-    <antcall target="build-jasper-compiler-jdt" />
++	<!--
++	<antcall target="build-jasper-compiler-jdt" />
++	-->
+   </target>
+ 
+   <target name="build-tomcat-dbcp">
