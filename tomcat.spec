@@ -1,9 +1,10 @@
+#
 # Conditional build:
 %bcond_with	binary	# build from binary source
 %bcond_without	javadoc	# skip building javadocs
 #
 Summary:	Apache Servlet/JSP Engine, RI for Servlet 2.4/JSP 2.0 API
-Summary(pl):	Tomcat - Zasobnik servlet�w/JSP
+Summary(pl.UTF-8):	Silnik Servlet/JSP Apache będący wzorcową implementacją API Servlet 2.4/JSP 2.0
 Name:		jakarta-tomcat
 Version:	5.5.23
 Release:	0.1
@@ -109,20 +110,22 @@ released under the Apache Software License. Tomcat is intended to be a
 collaboration of the best-of-breed developers from around the world.
 We invite you to participate in this open development project.
 
-%description -l pl
-Tomcat 4.0 - serwer implementuj�cy specyfikacje Servlet 2.3 oraz JSP
-1.2.
+%description -l pl.UTF-8
+Tomcat to kontener serwletowy używany przez oficjalną implementację
+wzorcową technologii Java Servlet i JavaServer Pages. Specyfikacje
+Java Servlet i JavaServer Pages są rozwijane przez Suna zgodnie z
+Java Community Process.
 
 %package doc
 Summary:	The Tomcat Servlet/JSP Container documentation
-Summary(pl):	Dokumentacja do Tomcata
+Summary(pl.UTF-8):	Dokumentacja do Tomcata - kontekera Servlet/JSP
 Group:		Development/Languages/Java
 
 %description doc
 The Tomcat Servlet/JSP Container documentation.
 
-%description doc -l pl
-Dokumentacja do Tomcata.
+%description doc -l pl.UTF-8
+Dokumentacja do Tomcata - kontekera Servlet/JSP.
 
 %prep
 %setup -q -n apache-tomcat-%{version}-src
