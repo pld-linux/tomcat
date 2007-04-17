@@ -5,20 +5,20 @@
 #
 Summary:	Apache Servlet/JSP Engine, RI for Servlet 2.4/JSP 2.0 API
 Summary(pl.UTF-8):	Silnik Servlet/JSP Apache będący wzorcową implementacją API Servlet 2.4/JSP 2.0
-Name:		jakarta-tomcat
+Name:		apache-tomcat
 Version:	5.5.23
 Release:	0.1
 License:	Apache
 Group:		Development/Languages/Java
 #Source0:	http://www.apache.org/dist/tomcat/tomcat-5/v5.0.30/src/%{name}-%{version}-src.tar.gz
-Source0:	http://www.apache.org/dist/tomcat/tomcat-5/v%{version}/src/apache-tomcat-%{version}-src.tar.gz
+Source0:	http://www.apache.org/dist/tomcat/tomcat-5/v%{version}/src/%{name}-%{version}-src.tar.gz
 # Source0-md5:	362d1d8b15dc09882440dcab8c592dd7
 #Source0:	http://apache.zone-h.org/
 Source1:	%{name}.init
-Patch0:		apache-tomcat-skip-servletapi.patch
-Patch1:		apache-tomcat-nsis.patch
-Patch2:		apache-tomcat-native.patch
-Patch3:		apache-tomcat-skip-jdt.patch
+Patch0:		%{name}-skip-servletapi.patch
+Patch1:		%{name}-nsis.patch
+Patch2:		%{name}-native.patch
+Patch3:		%{name}-skip-jdt.patch
 URL:		http://tomcat.apache.org/
 # required:
 BuildRequires:	ant >= 1.5.3
@@ -92,6 +92,7 @@ Requires:	tyrex >= 1.0
 Requires:	xml-commons
 Provides:	group(http)
 Provides:	user(http)
+Obsoletes:	jakarta-tomcat
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -113,13 +114,14 @@ We invite you to participate in this open development project.
 %description -l pl.UTF-8
 Tomcat to kontener serwletowy używany przez oficjalną implementację
 wzorcową technologii Java Servlet i JavaServer Pages. Specyfikacje
-Java Servlet i JavaServer Pages są rozwijane przez Suna zgodnie z
-Java Community Process.
+Java Servlet i JavaServer Pages są rozwijane przez Suna zgodnie z Java
+Community Process.
 
 %package doc
-Summary:	The Tomcat Servlet/JSP Container documentation
+Summary:	The Apache Tomcat Servlet/JSP Container documentation
 Summary(pl.UTF-8):	Dokumentacja do Tomcata - kontekera Servlet/JSP
 Group:		Development/Languages/Java
+Obsoletes:	jakarta-tomcat-doc
 
 %description doc
 The Tomcat Servlet/JSP Container documentation.
@@ -128,7 +130,7 @@ The Tomcat Servlet/JSP Container documentation.
 Dokumentacja do Tomcata - kontekera Servlet/JSP.
 
 %prep
-%setup -q -n apache-tomcat-%{version}-src
+%setup -q -n %{name}-%{version}-src
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
