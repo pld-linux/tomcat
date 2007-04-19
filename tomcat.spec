@@ -33,6 +33,8 @@ BuildRequires:	jakarta-commons-dbcp-source
 BuildRequires:	jakarta-commons-digester
 BuildRequires:	jakarta-commons-fileupload
 BuildRequires:	jakarta-commons-httpclient
+BuildRequires:	jakarta-commons-launcher
+BuildRequires:	eclipse-jdt
 BuildRequires:	jakarta-commons-logging
 BuildRequires:	jakarta-commons-modeler >= 2.0
 BuildRequires:	jakarta-commons-pool
@@ -140,8 +142,6 @@ Dokumentacja do Tomcata - kontekera Servlet/JSP.
 
 # servletapi built from jakarta-servletapi5.spec
 rm -rf servletapi
-# connectors (apache2 for now only) are built from apache-mod_jk.spec
-rm -rf connectors
 
 # Remove pre-built jars
 find -name '*.jar' | xargs rm -fv
@@ -196,8 +196,9 @@ commons-logging.jar=$(build-classpath commons-logging)
 commons-modeler.jar=$(build-classpath commons-modeler)
 xercesImpl.jar=$(build-classpath jaxp_parser_impl)
 xml-apis.jar=$(build-classpath xml-commons-apis)
+jdt.jar=$(build-classpath org.eclipse.jdt.core)
+jasper-compiler-jdt.home=$TOPDIR/tomcat-deps
 %if 0
-jdt.jar=${jdt.lib}/org.eclipse.jdt.core_3.1.2.jar
 log4j.jar=${log4j.lib}/dist/lib/log4j-1.2.12.jar
 %endif
 commons-httpclient.jar=$(build-classpath commons-httpclient)
