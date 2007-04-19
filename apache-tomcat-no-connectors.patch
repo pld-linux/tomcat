@@ -1,5 +1,5 @@
---- apache-tomcat-5.5.23-src/build/build.xml~	2007-04-18 00:09:13.236214762 +0300
-+++ apache-tomcat-5.5.23-src/build/build.xml	2007-04-18 00:09:15.076256315 +0300
+--- apache-tomcat-5.5.23-src/build/build.xml	2007-04-18 00:09:15.076256315 +0300
++++ apache-tomcat-5.5.23-src/build/build.xml	2007-04-19 22:15:14.256788067 +0300
 @@ -149,8 +149,9 @@
      <copy todir="${tomcat.build}/bin" file="${commons-daemon.jsvc.tar.gz}"
              failonerror="false" />
@@ -11,7 +11,20 @@
  
      <!-- <copy todir="${tomcat.build}/common/lib" file="${ant.jar}"/>
      <copy todir="${tomcat.build}/common/lib" file="${ant-launcher.jar}"/> -->
-@@ -1369,7 +1370,7 @@
+@@ -570,10 +571,12 @@
+   <target name="build" depends="init"
+           description="Builds all components">
+ 
++<!--
+     <antcall target="build-tomcatapr"/>
+     <antcall target="build-tomcatutil"/>
+     <antcall target="build-tomcatcoyote"/>
+     <antcall target="build-tomcathttp11"/>
++-->
+ 
+     <antcall target="build-catalina"/>
+ 
+@@ -1369,7 +1372,7 @@
      <mkdir  dir="${tomcat.dist}/src/${api.project}"/>
      <mkdir  dir="${tomcat.dist}/src/${tomcat.project}"/>
      <mkdir  dir="${tomcat.dist}/src/${catalina.project}"/>
@@ -20,7 +33,7 @@
      <mkdir  dir="${tomcat.dist}/src/${jasper.project}"/>
  
      <!-- Main build file -->
-@@ -1420,6 +1421,7 @@
+@@ -1420,6 +1423,7 @@
      </copy>
  
      <!-- tomcat connectors source -->
@@ -28,7 +41,7 @@
      <copy todir="${tomcat.dist}/src/${jtc.project}">
        <fileset dir="${jtc.home}">
          <exclude name="coyote/build/**"/>
-@@ -1431,6 +1433,7 @@
+@@ -1431,6 +1435,7 @@
          <exclude name="build.properties"/>
        </fileset>
      </copy>
