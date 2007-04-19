@@ -14,11 +14,12 @@ Group:		Development/Languages/Java
 Source0:	http://www.apache.org/dist/tomcat/tomcat-5/v%{version}/src/%{name}-%{version}-src.tar.gz
 # Source0-md5:	362d1d8b15dc09882440dcab8c592dd7
 #Source0:	http://apache.zone-h.org/
-Source1:	%{name}.init
+Source1:	jakarta-tomcat.init
 Patch0:		%{name}-skip-servletapi.patch
 Patch1:		%{name}-nsis.patch
 Patch2:		%{name}-native.patch
 Patch3:		%{name}-skip-jdt.patch
+Patch4:		%{name}-no-connectors.patch
 URL:		http://tomcat.apache.org/
 # required:
 BuildRequires:	ant >= 1.5.3
@@ -47,7 +48,7 @@ BuildRequires:	puretls
 BuildRequires:	rpmbuild(macros) >= 1.300
 BuildRequires:	xerces-j
 %if %{with javadoc}
-BuildRequires:	commons-el
+BuildRequires:	jakarta-commons-el
 %endif
 # optional:
 BuildRequires:	jaf >= 1.0.1
@@ -135,9 +136,12 @@ Dokumentacja do Tomcata - kontekera Servlet/JSP.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
-# servletapi built from jakarta-servletapi5
+# servletapi built from jakarta-servletapi5.spec
 rm -rf servletapi
+# connectors (apache2 for now only) are built from apache-mod_jk.spec
+rm -rf connectors
 
 # Remove pre-built jars
 find -name '*.jar' | xargs rm -fv
@@ -270,7 +274,8 @@ taglibs-standard.jar=$(build-classpath taglibs-standard)
 
 EOF
 
-%ant
+%ant \
+	-Dcompile.source=1.4
 
 exit 1
 
