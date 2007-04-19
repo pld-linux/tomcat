@@ -1,5 +1,5 @@
---- apache-tomcat-5.5.23-src/build/build.xml	2007-04-19 23:16:26.528291420 +0300
-+++ apache-tomcat-5.5.23-src/build/build.xml	2007-04-19 23:24:44.409317738 +0300
+--- apache-tomcat-5.5.23-src/build/build.xml	2007-04-19 23:24:44.409317738 +0300
++++ apache-tomcat-5.5.23-src/build/build.xml	2007-04-19 23:26:17.961392267 +0300
 @@ -99,16 +99,6 @@
      <mkdir dir="${tomcat.build}/server/lib" />
      <mkdir dir="${tomcat.build}/common/lib" />
@@ -33,7 +33,23 @@
  
      <jasper2
               package="admin"
-@@ -649,8 +641,8 @@
+@@ -484,6 +476,7 @@
+       </fileset>
+     </copy>
+ 
++	<!--
+     <javac destdir="${jsp-examples.base}/WEB-INF/classes"
+            optimize="off"
+            debug="${compile.debug}"
+@@ -509,6 +502,7 @@
+       <include name="**" />
+       <exclude name="tags/**" />
+     </javac>
++	-->
+ 
+     <javac destdir="${admin.base}/WEB-INF/classes"
+            optimize="off"
+@@ -649,8 +643,8 @@
  
    <target name="build-depends" depends="init"
            description="Builds various dependent components - APIs, commons-el, commons-modeler, daemon">
@@ -44,7 +60,7 @@
  
      <!-- <antcall target="build-commons-modeler" /> -->
      <!-- <antcall target="build-commons-daemon"  /> -->
-@@ -765,6 +757,7 @@
+@@ -765,6 +759,7 @@
      <mkdir dir="${tomcat.build}/server/webapps" />
  
      <!-- The build files are far too difficult to hack - just build it and copy -->
@@ -52,7 +68,7 @@
      <ant dir="${api.home}/jsr154" target="dist">
      </ant>
      <ant dir="${api.home}/jsr152" target="dist">
-@@ -781,6 +774,7 @@
+@@ -781,6 +776,7 @@
          <exclude name="WEB-INF/tagPlugins.xml" />
        </fileset>
      </copy>
