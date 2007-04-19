@@ -25,40 +25,42 @@ BuildRequires:	ant >= 1.5.3
 BuildRequires:	ant-trax
 BuildRequires:	eclipse-jdt
 BuildRequires:	jaas
-BuildRequires:	jakarta-commons-beanutils
-BuildRequires:	jakarta-commons-collections
-BuildRequires:	jakarta-commons-collections-source
-BuildRequires:	jakarta-commons-daemon
-BuildRequires:	jakarta-commons-dbcp
-BuildRequires:	jakarta-commons-dbcp-source
-BuildRequires:	jakarta-commons-digester
-%{?with_javadoc:BuildRequires:	jakarta-commons-el}
-BuildRequires:	jakarta-commons-fileupload
+BuildRequires:	jakarta-commons-beanutils >= 1.7
+BuildRequires:	jakarta-commons-collections >= 0:3.1
+BuildRequires:	jakarta-commons-collections-source >= 0:3.1
+BuildRequires:	jakarta-commons-daemon >= 1.0
+BuildRequires:	jakarta-commons-dbcp >= 0:1.2.1
+BuildRequires:	jakarta-commons-dbcp-source >= 0:1.2.1
+BuildRequires:	jakarta-commons-digester >= 0:1.7
+BuildRequires:	jakarta-commons-el >= 0:1.0
+BuildRequires:	jakarta-commons-fileupload >= 0:1.0
 BuildRequires:	jakarta-commons-httpclient
-BuildRequires:	jakarta-commons-launcher
-BuildRequires:	jakarta-commons-logging
+BuildRequires:	jakarta-commons-launcher >= 0:0.9
+BuildRequires:	jakarta-commons-logging >= 0:1.0.4
 BuildRequires:	jakarta-commons-modeler >= 2.0
-BuildRequires:	jakarta-commons-pool
-BuildRequires:	jakarta-commons-pool-source
-BuildRequires:	jakarta-regexp
+BuildRequires:	jakarta-commons-pool >= 0:1.2
+BuildRequires:	jakarta-commons-pool-source >= 0:1.2
+BuildRequires:	jakarta-regexp >= 0:1.3
 BuildRequires:	jakarta-servletapi5
+#BuildRequires:	jakarta-struts >= 0:1.2.7
 BuildRequires:	jakarta-struts >= 1.0.2
-BuildRequires:	javamail >= 1.2
-BuildRequires:	jaxp_parser_impl
-BuildRequires:	jdbc-stdext >= 2.0
+BuildRequires:	javamail >= 0:1.3.1
+BuildRequires:	jaxp_parser_impl >= 0:2.7.1
+BuildRequires:	jdbc-stdext >= 0:2.0
 BuildRequires:	jdk >= 1.5
-BuildRequires:	jndi >= 1.2.1
+BuildRequires:	jndi >= 0:1.2.1
 BuildRequires:	jpackage-utils
-BuildRequires:	jsse >= 1.0.2
-BuildRequires:	jta >= 1.0.1
-BuildRequires:	junit >= 3.7
+BuildRequires:	jsse >= 0:1.0.3
+BuildRequires:	jta >= 0:1.0.1
+BuildRequires:	junit >= 0:3.8.1
 BuildRequires:	logging-log4j
+#BuildRequires:	mx4j >= 0:3.0.1
 BuildRequires:	mx4j >= 1.1.1
 BuildRequires:	puretls
 BuildRequires:	rpmbuild(macros) >= 1.300
-BuildRequires:	tyrex >= 1.0
-BuildRequires:	xerces-j
+BuildRequires:	xerces-j >= 0:2.7.1
 BuildRequires:	xml-commons
+#BuildRequires:	xml-commons >= 1.3
 Requires(post,postun):	/sbin/ldconfig
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
@@ -85,7 +87,6 @@ Requires:	jsse >= 1.0.2
 Requires:	jta >= 1.0.1
 Requires:	mx4j >= 1.1.1
 Requires:	rc-scripts
-Requires:	tyrex >= 1.0
 Requires:	xml-commons
 Provides:	group(http)
 Provides:	user(http)
@@ -271,7 +272,6 @@ ln -sf %{_javadir}/jndi.jar			$DEST/common/lib
 ln -sf %{_javadir}/jta.jar			$DEST/common/lib
 ln -sf %{_javadir}/mail.jar			$DEST/common/lib
 ln -sf %{_javadir}/jsse.jar			$DEST/common/lib
-ln -sf %{_javadir}/tyrex.jar			$DEST/common/lib
 ln -sf %{_javadir}/junit.jar			$DEST/common/lib
 
 ln -sf %{_javadir}/mailapi.jar		$DEST/common/lib
