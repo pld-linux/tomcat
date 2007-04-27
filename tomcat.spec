@@ -2,7 +2,6 @@
 # - spec vs filename
 #
 # Conditional build:
-%bcond_with	binary	# build from binary source
 %bcond_without	javadoc	# skip building javadocs
 #
 Summary:	Apache Servlet/JSP Engine, RI for Servlet 2.4/JSP 2.0 API
@@ -48,6 +47,7 @@ BuildRequires:	javamail >= 0:1.3.1
 BuildRequires:	jaxp_parser_impl >= 0:2.7.1
 BuildRequires:	jdbc-stdext >= 0:2.0
 BuildRequires:	jdk >= 1.5
+BuildRequires:	jmx
 BuildRequires:	jndi >= 0:1.2.1
 BuildRequires:	jpackage-utils
 BuildRequires:	jsse >= 0:1.0.3
@@ -94,9 +94,10 @@ Obsoletes:	jakarta-tomcat
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_tomcatdir	%{_libdir}/tomcat
+%define		_tomcatdir	%{_datadir}/tomcat
 %define 	_logdir		%{_var}/log
 %define		_vardir		%{_var}/lib/tomcat
+%define		_sysconfdir	/etc/tomcat
 
 %description
 Tomcat is the servlet container that is used in the official Reference
@@ -193,8 +194,8 @@ jasper-compiler-jdt.home=$TOPDIR/tomcat-deps
 commons-httpclient.jar=$(build-classpath commons-httpclient)
 commons-collections.jar=$(build-classpath commons-collections)
 commons-fileupload.jar=$(build-classpath commons-fileupload)
-jmx.jar=$(build-classpath jre/jmx)
-jmx-tools.jar=$(build-classpath jre/jmx)
+jmx.jar=$(build-classpath jmx)
+jmx-tools.jar=$(build-classpath jmx)
 junit.jar=$(build-classpath junit)
 struts.jar=$(build-classpath struts)
 jcert.jar=$(build-classpath java/jcert)
@@ -222,81 +223,80 @@ EOF
 
 %install
 rm -rf $RPM_BUILD_ROOT
+cd build/build
+TOMCATDIR=$RPM_BUILD_ROOT%{_tomcatdir}
+CATALINADIR=$RPM_BUILD_ROOT/var/lib/tomcat
 
-DEST=$RPM_BUILD_ROOT%{_tomcatdir}
+# we don't need dos scripts
+rm -f bin/*.bat
 
-install -d $DEST/bin \
-	    $DEST/common/{lib,classes,endorsed} \
-	    $DEST/server/{lib,classes} \
-	    $DEST/webapps \
-	    $RPM_BUILD_ROOT%{_sysconfdir}/tomcat \
+randpw=$(echo $RANDOM$$ | md5sum | cut -c 1-15)
+sed -i -e s:SHUTDOWN:${randpw}: conf/{server,server-minimal}.xml
+
+install -d $TOMCATDIR/bin \
+	    $TOMCATDIR/common/{lib,classes,endorsed} \
+	    $TOMCATDIR/server/{lib,classes} \
+	    $TOMCATDIR/webapps \
+	    $RPM_BUILD_ROOT%{_sysconfdir} \
 	    $RPM_BUILD_ROOT%{_logdir}/tomcat \
 	    $RPM_BUILD_ROOT%{_vardir}/work \
 	    $RPM_BUILD_ROOT/etc/rc.d/init.d
 
-install build/bin/*.sh			$DEST/bin
-install build/bin/bootstrap*.jar	$DEST/bin
-install build/bin/tomcat*.jar		$DEST/bin
-install build/common/lib/naming-*.jar	$DEST/common/lib
-install build/common/lib/jasper-*.jar	$DEST/common/lib
-install build/conf/* 			$RPM_BUILD_ROOT%{_sysconfdir}/tomcat
-install build/server/lib/catalina*.jar	$DEST/server/lib
-install build/server/lib/servlets*.jar	$DEST/server/lib
-install build/server/lib/tomcat*.jar	$DEST/server/lib
-install build/server/lib/servlets-cgi.renametojar $DEST/server/lib/servlets-cgi.jar
-install build/server/lib/servlets-ssi.renametojar $DEST/server/lib/servlets-ssi.jar
-cp -rf  build/server/webapps	$DEST/server
-cp -rf  build/webapps 		$DEST
-cp -rf	build/shared		$DEST
-cp -rf	build/temp		$DEST
+install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/tomcat
 
-ln -sf %{_logdir}/tomcat	$DEST/logs
-ln -sf %{_vardir}/work		$DEST/work
-ln -sf %{_sysconfdir}/tomcat	$DEST/conf
+cp -pR conf/* $RPM_BUILD_ROOT%{_sysconfdir}
+cp -HR bin common server $TOMCATDIR
+
+cp -rf  server/webapps	$TOMCATDIR/server
+cp -rf  webapps 		$TOMCATDIR
+cp -rf	shared		$TOMCATDIR
+cp -rf	temp		$TOMCATDIR
+
+ln -sf %{_logdir}/tomcat	$TOMCATDIR/logs
+ln -sf %{_vardir}/work		$TOMCATDIR/work
+ln -sf %{_sysconfdir}	$TOMCATDIR/conf
 
 # symlinks instead of copies
-ln -sf %{_javadir}/commons-daemon.jar	$DEST/bin
+ln -sf %{_javadir}/commons-daemon.jar	$TOMCATDIR/bin
 
-ln -sf %{_javadir}/activation.jar		$DEST/common/lib
-ln -sf %{_javadir}/ant.jar			$DEST/common/lib
-ln -sf %{_javadir}/commons-collections.jar	$DEST/common/lib
-ln -sf %{_javadir}/commons-dbcp.jar		$DEST/common/lib
-ln -sf %{_javadir}/commons-logging-api.jar	$DEST/common/lib
-ln -sf %{_javadir}/commons-pool.jar		$DEST/common/lib
-ln -sf %{_javadir}/servlet.jar		$DEST/common/lib
-ln -sf %{_javadir}/servlet.jar		$DEST/common/lib/servletapi4.jar
-ln -sf %{_javadir}/jdbc-stdext.jar		$DEST/common/lib/jdbc2_0-stdext.jar
-ln -sf %{_javadir}/jdbc-stdext.jar		$DEST/common/lib/jdbc-stdext-2.0.jar
-ln -sf %{_javadir}/jmxri.jar			$DEST/common/lib
-ln -sf %{_javadir}/jndi.jar			$DEST/common/lib
-ln -sf %{_javadir}/jta.jar			$DEST/common/lib
-ln -sf %{_javadir}/mail.jar			$DEST/common/lib
-ln -sf %{_javadir}/jsse.jar			$DEST/common/lib
-ln -sf %{_javadir}/junit.jar			$DEST/common/lib
+ln -sf %{_javadir}/activation.jar		$TOMCATDIR/common/lib
+ln -sf %{_javadir}/ant.jar			$TOMCATDIR/common/lib
+ln -sf %{_javadir}/commons-collections.jar	$TOMCATDIR/common/lib
+ln -sf %{_javadir}/commons-dbcp.jar		$TOMCATDIR/common/lib
+ln -sf %{_javadir}/commons-logging-api.jar	$TOMCATDIR/common/lib
+ln -sf %{_javadir}/commons-pool.jar		$TOMCATDIR/common/lib
+ln -sf %{_javadir}/servlet.jar		$TOMCATDIR/common/lib
+ln -sf %{_javadir}/servlet.jar		$TOMCATDIR/common/lib/servletapi4.jar
+ln -sf %{_javadir}/jdbc-stdext.jar		$TOMCATDIR/common/lib/jdbc2_0-stdext.jar
+ln -sf %{_javadir}/jdbc-stdext.jar		$TOMCATDIR/common/lib/jdbc-stdext-2.0.jar
+ln -sf %{_javadir}/jmxri.jar			$TOMCATDIR/common/lib
+ln -sf %{_javadir}/jndi.jar			$TOMCATDIR/common/lib
+ln -sf %{_javadir}/jta.jar			$TOMCATDIR/common/lib
+ln -sf %{_javadir}/mail.jar			$TOMCATDIR/common/lib
+ln -sf %{_javadir}/jsse.jar			$TOMCATDIR/common/lib
+ln -sf %{_javadir}/junit.jar			$TOMCATDIR/common/lib
 
-ln -sf %{_javadir}/mailapi.jar		$DEST/common/lib
-ln -sf %{_javadir}/pop3.jar			$DEST/common/lib
-ln -sf %{_javadir}/pop3.jar			$DEST/common/lib/pop.jar
-ln -sf %{_javadir}/smtp.jar			$DEST/common/lib
-ln -sf %{_javadir}/imap.jar			$DEST/common/lib
+ln -sf %{_javadir}/mailapi.jar		$TOMCATDIR/common/lib
+ln -sf %{_javadir}/pop3.jar			$TOMCATDIR/common/lib
+ln -sf %{_javadir}/pop3.jar			$TOMCATDIR/common/lib/pop.jar
+ln -sf %{_javadir}/smtp.jar			$TOMCATDIR/common/lib
+ln -sf %{_javadir}/imap.jar			$TOMCATDIR/common/lib
 
-ln -sf %{_javadir}/commons-beanutils.jar	$DEST/server/lib
-ln -sf %{_javadir}/commons-digester.jar	$DEST/server/lib
-ln -sf %{_javadir}/commons-fileupload.jar	$DEST/server/lib
-ln -sf %{_javadir}/commons-logging.jar	$DEST/server/lib
-ln -sf %{_javadir}/commons-modeler.jar	$DEST/server/lib
-ln -sf %{_javadir}/jaas.jar			$DEST/server/lib/jaas.jar
-ln -sf %{_javadir}/mx4j-jmx.jar		$DEST/server/lib
-ln -sf %{_javadir}/regexp.jar		$DEST/server/lib
-ln -sf %{_javadir}/regexp.jar		$DEST/server/lib/jakarta-regexp-1.2.jar
-ln -sf %{_javadir}/regexp.jar		$DEST/server/lib/regexp-1.2.jar
+ln -sf %{_javadir}/commons-beanutils.jar	$TOMCATDIR/server/lib
+ln -sf %{_javadir}/commons-digester.jar	$TOMCATDIR/server/lib
+ln -sf %{_javadir}/commons-fileupload.jar	$TOMCATDIR/server/lib
+ln -sf %{_javadir}/commons-logging.jar	$TOMCATDIR/server/lib
+ln -sf %{_javadir}/commons-modeler.jar	$TOMCATDIR/server/lib
+ln -sf %{_javadir}/jaas.jar			$TOMCATDIR/server/lib/jaas.jar
+ln -sf %{_javadir}/mx4j-jmx.jar		$TOMCATDIR/server/lib
+ln -sf %{_javadir}/regexp.jar		$TOMCATDIR/server/lib
+ln -sf %{_javadir}/regexp.jar		$TOMCATDIR/server/lib/jakarta-regexp-1.2.jar
+ln -sf %{_javadir}/regexp.jar		$TOMCATDIR/server/lib/regexp-1.2.jar
 
-ln -sf %{_javadir}/jaxp_parser_impl.jar	$DEST/common/endorsed
-ln -sf %{_javadir}/xml-commons-apis.jar	$DEST/common/endorsed
+ln -sf %{_javadir}/jaxp_parser_impl.jar	$TOMCATDIR/common/endorsed
+ln -sf %{_javadir}/xml-commons-apis.jar	$TOMCATDIR/common/endorsed
 
-ln -sf %{_javadir}/struts.jar $DEST/server/webapps/admin/WEB-INF/lib
-
-install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/tomcat
+ln -sf %{_javadir}/struts.jar $TOMCATDIR/server/webapps/admin/WEB-INF/lib
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -323,15 +323,27 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc *.txt LICENSE
+%doc build/{RELEASE-NOTES,RUNNING.txt}
+# tomcat wants to regenerate tomcat-users.xml
+%dir %attr(775,root,http) %{_sysconfdir}
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/*
+%attr(754,root,root) /etc/rc.d/init.d/tomcat
 %dir %{_tomcatdir}
 %dir %{_tomcatdir}/bin
+%{_tomcatdir}/bin/catalina-tasks.xml
+%{_tomcatdir}/bin/jkstatus-tasks.xml
+%{_tomcatdir}/bin/jmxaccessor-tasks.xml
 %attr(755,root,root) %{_tomcatdir}/bin/*.sh
 %{_tomcatdir}/bin/*.jar
 %dir %{_tomcatdir}/common
 %dir %{_tomcatdir}/common/classes
 %dir %{_tomcatdir}/common/endorsed
+%dir %{_tomcatdir}/common/i18n
 %{_tomcatdir}/common/endorsed/*.jar
+%{_tomcatdir}/common/i18n/tomcat-i18n-en.jar
+%lang(es) %{_tomcatdir}/common/i18n/tomcat-i18n-es.jar
+%lang(fr) %{_tomcatdir}/common/i18n/tomcat-i18n-fr.jar
+%lang(ja) %{_tomcatdir}/common/i18n/tomcat-i18n-ja.jar
 %{_tomcatdir}/common/lib
 %{_tomcatdir}/conf
 %{_tomcatdir}/logs
@@ -343,14 +355,12 @@ fi
 %{_tomcatdir}/work
 %{_tomcatdir}/shared
 %{_tomcatdir}/temp
-# tomcat wants to regenerate tomcat-users.xml
-%attr(775,root,http) %dir %{_sysconfdir}/tomcat
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/tomcat/*
-%attr(754,root,root) /etc/rc.d/init.d/tomcat
 %dir %{_vardir}
-%attr(1730,root,http) %dir %{_vardir}/work
-%attr(1730,root,http) %dir %{_logdir}/tomcat
+%dir %attr(1730,root,http) %{_vardir}/work
+%dir %attr(1730,root,http) %{_logdir}/tomcat
 
+%if 0
 %files doc
 %defattr(644,root,root,755)
 %doc catalina/docs/*
+%endif
