@@ -1,6 +1,3 @@
-# TODO
-# - spec vs filename
-#
 # Conditional build:
 %bcond_without	javadoc	# skip building javadocs
 #
