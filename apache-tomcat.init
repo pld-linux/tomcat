@@ -36,7 +36,7 @@ case "$1" in
 	if [ ! -f /var/lock/subsys/tomcat ]; then
 		msg_starting tomcat
 		busy
-		su - http -s /bin/sh -c /usr/lib/tomcat/bin/startup.sh >/dev/null 2>&1
+		su - http -s /bin/sh -c /usr/share/tomcat/bin/startup.sh >/dev/null 2>&1
 		[ $? -ne 0 ] && RETVAL=1
 		[ $RETVAL -eq 0 ] && ok || fail
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/tomcat
@@ -49,7 +49,7 @@ case "$1" in
 		# Stop daemons.
 		msg_stopping tomcat
 		busy
-		su - http -s /bin/sh -c /usr/lib/tomcat/bin/shutdown.sh >/dev/null 2>&1
+		su - http -s /bin/sh -c /usr/share/tomcat/bin/shutdown.sh >/dev/null 2>&1
 		[ $? -eq 0 ] && ok || fail
 		rm -f /var/lock/subsys/tomcat
 	else
