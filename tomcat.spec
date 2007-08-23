@@ -10,7 +10,7 @@ License:	Apache
 Group:		Development/Languages/Java
 Source0:	http://www.apache.org/dist/tomcat/tomcat-5/v%{version}/src/%{name}-%{version}-src.tar.gz
 # Source0-md5:	362d1d8b15dc09882440dcab8c592dd7
-Source1:	jakarta-tomcat.init
+Source1:	%{name}.init
 Patch0:		%{name}-skip-servletapi.patch
 Patch1:		%{name}-nsis.patch
 Patch2:		%{name}-native.patch
