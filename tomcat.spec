@@ -24,10 +24,10 @@ BuildRequires:	eclipse-jdt
 BuildRequires:	jaas
 BuildRequires:	jakarta-commons-beanutils >= 1.7
 BuildRequires:	jakarta-commons-collections >= 0:3.1
-BuildRequires:	jakarta-commons-collections-source >= 0:3.1
+BuildRequires:	jakarta-commons-collections-tomcat5 >= 0:3.1
 BuildRequires:	jakarta-commons-daemon >= 1.0
 BuildRequires:	jakarta-commons-dbcp >= 0:1.2.1
-BuildRequires:	jakarta-commons-dbcp-source >= 0:1.2.1
+BuildRequires:	jakarta-commons-dbcp-tomcat5 >= 0:1.2.1
 BuildRequires:	jakarta-commons-digester >= 0:1.7
 BuildRequires:	jakarta-commons-el >= 0:1.0
 BuildRequires:	jakarta-commons-fileupload >= 0:1.0
@@ -36,7 +36,7 @@ BuildRequires:	jakarta-commons-launcher >= 0:0.9
 BuildRequires:	jakarta-commons-logging >= 0:1.0.4
 BuildRequires:	jakarta-commons-modeler >= 2.0
 BuildRequires:	jakarta-commons-pool >= 0:1.2
-BuildRequires:	jakarta-commons-pool-source >= 0:1.2
+BuildRequires:	jakarta-commons-pool-tomcat5 >= 0:1.2
 BuildRequires:	jakarta-regexp >= 0:1.3
 BuildRequires:	jakarta-servletapi5
 #BuildRequires:	jakarta-struts >= 0:1.2.7
