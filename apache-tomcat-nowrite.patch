@@ -1,0 +1,10 @@
+--- apache-tomcat-5.5.23-src/build/build.xml~	2007-12-02 21:50:56.514197016 +0200
++++ apache-tomcat-5.5.23-src/build/build.xml	2007-12-02 22:57:43.812325603 +0200
+@@ -1873,7 +1873,6 @@
+     <!-- commons-digester needs ../LICENSE -->
+     <!-- That is ugly XXX needs a review -->
+     <copy file="LICENSE" tofile="../LICENSE"/>
+-    <copy file="LICENSE" tofile="${base.path}/LICENSE"/>
+ 
+     <!-- Downdown any sub package or tools needed. -->
+     <antcall target="downloadgz">
