@@ -16,6 +16,7 @@ Patch1:		%{name}-nsis.patch
 Patch2:		%{name}-native.patch
 Patch3:		%{name}-skip-jdt.patch
 Patch4:		%{name}-no-connectors.patch
+Patch5:		%{name}-nowrite.patch
 URL:		http://tomcat.apache.org/
 BuildRequires:	ant >= 1.5.3
 BuildRequires:	ant-trax
@@ -132,6 +133,7 @@ Dokumentacja do Tomcata - kontekera Servlet/JSP.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 # servletapi built from jakarta-servletapi5.spec
 rm -rf servletapi
