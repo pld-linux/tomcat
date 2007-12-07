@@ -1,0 +1,11 @@
+--- apache-tomcat-5.5.23-src/build/build.xml~	2007-12-07 09:25:44.906016657 +0200
++++ apache-tomcat-5.5.23-src/build/build.xml	2007-12-07 09:34:23.553415095 +0200
+@@ -663,7 +663,7 @@
+       <param name="destfile" value="${tomcat-dbcp.jar}" />
+     </antcall>
+ 
+-    <antcall target="build-tomcat-dbcp" />
++	<!--<antcall target="build-tomcat-dbcp" />-->
+ 
+  	<!--
+     <antcall target="downloadzip">
