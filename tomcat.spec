@@ -7,12 +7,12 @@
 Summary:	Apache Servlet/JSP Engine, RI for Servlet 2.4/JSP 2.0 API
 Summary(pl.UTF-8):	Silnik Servlet/JSP Apache będący wzorcową implementacją API Servlet 2.4/JSP 2.0
 Name:		apache-tomcat
-Version:	5.5.23
-Release:	0.2
+Version:	5.5.26
+Release:	0.1
 License:	Apache
 Group:		Development/Languages/Java
 Source0:	http://www.apache.org/dist/tomcat/tomcat-5/v%{version}/src/%{name}-%{version}-src.tar.gz
-# Source0-md5:	362d1d8b15dc09882440dcab8c592dd7
+# Source0-md5:	642b6526354cb18c5b5d77ebef8109ae
 Source1:	%{name}.init
 Patch0:		%{name}-skip-servletapi.patch
 Patch1:		%{name}-nsis.patch
