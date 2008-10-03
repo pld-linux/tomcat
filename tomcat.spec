@@ -36,6 +36,7 @@ BuildRequires:	jakarta-commons-el >= 0:1.0
 BuildRequires:	jakarta-commons-fileupload >= 0:1.0
 BuildRequires:	jakarta-commons-httpclient
 BuildRequires:	jakarta-commons-launcher >= 0:0.9
+BuildRequires:	jakarta-commons-io >= 1.4
 BuildRequires:	jakarta-commons-logging >= 0:1.0.4
 BuildRequires:	jakarta-commons-modeler >= 2.0
 BuildRequires:	jakarta-commons-pool >= 0:1.2
@@ -195,6 +196,7 @@ jasper-compiler-jdt.home=$TOPDIR/tomcat-deps
 commons-httpclient.jar=$(find-jar commons-httpclient)
 commons-collections.jar=$(find-jar commons-collections)
 commons-fileupload.jar=$(find-jar commons-fileupload)
+commons-io.jar=$(find-jar commons-io)
 jmx.jar=$(find-jar jmx)
 jmx-tools.jar=$(find-jar jmx)
 junit.jar=$(find-jar junit)
