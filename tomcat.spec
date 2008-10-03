@@ -7,20 +7,19 @@
 Summary:	Apache Servlet/JSP Engine, RI for Servlet 2.4/JSP 2.0 API
 Summary(pl.UTF-8):	Silnik Servlet/JSP Apache będący wzorcową implementacją API Servlet 2.4/JSP 2.0
 Name:		apache-tomcat
-Version:	5.5.26
+Version:	5.5.27
 Release:	0.1
 License:	Apache
 Group:		Development/Languages/Java
 Source0:	http://www.apache.org/dist/tomcat/tomcat-5/v%{version}/src/%{name}-%{version}-src.tar.gz
-# Source0-md5:	642b6526354cb18c5b5d77ebef8109ae
+# Source0-md5:	eb3f196013550b9b1684e4ff18593a8e
 Source1:	%{name}.init
 Patch0:		%{name}-skip-servletapi.patch
 Patch1:		%{name}-nsis.patch
 Patch2:		%{name}-native.patch
 Patch3:		%{name}-skip-jdt.patch
 Patch4:		%{name}-no-connectors.patch
-Patch5:		%{name}-nowrite.patch
-Patch6:		%{name}-dbcp.patch
+Patch5:		%{name}-dbcp.patch
 URL:		http://tomcat.apache.org/
 BuildRequires:	ant >= 1.5.3
 BuildRequires:	ant-trax
@@ -140,7 +139,6 @@ Dokumentacja do Tomcata - kontekera Servlet/JSP.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
-%patch6 -p1
 
 # servletapi built from jakarta-servletapi5.spec
 rm -rf servletapi
