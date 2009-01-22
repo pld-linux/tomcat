@@ -46,7 +46,7 @@ BuildRequires:	java-commons-logging >= 0:1.0.4
 BuildRequires:	java-commons-modeler >= 2.0
 BuildRequires:	java-commons-pool >= 0:1.2
 BuildRequires:	java-commons-pool-tomcat5 >= 0:1.2
-BuildRequires:	java-servletapi5
+BuildRequires:	java-servletapi5 = %{version}-%{release}
 BuildRequires:	javamail >= 0:1.3.1
 BuildRequires:	jaxp_parser_impl >= 0:2.7.1
 BuildRequires:	jdbc-stdext >= 0:2.0
@@ -81,7 +81,7 @@ Requires:	jakarta-regexp
 Requires:	java-commons-el
 #Requires:	java-commons-fileupload
 #Requires:	java-commons-logging
-Requires:	java-servletapi5
+Requires:	java-servletapi5 = %{version}-%{release}
 Requires:	javamail >= 1.2
 Requires:	jaxp_parser_impl
 Requires:	jdbc-stdext >= 2.0
