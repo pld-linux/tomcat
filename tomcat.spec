@@ -56,8 +56,6 @@ BuildRequires:	jsse >= 0:1.0.3
 BuildRequires:	jta >= 0:1.0.1
 BuildRequires:	junit >= 0:3.8.1
 BuildRequires:	logging-log4j
-#BuildRequires:	mx4j >= 0:3.0.1
-BuildRequires:	mx4j >= 1.1.1
 BuildRequires:	puretls
 BuildRequires:	rpmbuild(macros) >= 1.300
 BuildRequires:	xerces-j >= 0:2.7.1
@@ -89,7 +87,6 @@ Requires:	jndi >= 1.2.1
 Requires:	jre >= 1.2
 Requires:	jsse >= 1.0.2
 Requires:	jta >= 1.0.1
-Requires:	mx4j >= 1.1.1
 Requires:	rc-scripts
 Requires:	xml-commons
 Provides:	group(http)
@@ -147,6 +144,9 @@ rm -rf servletapi
 # Remove pre-built jars
 find -name '*.jar' | xargs rm -fv
 
+# for jakarta-struts >= 1.3.10
+find -name '*.jsp' | xargs sed -i 's/<html:html locale="true">/<html:html>/'
+
 %build
 TOPDIR=$(pwd)
 
@@ -181,7 +181,7 @@ cd -
 
 # build tomcat 5.5
 cat > build.properties <<EOF
-commons-beanutils.jar=$(find-jar commons-beanutils)
+commons-beanutils.jar=$(find-jar commons-beanutils-core)
 commons-launcher.jar=$(find-jar commons-launcher)
 commons-daemon.jar=$(find-jar commons-daemon)
 commons-digester.jar=$(find-jar commons-digester)
@@ -200,7 +200,9 @@ commons-io.jar=$(find-jar commons-io)
 jmx.jar=$(find-jar jmx)
 jmx-tools.jar=$(find-jar jmx)
 junit.jar=$(find-jar junit)
-struts.jar=$(find-jar struts)
+struts.jar=$(find-jar struts-core)
+struts-core.jar=$(find-jar struts-core)
+struts-taglib.jar=$(find-jar struts-taglib)
 jcert.jar=$(find-jar jcert)
 jnet.jar=$(find-jar jnet)
 jsse.jar=$(find-jar jsse)
@@ -211,7 +213,8 @@ servletapi.build.notrequired=true
 jsp-api.jar=$(find-jar jsp-api)
 jspapi.build.notrequired=true
 log4j.jar=$(find-jar log4j)
-tomcat-dbcp.jar=$(find-jar jakarta-commons-dbcp-tomcat5)
+tomcat-dbcp.jar=$(find-jar commons-dbcp-tomcat5)
+struts.lib=%{_datadir}/jakarta-struts
 EOF
 
 %ant \
@@ -289,7 +292,6 @@ ln -sf $(find-jar commons-digester) $TOMCATDIR/server/lib/commons-digester.jar
 ln -sf $(find-jar commons-fileupload) $TOMCATDIR/server/lib/commons-fileupload.jar
 ln -sf $(find-jar commons-logging) $TOMCATDIR/server/lib/commons-logging.jar
 ln -sf $(find-jar jaas) $TOMCATDIR/server/lib/jaas.jar
-ln -sf $(find-jar mx4j-jmx) $TOMCATDIR/server/lib/mx4j-jmx.jar
 ln -sf $(find-jar regexp) $TOMCATDIR/server/lib/regexp.jar
 ln -sf $(find-jar regexp) $TOMCATDIR/server/lib/jakarta-regexp-1.2.jar
 ln -sf $(find-jar regexp) $TOMCATDIR/server/lib/regexp-1.2.jar
@@ -297,7 +299,7 @@ ln -sf $(find-jar regexp) $TOMCATDIR/server/lib/regexp-1.2.jar
 
 ln -sf $(find-jar jaxp_parser_impl) $TOMCATDIR/common/endorsed/jaxp_parser_impl.jar
 ln -sf $(find-jar xml-commons-apis) $TOMCATDIR/common/endorsed/xml-commons-apis.jar
-ln -sf $(find-jar struts) $TOMCATDIR/server/webapps/admin/WEB-INF/lib/struts.jar
+ln -sf $(find-jar struts-core) $TOMCATDIR/server/webapps/admin/WEB-INF/lib/struts-core.jar
 
 %clean
 rm -rf $RPM_BUILD_ROOT
