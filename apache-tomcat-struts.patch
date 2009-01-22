@@ -1,0 +1,684 @@
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/banner.jsp apache-tomcat-5.5.27-src/container/webapps/admin/banner.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/banner.jsp	2008-08-29 05:14:01.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/banner.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -21,7 +21,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <!-- Standard Content -->
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/blank.jsp apache-tomcat-5.5.27-src/container/webapps/admin/blank.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/blank.jsp	2008-08-29 05:14:01.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/blank.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -21,7 +21,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <!-- Standard Content -->
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/connector/connector.jsp apache-tomcat-5.5.27-src/container/webapps/admin/connector/connector.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/connector/connector.jsp	2008-08-29 05:14:01.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/connector/connector.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -22,7 +22,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="../users/header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/connector/connectors.jsp apache-tomcat-5.5.27-src/container/webapps/admin/connector/connectors.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/connector/connectors.jsp	2008-08-29 05:14:01.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/connector/connectors.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -21,7 +21,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="../users/header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/context/context.jsp apache-tomcat-5.5.27-src/container/webapps/admin/context/context.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/context/context.jsp	2008-08-29 05:14:01.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/context/context.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -21,7 +21,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="../users/header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/context/contexts.jsp apache-tomcat-5.5.27-src/container/webapps/admin/context/contexts.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/context/contexts.jsp	2008-08-29 05:14:01.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/context/contexts.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -21,7 +21,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="../users/header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/dumpRegistry.jsp apache-tomcat-5.5.27-src/container/webapps/admin/dumpRegistry.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/dumpRegistry.jsp	2008-08-29 05:14:01.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/dumpRegistry.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -21,7 +21,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <!-- Standard Content -->
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/dumpServer.jsp apache-tomcat-5.5.27-src/container/webapps/admin/dumpServer.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/dumpServer.jsp	2008-08-29 05:14:01.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/dumpServer.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -21,7 +21,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <!-- Standard Content -->
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/error.jsp apache-tomcat-5.5.27-src/container/webapps/admin/error.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/error.jsp	2008-08-29 05:14:01.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/error.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -21,7 +21,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <!-- Standard Content -->
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/frameset.jsp apache-tomcat-5.5.27-src/container/webapps/admin/frameset.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/frameset.jsp	2008-08-29 05:14:01.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/frameset.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -25,7 +25,7 @@
+    getServletContext().getNamedDispatcher("action").include(request,response);
+ %> 
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <!-- Standard Content -->
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/host/aliases.jsp apache-tomcat-5.5.27-src/container/webapps/admin/host/aliases.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/host/aliases.jsp	2008-08-29 05:14:01.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/host/aliases.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -21,7 +21,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="../users/header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/host/alias.jsp apache-tomcat-5.5.27-src/container/webapps/admin/host/alias.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/host/alias.jsp	2008-08-29 05:14:01.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/host/alias.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -21,7 +21,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="../users/header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/host/host.jsp apache-tomcat-5.5.27-src/container/webapps/admin/host/host.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/host/host.jsp	2008-08-29 05:14:01.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/host/host.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -21,7 +21,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="../users/header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/host/hosts.jsp apache-tomcat-5.5.27-src/container/webapps/admin/host/hosts.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/host/hosts.jsp	2008-08-29 05:14:01.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/host/hosts.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -21,7 +21,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="../users/header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/login.jsp apache-tomcat-5.5.27-src/container/webapps/admin/login.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/login.jsp	2008-08-29 05:14:01.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/login.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -25,7 +25,7 @@
+    getServletContext().getNamedDispatcher("action").include(request,response);
+ %> 
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <!-- Make sure window is not in a frame -->
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/realm/dataSourceRealm.jsp apache-tomcat-5.5.27-src/container/webapps/admin/realm/dataSourceRealm.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/realm/dataSourceRealm.jsp	2008-08-29 05:14:01.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/realm/dataSourceRealm.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -21,7 +21,7 @@
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="../users/header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/realm/jdbcRealm.jsp apache-tomcat-5.5.27-src/container/webapps/admin/realm/jdbcRealm.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/realm/jdbcRealm.jsp	2008-08-29 05:14:01.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/realm/jdbcRealm.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -21,7 +21,7 @@
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="../users/header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/realm/jndiRealm.jsp apache-tomcat-5.5.27-src/container/webapps/admin/realm/jndiRealm.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/realm/jndiRealm.jsp	2008-08-29 05:14:01.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/realm/jndiRealm.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -21,7 +21,7 @@
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="../users/header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/realm/memoryRealm.jsp apache-tomcat-5.5.27-src/container/webapps/admin/realm/memoryRealm.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/realm/memoryRealm.jsp	2008-08-29 05:14:01.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/realm/memoryRealm.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -21,7 +21,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="../users/header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/realm/realms.jsp apache-tomcat-5.5.27-src/container/webapps/admin/realm/realms.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/realm/realms.jsp	2008-08-29 05:14:01.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/realm/realms.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -21,7 +21,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="../users/header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/realm/userDatabaseRealm.jsp apache-tomcat-5.5.27-src/container/webapps/admin/realm/userDatabaseRealm.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/realm/userDatabaseRealm.jsp	2008-08-29 05:14:01.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/realm/userDatabaseRealm.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -21,7 +21,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="../users/header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/resources/dataSource.jsp apache-tomcat-5.5.27-src/container/webapps/admin/resources/dataSource.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/resources/dataSource.jsp	2008-08-29 05:14:01.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/resources/dataSource.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -22,7 +22,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="../users/header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/resources/deleteDataSources.jsp apache-tomcat-5.5.27-src/container/webapps/admin/resources/deleteDataSources.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/resources/deleteDataSources.jsp	2008-08-29 05:14:01.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/resources/deleteDataSources.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -21,7 +21,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="../users/header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/resources/deleteEnvEntries.jsp apache-tomcat-5.5.27-src/container/webapps/admin/resources/deleteEnvEntries.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/resources/deleteEnvEntries.jsp	2008-08-29 05:14:01.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/resources/deleteEnvEntries.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -21,7 +21,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="../users/header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/resources/deleteMailSessions.jsp apache-tomcat-5.5.27-src/container/webapps/admin/resources/deleteMailSessions.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/resources/deleteMailSessions.jsp	2008-08-29 05:14:01.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/resources/deleteMailSessions.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -21,7 +21,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="../users/header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/resources/deleteResourceLinks.jsp apache-tomcat-5.5.27-src/container/webapps/admin/resources/deleteResourceLinks.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/resources/deleteResourceLinks.jsp	2008-08-29 05:14:01.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/resources/deleteResourceLinks.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -21,7 +21,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="../users/header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/resources/deleteUserDatabases.jsp apache-tomcat-5.5.27-src/container/webapps/admin/resources/deleteUserDatabases.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/resources/deleteUserDatabases.jsp	2008-08-29 05:14:01.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/resources/deleteUserDatabases.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -21,7 +21,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="../users/header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/resources/envEntry.jsp apache-tomcat-5.5.27-src/container/webapps/admin/resources/envEntry.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/resources/envEntry.jsp	2008-08-29 05:14:01.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/resources/envEntry.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -22,7 +22,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="../users/header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/resources/listDataSources.jsp apache-tomcat-5.5.27-src/container/webapps/admin/resources/listDataSources.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/resources/listDataSources.jsp	2008-08-29 05:14:01.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/resources/listDataSources.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -21,7 +21,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="../users/header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/resources/listEnvEntries.jsp apache-tomcat-5.5.27-src/container/webapps/admin/resources/listEnvEntries.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/resources/listEnvEntries.jsp	2008-08-29 05:14:01.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/resources/listEnvEntries.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -21,7 +21,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="../users/header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/resources/listMailSessions.jsp apache-tomcat-5.5.27-src/container/webapps/admin/resources/listMailSessions.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/resources/listMailSessions.jsp	2008-08-29 05:14:01.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/resources/listMailSessions.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -21,7 +21,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="../users/header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/resources/listResourceLinks.jsp apache-tomcat-5.5.27-src/container/webapps/admin/resources/listResourceLinks.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/resources/listResourceLinks.jsp	2008-08-29 05:14:01.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/resources/listResourceLinks.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -21,7 +21,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="../users/header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/resources/listUserDatabases.jsp apache-tomcat-5.5.27-src/container/webapps/admin/resources/listUserDatabases.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/resources/listUserDatabases.jsp	2008-08-29 05:14:01.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/resources/listUserDatabases.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -21,7 +21,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="../users/header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/resources/mailSession.jsp apache-tomcat-5.5.27-src/container/webapps/admin/resources/mailSession.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/resources/mailSession.jsp	2008-08-29 05:14:01.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/resources/mailSession.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -22,7 +22,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="../users/header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/resources/resourceLink.jsp apache-tomcat-5.5.27-src/container/webapps/admin/resources/resourceLink.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/resources/resourceLink.jsp	2008-08-29 05:14:01.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/resources/resourceLink.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -22,7 +22,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="../users/header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/resources/userDatabase.jsp apache-tomcat-5.5.27-src/container/webapps/admin/resources/userDatabase.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/resources/userDatabase.jsp	2008-08-29 05:14:01.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/resources/userDatabase.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -22,7 +22,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="../users/header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/saved.jsp apache-tomcat-5.5.27-src/container/webapps/admin/saved.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/saved.jsp	2008-08-29 05:14:01.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/saved.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -21,7 +21,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+   <body bgcolor="white" background="images/PaperTexture.gif">
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/savefail.jsp apache-tomcat-5.5.27-src/container/webapps/admin/savefail.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/savefail.jsp	2008-08-29 05:14:01.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/savefail.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -21,7 +21,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+   <body bgcolor="white" background="images/PaperTexture.gif">
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/server/server.jsp apache-tomcat-5.5.27-src/container/webapps/admin/server/server.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/server/server.jsp	2008-08-29 05:14:01.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/server/server.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -22,7 +22,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="../users/header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/service/service.jsp apache-tomcat-5.5.27-src/container/webapps/admin/service/service.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/service/service.jsp	2008-08-29 05:14:01.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/service/service.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -22,7 +22,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="../users/header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/service/services.jsp apache-tomcat-5.5.27-src/container/webapps/admin/service/services.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/service/services.jsp	2008-08-29 05:14:01.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/service/services.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -21,7 +21,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="../users/header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/tree-control-test.jsp apache-tomcat-5.5.27-src/container/webapps/admin/tree-control-test.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/tree-control-test.jsp	2008-08-29 05:14:01.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/tree-control-test.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -22,7 +22,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <!-- Standard Content -->
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/users/deleteGroups.jsp apache-tomcat-5.5.27-src/container/webapps/admin/users/deleteGroups.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/users/deleteGroups.jsp	2008-08-29 05:14:01.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/users/deleteGroups.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -21,7 +21,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/users/deleteRoles.jsp apache-tomcat-5.5.27-src/container/webapps/admin/users/deleteRoles.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/users/deleteRoles.jsp	2008-08-29 05:14:02.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/users/deleteRoles.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -21,7 +21,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/users/deleteUsers.jsp apache-tomcat-5.5.27-src/container/webapps/admin/users/deleteUsers.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/users/deleteUsers.jsp	2008-08-29 05:14:02.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/users/deleteUsers.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -21,7 +21,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/users/group.jsp apache-tomcat-5.5.27-src/container/webapps/admin/users/group.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/users/group.jsp	2008-08-29 05:14:02.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/users/group.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -22,7 +22,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/users/listGroups.jsp apache-tomcat-5.5.27-src/container/webapps/admin/users/listGroups.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/users/listGroups.jsp	2008-08-29 05:14:02.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/users/listGroups.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -21,7 +21,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/users/listRoles.jsp apache-tomcat-5.5.27-src/container/webapps/admin/users/listRoles.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/users/listRoles.jsp	2008-08-29 05:14:02.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/users/listRoles.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -21,7 +21,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/users/listUsers.jsp apache-tomcat-5.5.27-src/container/webapps/admin/users/listUsers.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/users/listUsers.jsp	2008-08-29 05:14:02.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/users/listUsers.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -21,7 +21,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/users/role.jsp apache-tomcat-5.5.27-src/container/webapps/admin/users/role.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/users/role.jsp	2008-08-29 05:14:02.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/users/role.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -22,7 +22,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/users/user.jsp apache-tomcat-5.5.27-src/container/webapps/admin/users/user.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/users/user.jsp	2008-08-29 05:14:02.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/users/user.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -22,7 +22,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/valve/accessLogValve.jsp apache-tomcat-5.5.27-src/container/webapps/admin/valve/accessLogValve.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/valve/accessLogValve.jsp	2008-08-29 05:14:02.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/valve/accessLogValve.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -21,7 +21,7 @@
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="../users/header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/valve/remoteAddrValve.jsp apache-tomcat-5.5.27-src/container/webapps/admin/valve/remoteAddrValve.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/valve/remoteAddrValve.jsp	2008-08-29 05:14:02.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/valve/remoteAddrValve.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -21,7 +21,7 @@
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="../users/header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/valve/remoteHostValve.jsp apache-tomcat-5.5.27-src/container/webapps/admin/valve/remoteHostValve.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/valve/remoteHostValve.jsp	2008-08-29 05:14:02.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/valve/remoteHostValve.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -21,7 +21,7 @@
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="../users/header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/valve/requestDumperValve.jsp apache-tomcat-5.5.27-src/container/webapps/admin/valve/requestDumperValve.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/valve/requestDumperValve.jsp	2008-08-29 05:14:02.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/valve/requestDumperValve.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -21,7 +21,7 @@
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="../users/header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/valve/singleSignOnValve.jsp apache-tomcat-5.5.27-src/container/webapps/admin/valve/singleSignOnValve.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/valve/singleSignOnValve.jsp	2008-08-29 05:14:02.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/valve/singleSignOnValve.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -21,7 +21,7 @@
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="../users/header.jsp" %>
+ 
+diff -Naur apache-tomcat-5.5.27-src.orig/container/webapps/admin/valve/valves.jsp apache-tomcat-5.5.27-src/container/webapps/admin/valve/valves.jsp
+--- apache-tomcat-5.5.27-src.orig/container/webapps/admin/valve/valves.jsp	2008-08-29 05:14:02.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/valve/valves.jsp	2009-01-22 12:29:45.000000000 +0100
+@@ -21,7 +21,7 @@
+ <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+ <%@ taglib uri="/WEB-INF/controls.tld" prefix="controls" %>
+ 
+-<html:html locale="true">
++<html:html>
+ 
+ <%@ include file="../users/header.jsp" %>
+ 
