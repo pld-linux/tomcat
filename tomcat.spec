@@ -121,7 +121,7 @@ Community Process.
 
 %package doc
 Summary:	The Apache Tomcat Servlet/JSP Container documentation
-Summary(pl.UTF-8):	Dokumentacja do Tomcata - kontekera Servlet/JSP
+Summary(pl.UTF-8):	Dokumentacja do Tomcata - kontenera Servlet/JSP
 Group:		Development/Languages/Java
 Obsoletes:	jakarta-tomcat-doc
 
@@ -129,7 +129,7 @@ Obsoletes:	jakarta-tomcat-doc
 The Tomcat Servlet/JSP Container documentation.
 
 %description doc -l pl.UTF-8
-Dokumentacja do Tomcata - kontekera Servlet/JSP.
+Dokumentacja do Tomcata - kontenera Servlet/JSP.
 
 %prep
 %setup -q -n %{name}-%{version}-src
