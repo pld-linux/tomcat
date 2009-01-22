@@ -25,26 +25,26 @@ BuildRequires:	ant >= 1.5.3
 BuildRequires:	ant-trax
 BuildRequires:	eclipse-jdt
 BuildRequires:	jaas
-BuildRequires:	jakarta-commons-beanutils >= 1.7
-BuildRequires:	jakarta-commons-collections >= 0:3.1
-BuildRequires:	jakarta-commons-collections-tomcat5 >= 0:3.1
-BuildRequires:	jakarta-commons-daemon >= 1.0
-BuildRequires:	jakarta-commons-dbcp >= 0:1.2.1
-BuildRequires:	jakarta-commons-dbcp-tomcat5 >= 0:1.2.1
-BuildRequires:	jakarta-commons-digester >= 0:1.7
-BuildRequires:	jakarta-commons-el >= 0:1.0
-BuildRequires:	jakarta-commons-fileupload >= 0:1.0
 BuildRequires:	jakarta-commons-httpclient
-BuildRequires:	jakarta-commons-launcher >= 0:0.9
-BuildRequires:	jakarta-commons-io >= 1.4
-BuildRequires:	jakarta-commons-logging >= 0:1.0.4
-BuildRequires:	jakarta-commons-modeler >= 2.0
-BuildRequires:	jakarta-commons-pool >= 0:1.2
-BuildRequires:	jakarta-commons-pool-tomcat5 >= 0:1.2
 BuildRequires:	jakarta-regexp >= 0:1.3
-BuildRequires:	jakarta-servletapi5
 #BuildRequires:	jakarta-struts >= 0:1.2.7
 BuildRequires:	jakarta-struts >= 1.0.2
+BuildRequires:	java-commons-beanutils >= 1.7
+BuildRequires:	java-commons-collections >= 0:3.1
+BuildRequires:	java-commons-collections-tomcat5 >= 0:3.1
+BuildRequires:	java-commons-daemon >= 1.0
+BuildRequires:	java-commons-dbcp >= 0:1.2.1
+BuildRequires:	java-commons-dbcp-tomcat5 >= 0:1.2.1
+BuildRequires:	java-commons-digester >= 0:1.7
+BuildRequires:	java-commons-el >= 0:1.0
+BuildRequires:	java-commons-fileupload >= 0:1.0
+BuildRequires:	java-commons-io >= 1.4
+BuildRequires:	java-commons-launcher >= 0:0.9
+BuildRequires:	java-commons-logging >= 0:1.0.4
+BuildRequires:	java-commons-modeler >= 2.0
+BuildRequires:	java-commons-pool >= 0:1.2
+BuildRequires:	java-commons-pool-tomcat5 >= 0:1.2
+BuildRequires:	java-servletapi5
 BuildRequires:	javamail >= 0:1.3.1
 BuildRequires:	jaxp_parser_impl >= 0:2.7.1
 BuildRequires:	jdbc-stdext >= 0:2.0
@@ -71,15 +71,15 @@ Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
 Requires:	jaas
 #Requires:	jaf >= 1.0.1
-#Requires:	jakarta-commons-beanutils
-#Requires:	jakarta-commons-collections
-#Requires:	jakarta-commons-dbcp-tomcat5
-#Requires:	jakarta-commons-digester
-Requires:	jakarta-commons-el
-#Requires:	jakarta-commons-fileupload
-#Requires:	jakarta-commons-logging
 Requires:	jakarta-regexp
-Requires:	jakarta-servletapi >= 4
+#Requires:	java-commons-beanutils
+#Requires:	java-commons-collections
+#Requires:	java-commons-dbcp-tomcat5
+#Requires:	java-commons-digester
+Requires:	java-commons-el
+#Requires:	java-commons-fileupload
+#Requires:	java-commons-logging
+Requires:	java-servletapi5
 Requires:	javamail >= 1.2
 Requires:	jaxp_parser_impl
 Requires:	jdbc-stdext >= 2.0
