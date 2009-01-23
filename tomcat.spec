@@ -81,7 +81,7 @@ Requires:	jakarta-regexp
 Requires:	java-commons-el
 #Requires:	java-commons-fileupload
 #Requires:	java-commons-logging
-Requires:	java-servletapi5 = %{version}-%{release}
+Requires:	java-servletapi5 = %{version}
 Requires:	javamail >= 1.2
 Requires:	jaxp_parser_impl
 Requires:	jdbc-stdext >= 2.0
