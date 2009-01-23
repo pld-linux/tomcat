@@ -1,1 +1,2 @@
-CATALINA_BASE=/var/lib/tomcat
+export CATALINA_BASE=/var/lib/tomcat
+export JAVA_HOME=$(. /usr/share/java-utils/java-functions; set_jvm >&2; echo "$JAVA_HOME")
