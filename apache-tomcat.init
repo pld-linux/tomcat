@@ -33,7 +33,7 @@ start() {
 	if [ ! -f /var/lock/subsys/tomcat ]; then
 		msg_starting tomcat
 		busy
-		su - http -s /bin/sh -c /usr/share/tomcat/bin/startup.sh >/dev/null 2>&1
+		su http -s /bin/sh -c /usr/share/tomcat/bin/startup.sh >/dev/null 2>&1
 		[ $? -ne 0 ] && RETVAL=1
 		if [ $RETVAL -eq 0 ]; then
 		   	ok
@@ -51,7 +51,7 @@ stop() {
 		# Stop daemons.
 		msg_stopping tomcat
 		busy
-		su - http -s /bin/sh -c /usr/share/tomcat/bin/shutdown.sh >/dev/null 2>&1
+		su http -s /bin/sh -c /usr/share/tomcat/bin/shutdown.sh >/dev/null 2>&1
 		[ $? -eq 0 ] && ok || fail
 		rm -f /var/lock/subsys/tomcat
 	else
