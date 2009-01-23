@@ -349,7 +349,6 @@ fi
 %lang(fr) %{_tomcatdir}/common/i18n/tomcat-i18n-fr.jar
 %lang(ja) %{_tomcatdir}/common/i18n/tomcat-i18n-ja.jar
 %{_tomcatdir}/common/lib
-%{_tomcatdir}/logs
 %dir %{_tomcatdir}/server
 %dir %{_tomcatdir}/server/classes
 %{_tomcatdir}/server/lib
@@ -363,8 +362,9 @@ fi
 # Catalina dir
 %config(noreplace) %attr(775,root,http) %verify(not md5 mtime size) %{_vardir}/conf
 %dir %attr(1730,root,http) %{_vardir}/work
-%dir %attr(1730,root,http) %{_vardir}/webapps
-%dir %attr(1730,root,http) %{_logdir}/tomcat
+%dir %attr(775,root,http) %{_vardir}/webapps
+%dir %attr(775,root,http) %{_logdir}/tomcat
+%{_vardir}/logs
 
 %if 0
 %files doc
