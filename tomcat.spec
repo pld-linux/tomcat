@@ -27,10 +27,10 @@ BuildRequires:	ant >= 1.5.3
 BuildRequires:	ant-trax
 BuildRequires:	eclipse-jdt
 BuildRequires:	jaas
-BuildRequires:	jakarta-commons-httpclient
+BuildRequires:	java-commons-httpclient
 BuildRequires:	jakarta-regexp >= 0:1.3
-#BuildRequires:	jakarta-struts >= 0:1.2.7
-BuildRequires:	jakarta-struts >= 1.0.2
+#BuildRequires:	java-struts >= 0:1.2.7
+BuildRequires:	java-struts >= 1.0.2
 BuildRequires:	java-commons-beanutils >= 1.7
 BuildRequires:	java-commons-collections >= 0:3.1
 BuildRequires:	java-commons-collections-tomcat5 >= 0:3.1
@@ -46,7 +46,7 @@ BuildRequires:	java-commons-logging >= 0:1.0.4
 BuildRequires:	java-commons-modeler >= 2.0
 BuildRequires:	java-commons-pool >= 0:1.2
 BuildRequires:	java-commons-pool-tomcat5 >= 0:1.2
-BuildRequires:	java-servletapi5 = %{version}-%{release}
+BuildRequires:	java-servletapi5 = %{version}
 BuildRequires:	javamail >= 0:1.3.1
 BuildRequires:	jaxp_parser_impl >= 0:2.7.1
 BuildRequires:	jdbc-stdext >= 0:2.0
@@ -214,7 +214,7 @@ jsp-api.jar=$(find-jar jsp-api)
 jspapi.build.notrequired=true
 log4j.jar=$(find-jar log4j)
 tomcat-dbcp.jar=$(find-jar commons-dbcp-tomcat5)
-struts.lib=%{_datadir}/jakarta-struts
+struts.lib=%{_datadir}/java-struts
 EOF
 
 %ant \
