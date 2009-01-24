@@ -333,7 +333,7 @@ fi
 %defattr(644,root,root,755)
 %doc build/{RELEASE-NOTES,RUNNING.txt}
 %attr(754,root,root) /etc/rc.d/init.d/tomcat
-%config(noreplace) %verify(not md5 mtime size) /etc/sysconfdir/tomcat
+%config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/tomcat
 %{_sysconfdir}
 %dir %{_tomcatdir}
 %dir %{_tomcatdir}/conf
