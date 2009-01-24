@@ -14,6 +14,7 @@ Group:		Development/Languages/Java
 Source0:	http://www.apache.org/dist/tomcat/tomcat-5/v%{version}/src/%{name}-%{version}-src.tar.gz
 # Source0-md5:	eb3f196013550b9b1684e4ff18593a8e
 Source1:	%{name}.init
+Source2:	%{name}.sysconfig
 Patch0:		%{name}-skip-servletapi.patch
 Patch1:		%{name}-nsis.patch
 Patch2:		%{name}-native.patch
@@ -243,6 +244,7 @@ install -d $TOMCATDIR/bin \
 	    $RPM_BUILD_ROOT/etc/rc.d/init.d
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/tomcat
+install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/tomcat
 
 cp -pR conf/* $CATALINADIR/conf
 cp -HR bin common server $TOMCATDIR
@@ -330,6 +332,7 @@ fi
 %defattr(644,root,root,755)
 %doc build/{RELEASE-NOTES,RUNNING.txt}
 %attr(754,root,root) /etc/rc.d/init.d/tomcat
+%config(noreplace) %verify(not md5 mtime size) /etc/sysconfdir/tomcat
 %{_sysconfdir}
 %dir %{_tomcatdir}
 %dir %{_tomcatdir}/conf
