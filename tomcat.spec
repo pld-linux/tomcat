@@ -241,6 +241,7 @@ install -d $TOMCATDIR/bin \
 	    $RPM_BUILD_ROOT%{_vardir}/webapps \
 	    $RPM_BUILD_ROOT%{_vardir}/work \
 	    $RPM_BUILD_ROOT%{_vardir}/conf \
+	    $RPM_BUILD_ROOT/etc/sysconfig \
 	    $RPM_BUILD_ROOT/etc/rc.d/init.d
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/tomcat
