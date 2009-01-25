@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- $Id$ -->
+<Context path="/balancer" docBase="${catalina.home}/webapps/balancer"
+        privileged="true" allowLinking="true">
+
+</Context>
