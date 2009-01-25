@@ -263,7 +263,7 @@ cp -HR bin common server $TOMCATDIR
 cp -rf server/webapps $TOMCATDIR/server
 cp -rf webapps $TOMCATDIR
 cp -rf shared $TOMCATDIR
-cp -rf temp $TOMCATDIR
+cp -rf temp $CATALINADIR
 
 ln -sf %{_logdir}/tomcat $CATALINADIR/logs
 ln -sf %{_vardir}/work $TOMCATDIR/work
@@ -370,13 +370,13 @@ fi
 %{_tomcatdir}/webapps
 %{_tomcatdir}/work
 %{_tomcatdir}/shared
-%{_tomcatdir}/temp
 %dir %{_vardir}
 # tomcat config has to be writeable because of tomacta-users.xml file and
 # Catalina dir
 %config(noreplace) %attr(775,root,http) %verify(not md5 mtime size) %{_vardir}/conf
 %dir %attr(1730,root,http) %{_vardir}/work
 %dir %attr(775,root,http) %{_vardir}/webapps
+%dir %attr(775,root,http) %{_vardir}/temp
 %dir %attr(775,root,http) %{_logdir}/tomcat
 %{_vardir}/logs
 
