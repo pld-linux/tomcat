@@ -15,6 +15,11 @@ Source0:	http://www.apache.org/dist/tomcat/tomcat-5/v%{version}/src/%{name}-%{ve
 # Source0-md5:	eb3f196013550b9b1684e4ff18593a8e
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
+Source10:	%{name}-context-ROOT.xml
+Source11:	%{name}-context-balancer.xml
+Source12:	%{name}-context-jsp-examples.xml
+Source13:	%{name}-context-tomcat-docs.xml
+Source14:	%{name}-context-webdav.xml
 Patch0:		%{name}-skip-servletapi.patch
 Patch1:		%{name}-nsis.patch
 Patch2:		%{name}-native.patch
@@ -248,6 +253,11 @@ install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/tomcat
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/tomcat
 
 cp -pR conf/* $CATALINADIR/conf
+install %{SOURCE10} $CATALINADIR/conf/Catalina/localhost/ROOT.xml
+install %{SOURCE11} $CATALINADIR/conf/Catalina/localhost/balancer.xml
+install %{SOURCE12} $CATALINADIR/conf/Catalina/localhost/jsp-examples.xml
+install %{SOURCE13} $CATALINADIR/conf/Catalina/localhost/tomcat-docs.xml
+install %{SOURCE14} $CATALINADIR/conf/Catalina/localhost/webdav.xml
 cp -HR bin common server $TOMCATDIR
 
 cp -rf server/webapps $TOMCATDIR/server
