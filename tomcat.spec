@@ -320,8 +320,8 @@ ln -sf $(find-jar struts-core) $TOMCATDIR/server/webapps/admin/WEB-INF/lib/strut
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-%groupadd -g 51 -r -f tomcat
-%useradd -u 51 -r -d /var/lib/tomcat -s /bin/false -c "Tomcat User" -g tomcat tomcat
+%groupadd -g 234 -r -f tomcat
+%useradd -u 234 -r -d /var/lib/tomcat -s /bin/false -c "Tomcat User" -g tomcat tomcat
 
 %post
 /sbin/chkconfig --add tomcat
