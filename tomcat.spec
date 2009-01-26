@@ -97,8 +97,8 @@ Requires:	jsse >= 1.0.2
 Requires:	jta >= 1.0.1
 Requires:	rc-scripts
 Requires:	xml-commons
-Provides:	group(http)
-Provides:	user(http)
+Provides:	group(tomcat)
+Provides:	user(tomcat)
 Obsoletes:	jakarta-tomcat
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -320,8 +320,8 @@ ln -sf $(find-jar struts-core) $TOMCATDIR/server/webapps/admin/WEB-INF/lib/strut
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-%groupadd -g 51 -r -f http
-%useradd -u 51 -r -d /home/services/httpd -s /bin/false -c "HTTP User" -g http http
+%groupadd -g 51 -r -f tomcat
+%useradd -u 51 -r -d /var/lib/tomcat -s /bin/false -c "Tomcat User" -g tomcat tomcat
 
 %post
 /sbin/chkconfig --add tomcat
@@ -335,8 +335,8 @@ fi
 
 %postun
 if [ "$1" = "0" ]; then
-	%userremove http
-	%groupremove http
+	%userremove tomcat
+	%groupremove tomcat
 fi
 
 %files
@@ -373,11 +373,11 @@ fi
 %dir %{_vardir}
 # tomcat config has to be writeable because of tomacta-users.xml file and
 # Catalina dir
-%config(noreplace) %attr(775,root,http) %verify(not md5 mtime size) %{_vardir}/conf
-%dir %attr(1730,root,http) %{_vardir}/work
-%dir %attr(775,root,http) %{_vardir}/webapps
-%dir %attr(775,root,http) %{_vardir}/temp
-%dir %attr(775,root,http) %{_logdir}/tomcat
+%config(noreplace) %attr(775,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf
+%dir %attr(1730,root,tomcat) %{_vardir}/work
+%dir %attr(775,root,tomcat) %{_vardir}/webapps
+%dir %attr(775,root,tomcat) %{_vardir}/temp
+%dir %attr(775,root,tomcat) %{_logdir}/tomcat
 %{_vardir}/logs
 
 %if 0
