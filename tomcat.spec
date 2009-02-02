@@ -33,10 +33,7 @@ BuildRequires:	ant >= 1.5.3
 BuildRequires:	ant-trax
 BuildRequires:	eclipse-jdt
 BuildRequires:	jaas
-BuildRequires:	java-commons-httpclient
 BuildRequires:	jakarta-regexp >= 0:1.3
-#BuildRequires:	java-struts >= 0:1.2.7
-BuildRequires:	java-struts >= 1.0.2
 BuildRequires:	java-commons-beanutils >= 1.7
 BuildRequires:	java-commons-collections >= 0:3.1
 BuildRequires:	java-commons-collections-tomcat5 >= 0:3.1
@@ -46,6 +43,7 @@ BuildRequires:	java-commons-dbcp-tomcat5 >= 0:1.2.1
 BuildRequires:	java-commons-digester >= 0:1.7
 BuildRequires:	java-commons-el >= 0:1.0
 BuildRequires:	java-commons-fileupload >= 0:1.0
+BuildRequires:	java-commons-httpclient
 BuildRequires:	java-commons-io >= 1.4
 BuildRequires:	java-commons-launcher >= 0:0.9
 BuildRequires:	java-commons-logging >= 0:1.0.4
@@ -53,6 +51,8 @@ BuildRequires:	java-commons-modeler >= 2.0
 BuildRequires:	java-commons-pool >= 0:1.2
 BuildRequires:	java-commons-pool-tomcat5 >= 0:1.2
 BuildRequires:	java-servletapi5 = %{version}
+#BuildRequires:	java-struts >= 0:1.2.7
+BuildRequires:	java-struts >= 1.0.2
 BuildRequires:	javamail >= 0:1.3.1
 BuildRequires:	jaxp_parser_impl >= 0:2.7.1
 BuildRequires:	jdbc-stdext >= 0:2.0
@@ -98,6 +98,7 @@ Requires:	jta >= 1.0.1
 Requires:	rc-scripts
 Requires:	xml-commons
 Provides:	group(tomcat)
+Provides:	java-servlet-container
 Provides:	user(tomcat)
 Obsoletes:	jakarta-tomcat
 BuildArch:	noarch
