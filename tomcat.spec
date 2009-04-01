@@ -77,7 +77,7 @@ Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
-Requires:	%{name}-jasper = %{version}
+Requires:	%{name}-jasper = %{version}-%{release}
 Requires:	jaas
 #Requires:	jaf >= 1.0.1
 Requires:	jakarta-regexp
@@ -140,12 +140,18 @@ The Tomcat Servlet/JSP Container documentation.
 Dokumentacja do Tomcata - kontenera Servlet/JSP.
 
 %package jasper
-Summary:	Jasper classes from Apache Tomcat
+Summary:	JSP compiler
+Summary(pl.UTF-8):	Kompilator JSP
 Group:		Libraries/Java
 Requires:	jpackage-utils
 
 %description jasper
-This package contains compiled classes of Apache Tomcat`s Jasper.
+Jasper is Java ServerPages compiler used by Apache Tomcat servlet
+container.
+
+%description jasper -l pl.UTF-8
+Jasper jest kompilatorem Java ServerPages używanym przez kontener
+servletów Apache Tomcat.
 
 %prep
 %setup -q -n %{name}-%{version}-src
