@@ -77,6 +77,7 @@ Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
+Requires:	%{name}-jasper = %{version}
 Requires:	jaas
 #Requires:	jaf >= 1.0.1
 Requires:	jakarta-regexp
@@ -137,6 +138,13 @@ The Tomcat Servlet/JSP Container documentation.
 
 %description doc -l pl.UTF-8
 Dokumentacja do Tomcata - kontenera Servlet/JSP.
+
+%package jasper
+Summary:	Jasper classes from Apache Tomcat
+Group:		Libraries/Java
+
+%description jasper
+This package contains compiled classes of Apache Tomcat`s Jasper.
 
 %prep
 %setup -q -n %{name}-%{version}-src
@@ -221,7 +229,7 @@ jsp-api.jar=$(find-jar jsp-api)
 jspapi.build.notrequired=true
 log4j.jar=$(find-jar log4j)
 tomcat-dbcp.jar=$(find-jar commons-dbcp-tomcat5)
-struts.lib=%{_datadir}/java-struts
+struts.lib=%{_javadir}-struts
 EOF
 
 %ant \
@@ -317,6 +325,12 @@ ln -sf $(find-jar jaxp_parser_impl) $TOMCATDIR/common/endorsed/jaxp_parser_impl.
 ln -sf $(find-jar xml-commons-apis) $TOMCATDIR/common/endorsed/xml-commons-apis.jar
 ln -sf $(find-jar struts-core) $TOMCATDIR/server/webapps/admin/WEB-INF/lib/struts-core.jar
 
+install -d $RPM_BUILD_ROOT%{_javadir}
+mv $TOMCATDIR/common/lib/jasper* $RPM_BUILD_ROOT%{_javadir}
+ln -sf %{_javadir}/jasper-compiler-jdt.jar $TOMCATDIR/common/lib/
+ln -sf %{_javadir}/jasper-compiler.jar $TOMCATDIR/common/lib/
+ln -sf %{_javadir}/jasper-compiler-runtime.jar $TOMCATDIR/common/lib/
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -386,3 +400,9 @@ fi
 %defattr(644,root,root,755)
 %doc catalina/docs/*
 %endif
+
+%files jasper
+%defattr(644,root,root,755)
+%{_javadir}/jasper-compiler-jdt.jar
+%{_javadir}/jasper-compiler.jar
+%{_javadir}/jasper-runtime.jar
