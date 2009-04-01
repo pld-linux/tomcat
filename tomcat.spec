@@ -142,6 +142,7 @@ Dokumentacja do Tomcata - kontenera Servlet/JSP.
 %package jasper
 Summary:	Jasper classes from Apache Tomcat
 Group:		Libraries/Java
+Requires:	jpackage-utils
 
 %description jasper
 This package contains compiled classes of Apache Tomcat`s Jasper.
