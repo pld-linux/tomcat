@@ -409,7 +409,7 @@ fi
 %endif
 
 %files jasper
-%defattr(754,root,root,755)
+%defattr(644,root,root,755)
 %{_javadir}/jasper-compiler-jdt.jar
 %{_javadir}/jasper-compiler.jar
 %{_javadir}/jasper-runtime.jar
