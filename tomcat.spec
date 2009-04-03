@@ -290,8 +290,13 @@ ln -sf %{_vardir}/conf $RPM_BUILD_ROOT%{_sysconfdir}
 ln -sf $(find-jar commons-el) $TOMCATDIR/common/lib/commons-el.jar
 ln -sf $(find-jar jakarta-commons-dbcp-tomcat5) $TOMCATDIR/common/lib/jakarta-commons-dbcp-tomcat5.jar
 ln -sf $(find-jar servlet-api) $TOMCATDIR/common/lib/servlet-api.jar
+ln -sf $(find-jar jsp-api) $TOMCATDIR/common/lib/jsp-api.jar
 
 ln -sf $(find-jar commons-modeler) $TOMCATDIR/server/lib/commons-modeler.jar
+
+ln -sf $(find-jar jaxp_parser_impl) $TOMCATDIR/common/endorsed/jaxp_parser_impl.jar
+ln -sf $(find-jar xml-commons-apis) $TOMCATDIR/common/endorsed/xml-commons-apis.jar
+ln -sf $(find-jar struts) $TOMCATDIR/server/webapps/admin/WEB-INF/lib/struts.jar
 
 %if 0
 # do not make these symlinks as ant didn't do
