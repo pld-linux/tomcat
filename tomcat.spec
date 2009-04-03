@@ -139,6 +139,17 @@ The Tomcat Servlet/JSP Container documentation.
 %description doc -l pl.UTF-8
 Dokumentacja do Tomcata - kontenera Servlet/JSP.
 
+%package admin
+Summary:	Apache Tomcat`s Administration Web Application
+Summary(pl.UTF-8):	Panel Administracyjny dla Apache Tomcat
+Group:		Applications/WWW
+
+%description admin
+Administration Web Application for Apache Tomcat.
+
+%description admin -l pl.UTF-8
+Panel Administracyjny dla Apache Tomcat.
+
 %package jasper
 Summary:	JSP compiler
 Summary(pl.UTF-8):	Kompilator JSP
@@ -393,14 +404,26 @@ fi
 %dir %{_tomcatdir}/server
 %dir %{_tomcatdir}/server/classes
 %{_tomcatdir}/server/lib
-%{_tomcatdir}/server/webapps
+%{_tomcatdir}/server/webapps/host-manager
+%{_tomcatdir}/server/webapps/manager
 %{_tomcatdir}/webapps
 %{_tomcatdir}/work
 %{_tomcatdir}/shared
 %dir %{_vardir}
 # tomcat config has to be writeable because of tomacta-users.xml file and
 # Catalina dir
-%config(noreplace) %attr(775,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf
+%config(noreplace) %attr(775,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/MANIFEST.MF
+%config(noreplace) %attr(775,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/catalina.policy
+%config(noreplace) %attr(775,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/*.properties*
+%config(noreplace) %attr(775,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/*.manifest
+%config(noreplace) %attr(775,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/*.xml
+%config(noreplace) %attr(775,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/balancer.xml
+%config(noreplace) %attr(775,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/host-manager.xml
+%config(noreplace) %attr(775,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/jsp-examples.xml
+%config(noreplace) %attr(775,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/manager.xml
+%config(noreplace) %attr(775,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/ROOT.xml
+%config(noreplace) %attr(775,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/tomcat-docs.xml
+%config(noreplace) %attr(775,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/webdav.xml
 %dir %attr(1730,root,tomcat) %{_vardir}/work
 %dir %attr(775,root,tomcat) %{_vardir}/webapps
 %dir %attr(775,root,tomcat) %{_vardir}/temp
@@ -412,6 +435,11 @@ fi
 %defattr(644,root,root,755)
 %doc catalina/docs/*
 %endif
+
+%files admin
+%defattr(644,root,root,755)
+%config(noreplace) %attr(775,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/admin.xml
+%{_tomcatdir}/server/webapps/admin
 
 %files jasper
 %defattr(644,root,root,755)
