@@ -336,7 +336,7 @@ install -d $RPM_BUILD_ROOT%{_javadir}
 mv $TOMCATDIR/common/lib/jasper* $RPM_BUILD_ROOT%{_javadir}
 ln -sf %{_javadir}/jasper-compiler-jdt.jar $TOMCATDIR/common/lib/
 ln -sf %{_javadir}/jasper-compiler.jar $TOMCATDIR/common/lib/
-ln -sf %{_javadir}/jasper-compiler-runtime.jar $TOMCATDIR/common/lib/
+ln -sf %{_javadir}/jasper-runtime.jar $TOMCATDIR/common/lib/
 
 %clean
 rm -rf $RPM_BUILD_ROOT
