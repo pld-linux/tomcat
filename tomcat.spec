@@ -410,20 +410,21 @@ fi
 %{_tomcatdir}/work
 %{_tomcatdir}/shared
 %dir %{_vardir}
-# tomcat config has to be writeable because of tomacta-users.xml file and
-# Catalina dir
-%config(noreplace) %attr(775,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/MANIFEST.MF
-%config(noreplace) %attr(775,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/catalina.policy
-%config(noreplace) %attr(775,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/*.properties*
-%config(noreplace) %attr(775,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/*.manifest
-%config(noreplace) %attr(775,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/*.xml
-%config(noreplace) %attr(775,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/balancer.xml
-%config(noreplace) %attr(775,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/host-manager.xml
-%config(noreplace) %attr(775,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/jsp-examples.xml
-%config(noreplace) %attr(775,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/manager.xml
-%config(noreplace) %attr(775,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/ROOT.xml
-%config(noreplace) %attr(775,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/tomcat-docs.xml
-%config(noreplace) %attr(775,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/webdav.xml
+%dir %{_vardir}/conf/Catalina
+%dir %{_vardir}/conf/Catalina/localhost
+# tomcat config has to be writeable because of tomacta-users.xml file and Catalina dir
+%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/MANIFEST.MF
+%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/catalina.policy
+%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/*.properties*
+%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/*.manifest
+%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/*.xml
+%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/balancer.xml
+%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/host-manager.xml
+%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/jsp-examples.xml
+%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/manager.xml
+%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/ROOT.xml
+%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/tomcat-docs.xml
+%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/webdav.xml
 %dir %attr(1730,root,tomcat) %{_vardir}/work
 %dir %attr(775,root,tomcat) %{_vardir}/webapps
 %dir %attr(775,root,tomcat) %{_vardir}/temp
@@ -438,7 +439,7 @@ fi
 
 %files admin
 %defattr(644,root,root,755)
-%config(noreplace) %attr(775,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/admin.xml
+%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/admin.xml
 %{_tomcatdir}/server/webapps/admin
 
 %files jasper
