@@ -50,9 +50,16 @@ BuildRequires:	java-commons-logging >= 0:1.0.4
 BuildRequires:	java-commons-modeler >= 2.0
 BuildRequires:	java-commons-pool >= 0:1.2
 BuildRequires:	java-commons-pool-tomcat5 >= 0:1.2
+BuildRequires:	java-jta >= 0:1.0.1
+BuildRequires:	java-junit >= 0:3.8.1
+BuildRequires:	java-log4j
+BuildRequires:	java-puretls
 BuildRequires:	java-servletapi5 = %{version}
 #BuildRequires:	java-struts >= 0:1.2.7
 BuildRequires:	java-struts >= 1.0.2
+BuildRequires:	java-xerces >= 0:2.7.1
+BuildRequires:	java-xml-commons
+#BuildRequires:	java-xml-commons >= 1.3
 BuildRequires:	javamail >= 0:1.3.1
 BuildRequires:	jaxp_parser_impl >= 0:2.7.1
 BuildRequires:	jdbc-stdext >= 0:2.0
@@ -61,14 +68,7 @@ BuildRequires:	jmx
 BuildRequires:	jndi >= 0:1.2.1
 BuildRequires:	jpackage-utils
 BuildRequires:	jsse >= 0:1.0.3
-BuildRequires:	jta >= 0:1.0.1
-BuildRequires:	junit >= 0:3.8.1
-BuildRequires:	logging-log4j
-BuildRequires:	puretls
 BuildRequires:	rpmbuild(macros) >= 1.300
-BuildRequires:	xerces-j >= 0:2.7.1
-BuildRequires:	xml-commons
-#BuildRequires:	xml-commons >= 1.3
 Requires(post,postun):	/sbin/ldconfig
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
@@ -80,7 +80,6 @@ Requires(pre):	/usr/sbin/useradd
 Requires:	%{name}-jasper = %{version}-%{release}
 Requires:	jaas
 #Requires:	jaf >= 1.0.1
-Requires:	jakarta-regexp
 #Requires:	java-commons-beanutils
 #Requires:	java-commons-collections
 #Requires:	java-commons-dbcp-tomcat5
@@ -88,7 +87,9 @@ Requires:	jakarta-regexp
 Requires:	java-commons-el
 #Requires:	java-commons-fileupload
 #Requires:	java-commons-logging
+Requires:	java-regexp
 Requires:	java-servletapi5 = %{version}
+Requires:	java-xml-commons
 Requires:	javamail >= 1.2
 Requires:	jaxp_parser_impl
 Requires:	jdbc-stdext >= 2.0
@@ -97,7 +98,6 @@ Requires:	jre >= 1.2
 Requires:	jsse >= 1.0.2
 Requires:	jta >= 1.0.1
 Requires:	rc-scripts
-Requires:	xml-commons
 Provides:	group(tomcat)
 Provides:	java-servlet-container
 Provides:	user(tomcat)
