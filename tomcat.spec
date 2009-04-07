@@ -3,6 +3,7 @@
 #
 # Conditional build:
 %bcond_without	javadoc	# skip building javadocs
+%bcond_with	jta	# put jta jar into tomcat lib dir.
 #
 Summary:	Apache Servlet/JSP Engine, RI for Servlet 2.4/JSP 2.0 API
 Summary(pl.UTF-8):	Silnik Servlet/JSP Apache będący wzorcową implementacją API Servlet 2.4/JSP 2.0
@@ -50,8 +51,8 @@ BuildRequires:	java-commons-logging >= 0:1.0.4
 BuildRequires:	java-commons-modeler >= 2.0
 BuildRequires:	java-commons-pool >= 0:1.2
 BuildRequires:	java-commons-pool-tomcat5 >= 0:1.2
-BuildRequires:	java-jta >= 0:1.0.1
-BuildRequires:	java-junit >= 0:3.8.1
+%{?with_jta:BuildRequires:	java-jta >= 0:1.0.1}
+BuildRequires:	junit >= 0:3.8.1
 BuildRequires:	java-log4j
 BuildRequires:	java-puretls
 BuildRequires:	java-servletapi5 = %{version}
@@ -96,7 +97,7 @@ Requires:	jdbc-stdext >= 2.0
 Requires:	jndi >= 1.2.1
 Requires:	jre >= 1.2
 Requires:	jsse >= 1.0.2
-Requires:	jta >= 1.0.1
+%{?with_jta:Requires:	jta >= 1.0.1}
 Requires:	rc-scripts
 Provides:	group(tomcat)
 Provides:	java-servlet-container
@@ -213,6 +214,8 @@ cd -
 %endif
 
 # build tomcat 5.5
+# XXX build process should fail if one of these find-jar commands fails
+#     how to fix that?
 cat > build.properties <<EOF
 commons-beanutils.jar=$(find-jar commons-beanutils-core)
 commons-launcher.jar=$(find-jar commons-launcher)
@@ -239,7 +242,7 @@ struts-taglib.jar=$(find-jar struts-taglib)
 jcert.jar=$(find-jar jcert)
 jnet.jar=$(find-jar jnet)
 jsse.jar=$(find-jar jsse)
-jta.jar=$(find-jar jta)
+%{?with_jta:jta.jar=$(find-jar jta)}
 puretls.jar=$(find-jar puretls)
 servlet-api.jar=$(find-jar servlet-api)
 servletapi.build.notrequired=true
@@ -325,7 +328,7 @@ ln -sf jdbc-stdext.jar $TOMCATDIR/common/lib/jdbc2_0-stdext.jar
 ln -sf jdbc-stdext.jar $TOMCATDIR/common/lib/jdbc-stdext-2.0.jar
 ln -sf $(find-jar jmxri) $TOMCATDIR/common/lib/jmxri.jar
 ln -sf $(find-jar jndi) $TOMCATDIR/common/lib/jndi.jar
-ln -sf $(find-jar jta) $TOMCATDIR/common/lib/jta.jar
+%{?with_jta:ln -sf $(find-jar jta) $TOMCATDIR/common/lib/jta.jar}
 ln -sf $(find-jar mail) $TOMCATDIR/common/lib/mail.jar
 ln -sf $(find-jar jsse) $TOMCATDIR/common/lib/jsse.jar
 ln -sf $(find-jar junit) $TOMCATDIR/common/lib/junit.jar
