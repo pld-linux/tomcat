@@ -52,23 +52,23 @@ BuildRequires:	java-commons-modeler >= 2.0
 BuildRequires:	java-commons-pool >= 0:1.2
 BuildRequires:	java-commons-pool-tomcat5 >= 0:1.2
 %{?with_jta:BuildRequires:	java-jta >= 0:1.0.1}
-BuildRequires:	junit >= 0:3.8.1
 BuildRequires:	java-log4j
 BuildRequires:	java-puretls
 BuildRequires:	java-servletapi5 = %{version}
 #BuildRequires:	java-struts >= 0:1.2.7
 BuildRequires:	java-struts >= 1.0.2
+BuildRequires:	java-sun >= 1.5
 BuildRequires:	java-xerces >= 0:2.7.1
 BuildRequires:	java-xml-commons
 #BuildRequires:	java-xml-commons >= 1.3
 BuildRequires:	javamail >= 0:1.3.1
 BuildRequires:	jaxp_parser_impl >= 0:2.7.1
 BuildRequires:	jdbc-stdext >= 0:2.0
-BuildRequires:	jdk >= 1.5
 BuildRequires:	jmx
 BuildRequires:	jndi >= 0:1.2.1
 BuildRequires:	jpackage-utils
 BuildRequires:	jsse >= 0:1.0.3
+BuildRequires:	junit >= 0:3.8.1
 BuildRequires:	rpmbuild(macros) >= 1.300
 Requires(post,postun):	/sbin/ldconfig
 Requires(post,preun):	/sbin/chkconfig
@@ -215,7 +215,7 @@ cd -
 
 # build tomcat 5.5
 # XXX build process should fail if one of these find-jar commands fails
-#     how to fix that?
+#	 how to fix that?
 cat > build.properties <<EOF
 commons-beanutils.jar=$(find-jar commons-beanutils-core)
 commons-launcher.jar=$(find-jar commons-launcher)
