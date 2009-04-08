@@ -11,8 +11,8 @@ Summary(pl.UTF-8):	Silnik Servlet/JSP Apache będący wzorcową implementacją A
 Name:		apache-tomcat
 Version:	5.5.27
 Release:	0.2
-License:	Apache
-Group:		Development/Languages/Java
+License:	Apache v2.0
+Group:		Networking/Daemons/Java
 Source0:	http://www.apache.org/dist/tomcat/tomcat-5/v%{version}/src/%{name}-%{version}-src.tar.gz
 # Source0-md5:	eb3f196013550b9b1684e4ff18593a8e
 Source1:	%{name}.init
@@ -137,7 +137,7 @@ Community Process.
 %package doc
 Summary:	The Apache Tomcat Servlet/JSP Container documentation
 Summary(pl.UTF-8):	Dokumentacja do Tomcata - kontenera Servlet/JSP
-Group:		Development/Languages/Java
+Group:		Documentation
 Obsoletes:	jakarta-tomcat-doc
 
 %description doc
@@ -149,7 +149,7 @@ Dokumentacja do Tomcata - kontenera Servlet/JSP.
 %package admin
 Summary:	Apache Tomcat`s Administration Web Application
 Summary(pl.UTF-8):	Panel Administracyjny dla Apache Tomcat
-Group:		Applications/WWW
+Group:		Networking/Daemons/Java/Servlets
 
 %description admin
 Administration Web Application for Apache Tomcat.
