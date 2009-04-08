@@ -36,7 +36,7 @@ BuildRequires:	java-sun >= 1.5
 BuildRequires:	java-sun-jre >= 1.5
 %else
 BuildRequires:	java-gcj-compat-devel
-BuildRequires:	jsse >= 0:1.0.3
+# BuildRequires:	jsse >= 0:1.0.3
 %endif
 BuildRequires:	ant >= 1.5.3
 BuildRequires:	ant-trax
