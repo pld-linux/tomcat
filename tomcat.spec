@@ -68,7 +68,7 @@ BuildRequires:	java-struts >= 1.0.2
 BuildRequires:	java-xerces >= 0:2.7.1
 BuildRequires:	java-xml-commons
 #BuildRequires:	java-xml-commons >= 1.3
-BuildRequires:	javamail >= 0:1.3.1
+BuildRequires:	java-mail >= 0:1.3.1
 BuildRequires:	jaxp_parser_impl >= 0:2.7.1
 BuildRequires:	jdbc-stdext >= 0:2.0
 BuildRequires:	jmx
