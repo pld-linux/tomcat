@@ -31,7 +31,7 @@ Patch5:		%{name}-dbcp.patch
 # this patch is needed for struts >= 1.3
 Patch6:		%{name}-struts.patch
 URL:		http://tomcat.apache.org/
-%if %{with java-sun}
+%if %{with java_sun}
 BuildRequires:	java-sun >= 1.5
 BuildRequires:	java-sun-jre >= 1.5
 %else
