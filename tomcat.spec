@@ -87,13 +87,14 @@ Requires(pre):	/usr/sbin/useradd
 Requires:	%{name}-jasper = %{version}-%{release}
 Requires:	jaas
 #Requires:	jaf >= 1.0.1
-#Requires:	java-commons-beanutils
-#Requires:	java-commons-collections
+Requires:	java-commons-beanutils
+Requires:	java-commons-collections
 #Requires:	java-commons-dbcp-tomcat5
-#Requires:	java-commons-digester
+Requires:	java-commons-digester
 Requires:	java-commons-el
 #Requires:	java-commons-fileupload
-#Requires:	java-commons-logging
+Requires:	java-commons-logging
+Requires:	java-commons-modeler
 Requires:	java-regexp
 Requires:	java-servletapi5 = %{version}
 Requires:	java-xml-commons
