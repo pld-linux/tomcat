@@ -2,8 +2,9 @@
 # - packages for *.renametojar files (-cgi and -ssi in server/lib)
 #
 # Conditional build:
-%bcond_without	javadoc	# skip building javadocs
-%bcond_with	jta	# put jta jar into tomcat lib dir.
+%bcond_without	javadoc		# skip building javadocs
+%bcond_with	jta		# put jta jar into tomcat lib dir.
+%bcond_without	java_sun	# build with gcj (does not work)
 #
 Summary:	Apache Servlet/JSP Engine, RI for Servlet 2.4/JSP 2.0 API
 Summary(pl.UTF-8):	Silnik Servlet/JSP Apache będący wzorcową implementacją API Servlet 2.4/JSP 2.0
@@ -30,6 +31,13 @@ Patch5:		%{name}-dbcp.patch
 # this patch is needed for struts >= 1.3
 Patch6:		%{name}-struts.patch
 URL:		http://tomcat.apache.org/
+%if %{with java-sun}
+BuildRequires:	java-sun >= 1.5
+BuildRequires:	java-sun-jre >= 1.5
+%else
+BuildRequires:	java-gcj-compat-devel
+BuildRequires:	jsse >= 0:1.0.3
+%endif
 BuildRequires:	ant >= 1.5.3
 BuildRequires:	ant-trax
 BuildRequires:	eclipse-jdt
@@ -57,7 +65,6 @@ BuildRequires:	java-puretls
 BuildRequires:	java-servletapi5 = %{version}
 #BuildRequires:	java-struts >= 0:1.2.7
 BuildRequires:	java-struts >= 1.0.2
-BuildRequires:	java-sun >= 1.5
 BuildRequires:	java-xerces >= 0:2.7.1
 BuildRequires:	java-xml-commons
 #BuildRequires:	java-xml-commons >= 1.3
@@ -67,7 +74,6 @@ BuildRequires:	jdbc-stdext >= 0:2.0
 BuildRequires:	jmx
 BuildRequires:	jndi >= 0:1.2.1
 BuildRequires:	jpackage-utils
-BuildRequires:	jsse >= 0:1.0.3
 BuildRequires:	junit >= 0:3.8.1
 BuildRequires:	rpmbuild(macros) >= 1.300
 Requires(post,postun):	/sbin/ldconfig
