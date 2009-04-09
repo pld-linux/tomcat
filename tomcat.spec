@@ -151,6 +151,7 @@ Dokumentacja do Tomcata - kontenera Servlet/JSP.
 Summary:	Apache Tomcat`s Administration Web Application
 Summary(pl.UTF-8):	Panel Administracyjny dla Apache Tomcat
 Group:		Networking/Daemons/Java/Servlets
+Requires:	java-commons-chain
 
 %description admin
 Administration Web Application for Apache Tomcat.
