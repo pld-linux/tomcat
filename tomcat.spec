@@ -318,11 +318,12 @@ ln -sf $(find-jar commons-modeler) $TOMCATDIR/server/lib/commons-modeler.jar
 
 ln -sf $(find-jar jaxp_parser_impl) $TOMCATDIR/common/endorsed/jaxp_parser_impl.jar
 ln -sf $(find-jar xml-commons-apis) $TOMCATDIR/common/endorsed/xml-commons-apis.jar
-ln -sf $(find-jar struts) $TOMCATDIR/server/webapps/admin/WEB-INF/lib/struts.jar
-ln -sf $(find-jar commons-collections) $TOMCATDIR/server/webapps/admin/WEBINF/lib/commons-collections.jar
-ln -sf $(find-jar commons-beanutils-core) $TOMCATDIR/server/webapps/admin/WEBINF/lib/commons-beanutils-core.jar
-ln -sf $(find-jar commons-digester) $TOMCATDIR/server/webapps/admin/WEBINF/lib/commons-digester.jar
-ln -sf $(find-jar commons-chain) $TOMCATDIR/server/webapps/admin/WEBINF/lib/commons-chain.jar
+ln -sf $(find-jar struts-core) $TOMCATDIR/server/webapps/admin/WEB-INF/lib/struts-core.jar
+ln -sf $(find-jar struts-taglib) $TOMCATDIR/server/webapps/admin/WEB-INF/lib/struts-taglib.jar
+ln -sf $(find-jar commons-collections) $TOMCATDIR/server/webapps/admin/WEB-INF/lib/commons-collections.jar
+ln -sf $(find-jar commons-beanutils-core) $TOMCATDIR/server/webapps/admin/WEB-INF/lib/commons-beanutils-core.jar
+ln -sf $(find-jar commons-digester) $TOMCATDIR/server/webapps/admin/WEB-INF/lib/commons-digester.jar
+ln -sf $(find-jar commons-chain) $TOMCATDIR/server/webapps/admin/WEB-INF/lib/commons-chain.jar
 
 %if 0
 # do not make these symlinks as ant didn't do
