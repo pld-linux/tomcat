@@ -10,7 +10,7 @@ Summary:	Apache Servlet/JSP Engine, RI for Servlet 2.4/JSP 2.0 API
 Summary(pl.UTF-8):	Silnik Servlet/JSP Apache będący wzorcową implementacją API Servlet 2.4/JSP 2.0
 Name:		apache-tomcat
 Version:	5.5.27
-Release:	0.2
+Release:	0.3
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
 Source0:	http://www.apache.org/dist/tomcat/tomcat-5/v%{version}/src/%{name}-%{version}-src.tar.gz
@@ -319,13 +319,16 @@ ln -sf $(find-jar commons-modeler) $TOMCATDIR/server/lib/commons-modeler.jar
 ln -sf $(find-jar jaxp_parser_impl) $TOMCATDIR/common/endorsed/jaxp_parser_impl.jar
 ln -sf $(find-jar xml-commons-apis) $TOMCATDIR/common/endorsed/xml-commons-apis.jar
 ln -sf $(find-jar struts) $TOMCATDIR/server/webapps/admin/WEB-INF/lib/struts.jar
+ln -sf $(find-jar commons-collections) $TOMCATDIR/server/webapps/admin/WEBINF/lib/commons-collections.jar
+ln -sf $(find-jar commons-beanutils-core) $TOMCATDIR/server/webapps/admin/WEBINF/lib/commons-beanutils-core.jar
+ln -sf $(find-jar commons-digester) $TOMCATDIR/server/webapps/admin/WEBINF/lib/commons-digester.jar
+ln -sf $(find-jar commons-chain) $TOMCATDIR/server/webapps/admin/WEBINF/lib/commons-chain.jar
 
 %if 0
 # do not make these symlinks as ant didn't do
 ln -sf $(find-jar commons-daemon) $TOMCATDIR/bin/commons-daemon.jar
 ln -sf $(find-jar activation) $TOMCATDIR/common/lib/activation.jar
 ln -sf $(find-jar ant) $TOMCATDIR/common/lib/ant.jar
-ln -sf $(find-jar commons-collections) $TOMCATDIR/common/lib/commons-collections.jar
 ln -sf $(find-jar commons-dbcp) $TOMCATDIR/common/lib/commons-dbcp.jar
 ln -sf $(find-jar commons-logging-api) $TOMCATDIR/common/lib/commons-logging-api.jar
 ln -sf $(find-jar commons-pool) $TOMCATDIR/common/lib/commons-pool.jar
