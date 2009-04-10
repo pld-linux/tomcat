@@ -419,12 +419,14 @@ fi
 %dir %{_tomcatdir}/server
 %dir %{_tomcatdir}/server/classes
 %{_tomcatdir}/server/lib
+%dir %{_tomcatdir}/server/webapps
 %{_tomcatdir}/server/webapps/host-manager
 %{_tomcatdir}/server/webapps/manager
 %{_tomcatdir}/webapps
 %{_tomcatdir}/work
 %{_tomcatdir}/shared
 %dir %{_vardir}
+%dir %{_vardir}/conf
 %dir %{_vardir}/conf/Catalina
 %dir %{_vardir}/conf/Catalina/localhost
 # tomcat config has to be writeable because of tomacta-users.xml file and Catalina dir
