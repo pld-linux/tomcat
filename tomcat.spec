@@ -30,6 +30,8 @@ Patch4:		%{name}-no-connectors.patch
 Patch5:		%{name}-dbcp.patch
 # this patch is needed for struts >= 1.3
 Patch6:		%{name}-struts.patch
+# WTF? Why is it needed? Is it related to struts version?
+Patch7:		%{name}-admin-struts.patch
 URL:		http://tomcat.apache.org/
 %if %{with java_sun}
 BuildRequires:	java-sun >= 1.5
@@ -44,6 +46,7 @@ BuildRequires:	eclipse-jdt
 BuildRequires:	jaas
 BuildRequires:	jakarta-regexp >= 0:1.3
 BuildRequires:	java-commons-beanutils >= 1.7
+BuildRequires:	java-commons-chain
 BuildRequires:	java-commons-collections >= 0:3.1
 BuildRequires:	java-commons-collections-tomcat5 >= 0:3.1
 BuildRequires:	java-commons-daemon >= 1.0
