@@ -121,6 +121,8 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_vardir		%{_var}/lib/tomcat
 %define		_sysconfdir	/etc/tomcat
 
+%define find_jar() %{expand:%%define jarfile {%(jar=$(find-jar %1); echo ${jar:-%%nil})}}%{?jarfile}%{!?jarfile:%{error:find-jar %1 failed}}%{nil}
+
 %description
 Tomcat is the servlet container that is used in the official Reference
 Implementation for the Java Servlet and JavaServer Pages technologies.
@@ -186,6 +188,9 @@ servletów Apache Tomcat.
 %patch5 -p1
 %patch6 -p1
 
+# we don't need dos scripts
+rm -f bin/*.bat
+
 # servletapi built from jakarta-servletapi5.spec
 rm -rf servletapi
 
@@ -195,38 +200,7 @@ find -name '*.jar' | xargs rm -fv
 %build
 TOPDIR=$(pwd)
 
-%if 0
-# build jasper javadocs
-cd jasper
-CLASSPATH=$(build-classpath xml-commons-apis)
-# building jasper needs eclipse classes
-cat > build.properties <<EOF
-ant.jar=$(find-jar ant)
-servlet-api.jar=$(find-jar servlet-api)
-jsp-api.jar=$(find-jar jsp-api)
-tools.jar=%{java_home}/lib/tools.jar
-xercesImpl.jar=$(find-jar jaxp_parser_impl)
-xmlParserAPIs.jar=$(find-jar xml-commons-apis)
-commons-collections.jar=$(find-jar commons-collections)
-commons-logging.jar=$(find-jar commons-logging)
-commons-daemon.jar=$(find-jar commons-daemon)
-junit.jar=$(find-jar junit)
-commons-el.jar=$(find-jar commons-el)
-EOF
-#%ant dist
-
-%if %{with javadoc}
-%ant javadoc \
-	-Dcompile.source=1.4 \
-	-Dbuild.compiler=modern \
-
-%endif
-cd -
-%endif
-
 # build tomcat 5.5
-# XXX build process should fail if one of these find-jar commands fails
-#	 how to fix that?
 cat > build.properties <<EOF
 commons-beanutils.jar=$(find-jar commons-beanutils-core)
 commons-launcher.jar=$(find-jar commons-launcher)
@@ -264,6 +238,11 @@ tomcat-dbcp.jar=$(find-jar commons-dbcp-tomcat5)
 struts.lib=%{_javadir}-struts
 EOF
 
+if grep '=$' build.properties; then
+	: Some .jar could not be found
+	exit 1
+fi
+
 %ant \
 	-Dcompile.source=1.4
 
@@ -272,9 +251,6 @@ rm -rf $RPM_BUILD_ROOT
 cd build/build
 TOMCATDIR=$RPM_BUILD_ROOT%{_tomcatdir}
 CATALINADIR=$RPM_BUILD_ROOT/var/lib/tomcat
-
-# we don't need dos scripts
-rm -f bin/*.bat
 
 randpw=$(echo $RANDOM$$ | md5sum | cut -c 1-15)
 %{__sed} -i -e "s:SHUTDOWN:${randpw}:" conf/{server,server-minimal}.xml
@@ -293,7 +269,7 @@ install -d $TOMCATDIR/bin \
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/tomcat
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/tomcat
 
-cp -pR conf/* $CATALINADIR/conf
+cp -a conf/* $CATALINADIR/conf
 install %{SOURCE10} $CATALINADIR/conf/Catalina/localhost/ROOT.xml
 install %{SOURCE11} $CATALINADIR/conf/Catalina/localhost/balancer.xml
 install %{SOURCE12} $CATALINADIR/conf/Catalina/localhost/jsp-examples.xml
@@ -301,10 +277,10 @@ install %{SOURCE13} $CATALINADIR/conf/Catalina/localhost/tomcat-docs.xml
 install %{SOURCE14} $CATALINADIR/conf/Catalina/localhost/webdav.xml
 cp -HR bin common server $TOMCATDIR
 
-cp -rf server/webapps $TOMCATDIR/server
-cp -rf webapps $TOMCATDIR
-cp -rf shared $TOMCATDIR
-cp -rf temp $CATALINADIR
+cp -a server/webapps $TOMCATDIR/server
+cp -a webapps $TOMCATDIR
+cp -a shared $TOMCATDIR
+cp -a temp $CATALINADIR
 
 ln -sf %{_logdir}/tomcat $CATALINADIR/logs
 ln -sf %{_vardir}/work $TOMCATDIR/work
@@ -312,65 +288,58 @@ ln -sf %{_vardir}/conf $TOMCATDIR/conf
 ln -sf %{_vardir}/conf $RPM_BUILD_ROOT%{_sysconfdir}
 
 # symlinks instead of copies
-ln -sf $(find-jar commons-el) $TOMCATDIR/common/lib/commons-el.jar
-ln -sf $(find-jar jakarta-commons-dbcp-tomcat5) $TOMCATDIR/common/lib/jakarta-commons-dbcp-tomcat5.jar
-ln -sf $(find-jar servlet-api) $TOMCATDIR/common/lib/servlet-api.jar
-ln -sf $(find-jar jsp-api) $TOMCATDIR/common/lib/jsp-api.jar
+jars="commons-el jakarta-commons-dbcp-tomcat5 servlet-api jsp-api commons-modeler"
+for jar in $jars; do
+	jar=$(find-jar $jar)
+	ln -sf $jar $TOMCATDIR/common/lib
+done
 
-ln -sf $(find-jar commons-modeler) $TOMCATDIR/server/lib/commons-modeler.jar
+jars="jaxp_parser_impl xml-commons-apis"
+for jar in $jars; do
+	jar=$(find-jar $jar)
+	ln -sf $jar $TOMCATDIR/common/endorsed
+done
 
-ln -sf $(find-jar jaxp_parser_impl) $TOMCATDIR/common/endorsed/jaxp_parser_impl.jar
-ln -sf $(find-jar xml-commons-apis) $TOMCATDIR/common/endorsed/xml-commons-apis.jar
-ln -sf $(find-jar struts-core) $TOMCATDIR/server/webapps/admin/WEB-INF/lib/struts-core.jar
-ln -sf $(find-jar struts-taglib) $TOMCATDIR/server/webapps/admin/WEB-INF/lib/struts-taglib.jar
-ln -sf $(find-jar commons-collections) $TOMCATDIR/server/webapps/admin/WEB-INF/lib/commons-collections.jar
-ln -sf $(find-jar commons-beanutils-core) $TOMCATDIR/server/webapps/admin/WEB-INF/lib/commons-beanutils-core.jar
-ln -sf $(find-jar commons-digester) $TOMCATDIR/server/webapps/admin/WEB-INF/lib/commons-digester.jar
-ln -sf $(find-jar commons-chain) $TOMCATDIR/server/webapps/admin/WEB-INF/lib/commons-chain.jar
+jars="struts-core struts-taglib commons-collections commons-beanutils-core commons-digester commons-chain"
+for jar in $jars; do
+	jar=$(find-jar $jar)
+	ln -sf $jar $TOMCATDIR/server/webapps/admin/WEB-INF/lib
+done
 
 %if 0
 # do not make these symlinks as ant didn't do
-ln -sf $(find-jar commons-daemon) $TOMCATDIR/bin/commons-daemon.jar
-ln -sf $(find-jar activation) $TOMCATDIR/common/lib/activation.jar
-ln -sf $(find-jar ant) $TOMCATDIR/common/lib/ant.jar
-ln -sf $(find-jar commons-dbcp) $TOMCATDIR/common/lib/commons-dbcp.jar
-ln -sf $(find-jar commons-logging-api) $TOMCATDIR/common/lib/commons-logging-api.jar
-ln -sf $(find-jar commons-pool) $TOMCATDIR/common/lib/commons-pool.jar
-ln -sf $(find-jar servlet) $TOMCATDIR/common/lib/servlet.jar
-ln -sf $(find-jar servlet) $TOMCATDIR/common/lib/servletapi4.jar
-ln -sf $(find-jar jdbc-stdext) $TOMCATDIR/common/lib/jdbc-stdext.jar
+jars="commons-daemon"
+for jar in $jars; do
+	jar=$(find-jar $jar)
+	ln -sf $jar $TOMCATDIR/bin
+done
+
+jars="activation ant commons-dbcp commons-logging-api commons-pool servlet jdbc-stdext
+jmxri jndi %{?with_jta:jta} mail jsse junit mailapi pop3"
+for jar in $jars; do
+	jar=$(find-jar $jar)
+	ln -sf $jar $TOMCATDIR/common/lib
+done
+
+ln -sf servlet.jar $TOMCATDIR/common/lib/servletapi4.jar
 ln -sf jdbc-stdext.jar $TOMCATDIR/common/lib/jdbc2_0-stdext.jar
 ln -sf jdbc-stdext.jar $TOMCATDIR/common/lib/jdbc-stdext-2.0.jar
-ln -sf $(find-jar jmxri) $TOMCATDIR/common/lib/jmxri.jar
-ln -sf $(find-jar jndi) $TOMCATDIR/common/lib/jndi.jar
-%{?with_jta:ln -sf $(find-jar jta) $TOMCATDIR/common/lib/jta.jar}
-ln -sf $(find-jar mail) $TOMCATDIR/common/lib/mail.jar
-ln -sf $(find-jar jsse) $TOMCATDIR/common/lib/jsse.jar
-ln -sf $(find-jar junit) $TOMCATDIR/common/lib/junit.jar
-ln -sf $(find-jar mailapi) $TOMCATDIR/common/lib/mailapi.jar
-ln -sf $(find-jar pop3) $TOMCATDIR/common/lib/pop3.jar
 ln -sf pop3.jar $TOMCATDIR/common/lib/pop.jar
-ln -sf $(find-jar smtp) $TOMCATDIR/common/lib/smtp.jar
-ln -sf $(find-jar imap) $TOMCATDIR/common/lib/imap.jar
-ln -sf $(find-jar commons-beanutils) $TOMCATDIR/server/lib/commons-beanutils.jar
-ln -sf $(find-jar commons-digester) $TOMCATDIR/server/lib/commons-digester.jar
-ln -sf $(find-jar commons-fileupload) $TOMCATDIR/server/lib/commons-fileupload.jar
-ln -sf $(find-jar commons-logging) $TOMCATDIR/server/lib/commons-logging.jar
-ln -sf $(find-jar jaas) $TOMCATDIR/server/lib/jaas.jar
-ln -sf $(find-jar regexp) $TOMCATDIR/server/lib/regexp.jar
-ln -sf $(find-jar regexp) $TOMCATDIR/server/lib/jakarta-regexp-1.2.jar
-ln -sf $(find-jar regexp) $TOMCATDIR/server/lib/regexp-1.2.jar
+
+jars="commons-beanutils commons-digester commons-fileupload commons-logging jaas regexp"
+for jar in $jars; do
+	jar=$(find-jar $jar)
+	ln -sf $jar $TOMCATDIR/server/lib
+done
+ln -sf regexp.jar $TOMCATDIR/server/lib/jakarta-regexp-1.2.jar
+ln -sf regexp.jar $TOMCATDIR/server/lib/regexp-1.2.jar
 %endif
 
-ln -sf $(find-jar jaxp_parser_impl) $TOMCATDIR/common/endorsed/jaxp_parser_impl.jar
-ln -sf $(find-jar xml-commons-apis) $TOMCATDIR/common/endorsed/xml-commons-apis.jar
-ln -sf $(find-jar struts-core) $TOMCATDIR/server/webapps/admin/WEB-INF/lib/struts-core.jar
-
 install -d $RPM_BUILD_ROOT%{_javadir}
-mv $TOMCATDIR/common/lib/jasper* $RPM_BUILD_ROOT%{_javadir}
-ln -sf %{_javadir}/jasper-compiler-jdt.jar $TOMCATDIR/common/lib/
-ln -sf %{_javadir}/jasper-compiler.jar $TOMCATDIR/common/lib/
-ln -sf %{_javadir}/jasper-runtime.jar $TOMCATDIR/common/lib/
+mv $TOMCATDIR/common/lib/jasper*.jar $RPM_BUILD_ROOT%{_javadir}
+ln -sf %{_javadir}/jasper-compiler-jdt.jar $TOMCATDIR/common/lib
+ln -sf %{_javadir}/jasper-compiler.jar $TOMCATDIR/common/lib
+ln -sf %{_javadir}/jasper-runtime.jar $TOMCATDIR/common/lib
 
 %clean
 rm -rf $RPM_BUILD_ROOT
