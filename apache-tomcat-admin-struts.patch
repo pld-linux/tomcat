@@ -1,0 +1,12 @@
+--- apache-tomcat-5.5.27-src/container/webapps/admin/WEB-INF/struts-config.xml~	2008-08-29 05:14:01.000000000 +0200
++++ apache-tomcat-5.5.27-src/container/webapps/admin/WEB-INF/struts-config.xml	2009-04-11 04:19:16.000000000 +0200
+@@ -478,6 +478,9 @@
+ 
+   <action-mappings>
+ 
++    <!-- Ugly PLD hack, that makes it working -->
++    <action    path="/login.jsp" unknown="true"/>
++
+     <!-- Dump registry information (debugging) -->
+     <action    path="/dumpRegistry"
+                type="org.apache.webapp.admin.DumpRegistryAction"/>
