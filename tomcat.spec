@@ -37,8 +37,8 @@ URL:		http://tomcat.apache.org/
 BuildRequires:	java-sun >= 1.5
 BuildRequires:	java-sun-jre >= 1.5
 %else
-BuildRequires:	java-gcj-compat-devel
 # BuildRequires:	jsse >= 0:1.0.3
+BuildRequires:	java-gcj-compat-devel
 %endif
 BuildRequires:	ant >= 1.5.3
 BuildRequires:	ant-trax
@@ -64,6 +64,7 @@ BuildRequires:	java-commons-pool >= 0:1.2
 BuildRequires:	java-commons-pool-tomcat5 >= 0:1.2
 %{?with_jta:BuildRequires:	java-jta >= 0:1.0.1}
 BuildRequires:	java-log4j
+BuildRequires:	java-mail >= 0:1.3.1
 BuildRequires:	java-puretls
 BuildRequires:	java-servletapi5 = %{version}
 #BuildRequires:	java-struts >= 0:1.2.7
@@ -71,7 +72,6 @@ BuildRequires:	java-struts >= 1.0.2
 BuildRequires:	java-xerces >= 0:2.7.1
 BuildRequires:	java-xml-commons
 #BuildRequires:	java-xml-commons >= 1.3
-BuildRequires:	java-mail >= 0:1.3.1
 BuildRequires:	jaxp_parser_impl >= 0:2.7.1
 BuildRequires:	jdbc-stdext >= 0:2.0
 BuildRequires:	jmx
@@ -156,6 +156,7 @@ Dokumentacja do Tomcata - kontenera Servlet/JSP.
 Summary:	Apache Tomcat`s Administration Web Application
 Summary(pl.UTF-8):	Panel Administracyjny dla Apache Tomcat
 Group:		Networking/Daemons/Java/Servlets
+Requires:	%{name} = %{version}-%{release}
 Requires:	java-commons-chain
 
 %description admin
