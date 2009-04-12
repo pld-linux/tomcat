@@ -8,30 +8,30 @@
 #
 Summary:	Apache Servlet/JSP Engine, RI for Servlet 2.4/JSP 2.0 API
 Summary(pl.UTF-8):	Silnik Servlet/JSP Apache będący wzorcową implementacją API Servlet 2.4/JSP 2.0
-Name:		apache-tomcat
+Name:		tomcat
 Version:	5.5.27
 Release:	0.3
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
-Source0:	http://www.apache.org/dist/tomcat/tomcat-5/v%{version}/src/%{name}-%{version}-src.tar.gz
+Source0:	http://www.apache.org/dist/tomcat/tomcat-5/v%{version}/src/apache-%{name}-%{version}-src.tar.gz
 # Source0-md5:	eb3f196013550b9b1684e4ff18593a8e
-Source1:	%{name}.init
-Source2:	%{name}.sysconfig
-Source10:	%{name}-context-ROOT.xml
-Source11:	%{name}-context-balancer.xml
-Source12:	%{name}-context-jsp-examples.xml
-Source13:	%{name}-context-tomcat-docs.xml
-Source14:	%{name}-context-webdav.xml
-Patch0:		%{name}-skip-servletapi.patch
-Patch1:		%{name}-nsis.patch
-Patch2:		%{name}-native.patch
-Patch3:		%{name}-skip-jdt.patch
-Patch4:		%{name}-no-connectors.patch
-Patch5:		%{name}-dbcp.patch
+Source1:	apache-%{name}.init
+Source2:	apache-%{name}.sysconfig
+Source10:	apache-%{name}-context-ROOT.xml
+Source11:	apache-%{name}-context-balancer.xml
+Source12:	apache-%{name}-context-jsp-examples.xml
+Source13:	apache-%{name}-context-tomcat-docs.xml
+Source14:	apache-%{name}-context-webdav.xml
+Patch0:		apache-%{name}-skip-servletapi.patch
+Patch1:		apache-%{name}-nsis.patch
+Patch2:		apache-%{name}-native.patch
+Patch3:		apache-%{name}-skip-jdt.patch
+Patch4:		apache-%{name}-no-connectors.patch
+Patch5:		apache-%{name}-dbcp.patch
 # this patch is needed for struts >= 1.3
-Patch6:		%{name}-struts.patch
+Patch6:		apache-%{name}-struts.patch
 # WTF? Why is it needed? Is it related to struts version?
-Patch7:		%{name}-admin-struts.patch
+Patch7:		apache-%{name}-admin-struts.patch
 URL:		http://tomcat.apache.org/
 %if %{with java_sun}
 BuildRequires:	java-sun >= 1.5
@@ -179,7 +179,7 @@ Jasper jest kompilatorem Java ServerPages używanym przez kontener
 servletów Apache Tomcat.
 
 %prep
-%setup -q -n %{name}-%{version}-src
+%setup -q -n apache-%{name}-%{version}-src
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
