@@ -97,6 +97,7 @@ Requires:	java-commons-el
 #Requires:	java-commons-fileupload
 Requires:	java-commons-logging
 Requires:	java-commons-modeler
+Requires:	java-commons-pool-tomcat5
 Requires:	java-regexp
 Requires:	java-servletapi5 = %{version}
 Requires:	java-xml-commons
@@ -301,7 +302,7 @@ ln -sf %{_vardir}/conf $TOMCATDIR/conf
 ln -sf %{_vardir}/conf $RPM_BUILD_ROOT%{_sysconfdir}
 
 # symlinks instead of copies
-jars="commons-el commons-dbcp-tomcat5 servlet-api jsp-api commons-modeler"
+jars="commons-el commons-dbcp-tomcat5 commons-pool-tomcat5 servlet-api jsp-api commons-modeler"
 for jar in $jars; do
 	jar=$(find-jar $jar)
 	ln -sf $jar $TOMCATDIR/common/lib
