@@ -1,6 +1,3 @@
-# TODO
-# - packages for *.renametojar files (-cgi and -ssi in server/lib)
-#
 # Conditional build:
 %bcond_without	javadoc		# skip building javadocs
 %bcond_with	jta		# put jta jar into tomcat lib dir.
@@ -10,7 +7,7 @@ Summary:	Apache Servlet/JSP Engine, RI for Servlet 2.4/JSP 2.0 API
 Summary(pl.UTF-8):	Silnik Servlet/JSP Apache będący wzorcową implementacją API Servlet 2.4/JSP 2.0
 Name:		tomcat
 Version:	5.5.27
-Release:	0.3
+Release:	0.4
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
 Source0:	http://www.apache.org/dist/tomcat/tomcat-5/v%{version}/src/apache-%{name}-%{version}-src.tar.gz
@@ -401,39 +398,46 @@ fi
 %dir %{_tomcatdir}/server/classes
 %{_tomcatdir}/server/lib
 %dir %{_tomcatdir}/server/webapps
+
+%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/host-manager.xml
 %{_tomcatdir}/server/webapps/host-manager
+
+%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/manager.xml
 %{_tomcatdir}/server/webapps/manager
-%{_tomcatdir}/webapps
+
+%dir %{_tomcatdir}/webapps
+
+%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/ROOT.xml
+%{_tomcatdir}/webapps/ROOT
+
+%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/balancer.xml
+%{_tomcatdir}/webapps/balancer
+
+%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/webdav.xml
+%{_tomcatdir}/webapps/webdav
+
 %{_tomcatdir}/work
 %{_tomcatdir}/shared
 %dir %{_vardir}
 %dir %{_vardir}/conf
 %dir %{_vardir}/conf/Catalina
 %dir %{_vardir}/conf/Catalina/localhost
-# tomcat config has to be writeable because of tomacta-users.xml file and Catalina dir
+# tomcat config has to be writeable because of tomcat-users.xml file and Catalina dir
 %config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/MANIFEST.MF
 %config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/catalina.policy
 %config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/*.properties*
 %config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/*.manifest
 %config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/*.xml
-%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/balancer.xml
-%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/host-manager.xml
-%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/jsp-examples.xml
-%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/manager.xml
-%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/ROOT.xml
-%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/tomcat-docs.xml
-%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/webdav.xml
 %dir %attr(1730,root,tomcat) %{_vardir}/work
 %dir %attr(775,root,tomcat) %{_vardir}/webapps
 %dir %attr(775,root,tomcat) %{_vardir}/temp
 %dir %attr(775,root,tomcat) %{_logdir}/tomcat
 %{_vardir}/logs
 
-%if 0
 %files doc
 %defattr(644,root,root,755)
-%doc catalina/docs/*
-%endif
+%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/tomcat-docs.xml
+%{_tomcatdir}/webapps/tomcat-docs
 
 %files admin
 %defattr(644,root,root,755)
