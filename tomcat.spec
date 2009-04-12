@@ -108,6 +108,7 @@ Requires:	jre >= 1.2
 Requires:	jsse >= 1.0.2
 %{?with_jta:Requires:	jta >= 1.0.1}
 Requires:	rc-scripts
+Provides:	group(servlet)
 Provides:	group(tomcat)
 Provides:	java-servlet-container
 Provides:	user(tomcat)
@@ -355,7 +356,8 @@ rm -rf $RPM_BUILD_ROOT
 
 %pre
 %groupadd -g 234 -r -f tomcat
-%useradd -u 234 -r -d /var/lib/tomcat -s /bin/false -c "Tomcat User" -g tomcat tomcat
+%groupadd -g 237 -r -f servlet
+%useradd -u 234 -r -d /var/lib/tomcat -s /bin/false -c "Tomcat User" -g tomcat -G servlet tomcat
 
 %post
 /sbin/chkconfig --add tomcat
@@ -371,6 +373,7 @@ fi
 if [ "$1" = "0" ]; then
 	%userremove tomcat
 	%groupremove tomcat
+	%groupremove servlet
 fi
 
 %files
