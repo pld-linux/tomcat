@@ -191,6 +191,11 @@ servletów Apache Tomcat.
 # we don't need dos scripts
 rm -f bin/*.bat
 
+# causes file(1) rpm to abort, and not really neccessary file
+rm container/webapps/admin/images/Thumbs.db
+# file: Thumbs.db: ERROR: Cannot read short stream (Invalid argument)
+# rpm: error: magic_file(ms, "Thumbs.db") failed: mode 37777700644 Cannot read short stream (Invalid argument)
+
 # servletapi built from jakarta-servletapi5.spec
 rm -rf servletapi
 
@@ -277,6 +282,7 @@ install %{SOURCE13} $CATALINADIR/conf/Catalina/localhost/tomcat-docs.xml
 install %{SOURCE14} $CATALINADIR/conf/Catalina/localhost/webdav.xml
 cp -HR bin common server $TOMCATDIR
 
+/home/users/glen/tmp/apache-tomcat-5.5.27-root-glen/usr/share/tomcat/server/webapps/admin/images/Thumbs.db
 cp -a server/webapps $TOMCATDIR/server
 cp -a webapps $TOMCATDIR
 cp -a shared $TOMCATDIR
