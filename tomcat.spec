@@ -1,3 +1,5 @@
+# TODO   
+# - packages for *.renametojar files (-cgi and -ssi in server/lib)   
 # Conditional build:
 %bcond_without	javadoc		# skip building javadocs
 %bcond_with	jta		# put jta jar into tomcat lib dir.
