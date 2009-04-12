@@ -431,8 +431,8 @@ fi
 %dir %{_vardir}
 # these directory has to be writeable because /admin need to modify config
 # files and create temporary files
-%dir %attr(664,root,tomcat) %{_vardir}/conf
-%dir %attr(664,root,tomcat) %{_vardir}/conf/Catalina
+%dir %attr(775,root,tomcat) %{_vardir}/conf
+%dir %attr(775,root,tomcat) %{_vardir}/conf/Catalina
 %dir %{_vardir}/conf/Catalina/localhost
 # tomcat config has to be writeable because of tomcat-users.xml file and Catalina dir
 %config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/MANIFEST.MF
