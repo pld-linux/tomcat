@@ -288,7 +288,7 @@ ln -sf %{_vardir}/conf $TOMCATDIR/conf
 ln -sf %{_vardir}/conf $RPM_BUILD_ROOT%{_sysconfdir}
 
 # symlinks instead of copies
-jars="commons-el jakarta-commons-dbcp-tomcat5 servlet-api jsp-api commons-modeler"
+jars="commons-el commons-dbcp-tomcat5 servlet-api jsp-api commons-modeler"
 for jar in $jars; do
 	jar=$(find-jar $jar)
 	ln -sf $jar $TOMCATDIR/common/lib
