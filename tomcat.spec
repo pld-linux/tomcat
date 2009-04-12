@@ -425,6 +425,7 @@ fi
 %config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/webdav.xml
 %{_tomcatdir}/webapps/webdav
 
+%{_tomcatdir}/logs
 %{_tomcatdir}/work
 %{_tomcatdir}/shared
 %dir %{_vardir}
