@@ -33,7 +33,7 @@ start() {
 	if [ ! -f /var/lock/subsys/tomcat ]; then
 		msg_starting tomcat
 		busy
-		su tomcat -s /bin/sh -c '/usr/share/tomcat/bin/catalina.sh start' # >/dev/null 2>&1
+		su tomcat -s /bin/sh -c '/usr/share/tomcat/bin/catalina.sh start' >/dev/null 2>&1
 		[ $? -ne 0 ] && RETVAL=1
 		if [ $RETVAL -eq 0 ]; then
 		   	ok
