@@ -295,6 +295,7 @@ cp -a shared $TOMCATDIR
 cp -a temp $CATALINADIR
 
 ln -sf %{_logdir}/tomcat $CATALINADIR/logs
+ln -sf %{_logdir}/tomcat $TOMCATDIR/logs
 ln -sf %{_vardir}/work $TOMCATDIR/work
 ln -sf %{_vardir}/conf $TOMCATDIR/conf
 ln -sf %{_vardir}/conf $RPM_BUILD_ROOT%{_sysconfdir}
