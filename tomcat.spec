@@ -112,6 +112,7 @@ Requires:	rc-scripts
 Provides:	group(tomcat)
 Provides:	java-servlet-container
 Provides:	user(tomcat)
+Obsoletes:	apache-tomcat
 Obsoletes:	jakarta-tomcat
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -144,6 +145,7 @@ Community Process.
 Summary:	The Apache Tomcat Servlet/JSP Container documentation
 Summary(pl.UTF-8):	Dokumentacja do Tomcata - kontenera Servlet/JSP
 Group:		Documentation
+Obsoletes:	apache-tomcat-doc
 Obsoletes:	jakarta-tomcat-doc
 
 %description doc
@@ -170,6 +172,7 @@ Summary:	JSP compiler
 Summary(pl.UTF-8):	Kompilator JSP
 Group:		Libraries/Java
 Requires:	jpackage-utils
+Obsoletes:	apache-tomcat-jasper
 
 %description jasper
 Jasper is Java ServerPages compiler used by Apache Tomcat servlet
