@@ -9,7 +9,7 @@ Summary:	Apache Servlet/JSP Engine, RI for Servlet 2.4/JSP 2.0 API
 Summary(pl.UTF-8):	Silnik Servlet/JSP Apache będący wzorcową implementacją API Servlet 2.4/JSP 2.0
 Name:		tomcat
 Version:	5.5.27
-Release:	0.6
+Release:	0.8
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
 Source0:	http://www.apache.org/dist/tomcat/tomcat-5/v%{version}/src/apache-%{name}-%{version}-src.tar.gz
@@ -302,6 +302,12 @@ ln -sf %{_vardir}/conf $TOMCATDIR/conf
 ln -sf %{_vardir}/conf $RPM_BUILD_ROOT%{_sysconfdir}
 
 # symlinks instead of copies
+jars="commons-daemon commons-logging-api"
+for jar in $jars; do
+	jar=$(find-jar $jar)
+	ln -sf $jar $TOMCATDIR/bin
+done
+
 jars="commons-el commons-dbcp-tomcat5 commons-pool-tomcat5 servlet-api jsp-api commons-modeler"
 for jar in $jars; do
 	jar=$(find-jar $jar)
@@ -320,34 +326,11 @@ for jar in $jars; do
 	ln -sf $jar $TOMCATDIR/server/webapps/admin/WEB-INF/lib
 done
 
-%if 0
-# do not make these symlinks as ant didn't do
-jars="commons-daemon"
-for jar in $jars; do
-	jar=$(find-jar $jar)
-	ln -sf $jar $TOMCATDIR/bin
-done
-
-jars="activation ant commons-dbcp commons-logging-api commons-pool servlet jdbc-stdext
-jmxri jndi %{?with_jta:jta} mail jsse junit mailapi pop3"
-for jar in $jars; do
-	jar=$(find-jar $jar)
-	ln -sf $jar $TOMCATDIR/common/lib
-done
-
-ln -sf servlet.jar $TOMCATDIR/common/lib/servletapi4.jar
-ln -sf jdbc-stdext.jar $TOMCATDIR/common/lib/jdbc2_0-stdext.jar
-ln -sf jdbc-stdext.jar $TOMCATDIR/common/lib/jdbc-stdext-2.0.jar
-ln -sf pop3.jar $TOMCATDIR/common/lib/pop.jar
-
-jars="commons-beanutils commons-digester commons-fileupload commons-logging jaas regexp"
+jars="commons-modeler"
 for jar in $jars; do
 	jar=$(find-jar $jar)
 	ln -sf $jar $TOMCATDIR/server/lib
 done
-ln -sf regexp.jar $TOMCATDIR/server/lib/jakarta-regexp-1.2.jar
-ln -sf regexp.jar $TOMCATDIR/server/lib/regexp-1.2.jar
-%endif
 
 install -d $RPM_BUILD_ROOT%{_javadir}
 mv $TOMCATDIR/common/lib/jasper*.jar $RPM_BUILD_ROOT%{_javadir}
