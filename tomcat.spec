@@ -98,6 +98,7 @@ Requires:	java-commons-el
 Requires:	java-commons-logging
 Requires:	java-commons-modeler
 Requires:	java-commons-pool-tomcat5
+Requires:	java-jdbc-mysql
 Requires:	java-regexp
 Requires:	java-servletapi5 = %{version}
 Requires:	java-xml-commons
@@ -308,7 +309,7 @@ for jar in $jars; do
 	ln -sf $jar $TOMCATDIR/bin
 done
 
-jars="commons-el commons-dbcp-tomcat5 commons-pool-tomcat5 servlet-api jsp-api commons-modeler"
+jars="commons-el commons-dbcp-tomcat5 commons-pool-tomcat5 servlet-api jsp-api commons-modeler jdbc-mysql"
 for jar in $jars; do
 	jar=$(find-jar $jar)
 	ln -sf $jar $TOMCATDIR/common/lib
