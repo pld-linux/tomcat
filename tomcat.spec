@@ -61,6 +61,7 @@ BuildRequires:	java-commons-logging >= 0:1.0.4
 BuildRequires:	java-commons-modeler >= 2.0
 BuildRequires:	java-commons-pool >= 0:1.2
 BuildRequires:	java-commons-pool-tomcat5 >= 0:1.2
+BuildRequires:	java-jdbc-mysql
 %{?with_jta:BuildRequires:	java-jta >= 0:1.0.1}
 BuildRequires:	java-log4j
 BuildRequires:	java-mail >= 0:1.3.1
