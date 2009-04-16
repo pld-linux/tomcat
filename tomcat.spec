@@ -1,5 +1,5 @@
-# TODO   
-# - packages for *.renametojar files (-cgi and -ssi in server/lib)   
+# TODO
+# - packages for *.renametojar files (-cgi and -ssi in server/lib)
 # Conditional build:
 %bcond_without	javadoc		# skip building javadocs
 %bcond_with	jta		# put jta jar into tomcat lib dir.
@@ -9,7 +9,7 @@ Summary:	Apache Servlet/JSP Engine, RI for Servlet 2.4/JSP 2.0 API
 Summary(pl.UTF-8):	Silnik Servlet/JSP Apache będący wzorcową implementacją API Servlet 2.4/JSP 2.0
 Name:		tomcat
 Version:	5.5.27
-Release:	0.8
+Release:	0.9
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
 Source0:	http://www.apache.org/dist/tomcat/tomcat-5/v%{version}/src/apache-%{name}-%{version}-src.tar.gz
@@ -31,6 +31,7 @@ Patch5:		apache-%{name}-dbcp.patch
 Patch6:		apache-%{name}-struts.patch
 # WTF? Why is it needed? Is it related to struts version?
 Patch7:		apache-%{name}-admin-struts.patch
+Patch8:		apache-%{name}-no_links_to_examples.patch
 URL:		http://tomcat.apache.org/
 %if %{with java_sun}
 BuildRequires:	java-sun >= 1.5
@@ -195,6 +196,7 @@ servletów Apache Tomcat.
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
+%patch8 -p1
 
 # we don't need dos scripts
 rm -f container/catalina/src/bin/*.bat
