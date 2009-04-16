@@ -27,9 +27,7 @@ Patch2:		apache-%{name}-native.patch
 Patch3:		apache-%{name}-skip-jdt.patch
 Patch4:		apache-%{name}-no-connectors.patch
 Patch5:		apache-%{name}-dbcp.patch
-# this patch is needed for struts >= 1.3
 Patch6:		apache-%{name}-struts.patch
-# WTF? Why is it needed? Is it related to struts version?
 Patch7:		apache-%{name}-admin-struts.patch
 Patch8:		apache-%{name}-no_links_to_examples.patch
 URL:		http://tomcat.apache.org/
@@ -37,7 +35,6 @@ URL:		http://tomcat.apache.org/
 BuildRequires:	java-sun >= 1.5
 BuildRequires:	java-sun-jre >= 1.5
 %else
-# BuildRequires:	jsse >= 0:1.0.3
 BuildRequires:	java-gcj-compat-devel
 %endif
 BuildRequires:	ant >= 1.5.3
@@ -68,11 +65,9 @@ BuildRequires:	java-log4j
 BuildRequires:	java-mail >= 0:1.3.1
 BuildRequires:	java-puretls
 BuildRequires:	java-servletapi5 = %{version}
-#BuildRequires:	java-struts >= 0:1.2.7
 BuildRequires:	java-struts >= 1.0.2
 BuildRequires:	java-xerces >= 0:2.7.1
 BuildRequires:	java-xml-commons
-#BuildRequires:	java-xml-commons >= 1.3
 BuildRequires:	jaxp_parser_impl >= 0:2.7.1
 BuildRequires:	jdbc-stdext >= 0:2.0
 BuildRequires:	jmx
@@ -90,13 +85,10 @@ Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
 Requires:	%{name}-jasper = %{version}-%{release}
 Requires:	jaas
-#Requires:	jaf >= 1.0.1
 Requires:	java-commons-beanutils
 Requires:	java-commons-collections
-#Requires:	java-commons-dbcp-tomcat5
 Requires:	java-commons-digester
 Requires:	java-commons-el
-#Requires:	java-commons-fileupload
 Requires:	java-commons-logging
 Requires:	java-commons-modeler
 Requires:	java-commons-pool-tomcat5
@@ -198,17 +190,16 @@ servletów Apache Tomcat.
 %patch7 -p1
 %patch8 -p1
 
-# we don't need dos scripts
+# we don't need those scripts
 rm -f container/catalina/src/bin/*.bat
-# or those
 rm -f container/catalina/src/bin/{startup,shutdown}.sh
 
 # causes file(1) rpm to abort, and not really neccessary file
-rm container/webapps/admin/images/Thumbs.db
 # file: Thumbs.db: ERROR: Cannot read short stream (Invalid argument)
 # rpm: error: magic_file(ms, "Thumbs.db") failed: mode 37777700644 Cannot read short stream (Invalid argument)
+rm container/webapps/admin/images/Thumbs.db
 
-# servletapi built from jakarta-servletapi5.spec
+# servletapi built from java-servletapi5.spec
 rm -rf servletapi
 
 # Remove pre-built jars
