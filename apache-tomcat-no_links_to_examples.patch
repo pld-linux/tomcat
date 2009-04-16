@@ -1,0 +1,20 @@
+--- apache-tomcat-5.5.27-src/container/webapps/ROOT/index.jsp	2008-08-29 05:14:00.000000000 +0200
++++ apache-tomcat-5.5.27-src.new/container/webapps/ROOT/index.jsp	2009-04-16 10:12:27.576052969 +0200
+@@ -164,8 +164,6 @@
+                 </tr>
+                 <tr>
+                   <td class="menu">
+-                    <a href="jsp-examples/">JSP&nbsp;Examples</a><br/>
+-                    <a href="servlets-examples/">Servlet&nbsp;Examples</a><br/>
+                     <a href="webdav/">WebDAV&nbsp;capabilities</a><br/>
+      		    &nbsp;
+                   </td>
+@@ -208,8 +206,6 @@
+             is restricted to users with role "manager".</b>
+             Users are defined in <code>$CATALINA_HOME/conf/tomcat-users.xml</code>.</p>
+ 
+-            <p>Included with this release are a host of sample Servlets and JSPs (with associated source code), extensive documentation (including the Servlet 2.4 and JSP 2.0 API JavaDoc), and an introductory guide to developing web applications.</p>
+-
+             <p>Tomcat mailing lists are available at the Tomcat project web site:</p>
+ 
+            <ul>
