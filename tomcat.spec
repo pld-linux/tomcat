@@ -41,7 +41,7 @@ BuildRequires:	ant >= 1.5.3
 BuildRequires:	ant-trax
 BuildRequires:	eclipse-jdt
 BuildRequires:	jaas
-BuildRequires:	jakarta-regexp >= 0:1.3
+BuildRequires:	java-regexp >= 0:1.3
 BuildRequires:	java-commons-beanutils >= 1.7
 BuildRequires:	java-commons-chain
 BuildRequires:	java-commons-collections >= 0:3.1
