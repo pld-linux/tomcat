@@ -5,15 +5,15 @@
 %bcond_with	jta		# put jta jar into tomcat lib dir.
 %bcond_without	java_sun	# build with gcj (does not work)
 #
-Summary:	Apache Servlet/JSP Engine, RI for Servlet 2.4/JSP 2.0 API
-Summary(pl.UTF-8):	Silnik Servlet/JSP Apache będący wzorcową implementacją API Servlet 2.4/JSP 2.0
+Summary:	Apache Servlet/JSP Engine, RI for Servlet 2.5/JSP 2.1 API
+Summary(pl.UTF-8):	Silnik Servlet/JSP Apache będący wzorcową implementacją API Servlet 2.5/JSP 2.1
 Name:		tomcat
-Version:	5.5.27
-Release:	1
+Version:	6.0.18
+Release:	0.1
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
-Source0:	http://www.apache.org/dist/tomcat/tomcat-5/v%{version}/src/apache-%{name}-%{version}-src.tar.gz
-# Source0-md5:	eb3f196013550b9b1684e4ff18593a8e
+Source0:	http://www.apache.org/dist/tomcat/tomcat-6/v%{version}/src/apache-%{name}-%{version}-src.tar.gz
+# Source0-md5:	9bdbb1c1d79302c80057a70b18fe6721
 Source1:	apache-%{name}.init
 Source2:	apache-%{name}.sysconfig
 Source10:	apache-%{name}-context-ROOT.xml
@@ -21,15 +21,15 @@ Source11:	apache-%{name}-context-balancer.xml
 Source12:	apache-%{name}-context-jsp-examples.xml
 Source13:	apache-%{name}-context-tomcat-docs.xml
 Source14:	apache-%{name}-context-webdav.xml
-Patch0:		apache-%{name}-skip-servletapi.patch
-Patch1:		apache-%{name}-nsis.patch
-Patch2:		apache-%{name}-native.patch
-Patch3:		apache-%{name}-skip-jdt.patch
-Patch4:		apache-%{name}-no-connectors.patch
-Patch5:		apache-%{name}-dbcp.patch
-Patch6:		apache-%{name}-struts.patch
-Patch7:		apache-%{name}-admin-struts.patch
-Patch8:		apache-%{name}-no_links_to_examples.patch
+# Patch0:		apache-%{name}-skip-servletapi.patch
+# Patch1:		apache-%{name}-nsis.patch
+# Patch2:		apache-%{name}-native.patch
+# Patch3:		apache-%{name}-skip-jdt.patch
+# Patch4:		apache-%{name}-no-connectors.patch
+# Patch5:		apache-%{name}-dbcp.patch
+# Patch6:		apache-%{name}-struts.patch
+# Patch7:		apache-%{name}-admin-struts.patch
+# Patch8:		apache-%{name}-no_links_to_examples.patch
 URL:		http://tomcat.apache.org/
 %if %{with java_sun}
 BuildRequires:	java-sun >= 1.5
@@ -180,26 +180,21 @@ servletów Apache Tomcat.
 
 %prep
 %setup -q -n apache-%{name}-%{version}-src
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
-%patch6 -p1
-%patch7 -p1
-%patch8 -p1
+#%%patch0 -p1
+#%%patch1 -p1
+#%%patch2 -p1
+#%%patch3 -p1
+#%%patch4 -p1
+#%%patch5 -p1
+#%%patch6 -p1
+#%%patch7 -p1
+#%%patch8 -p1
 
 # we don't need those scripts
 rm -f container/catalina/src/bin/*.bat
 rm -f container/catalina/src/bin/{startup,shutdown}.sh
 
-# causes file(1) rpm to abort, and not really neccessary file
-# file: Thumbs.db: ERROR: Cannot read short stream (Invalid argument)
-# rpm: error: magic_file(ms, "Thumbs.db") failed: mode 37777700644 Cannot read short stream (Invalid argument)
-rm container/webapps/admin/images/Thumbs.db
-
-# servletapi built from java-servletapi5.spec
+# servletapi built from java-servletapi.spec
 rm -rf servletapi
 
 # Remove pre-built jars
