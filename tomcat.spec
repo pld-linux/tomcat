@@ -156,6 +156,7 @@ Summary(pl.UTF-8):	Panel Administracyjny dla Apache Tomcat
 Group:		Networking/Daemons/Java/Servlets
 Requires:	%{name} = %{version}-%{release}
 Requires:	java-commons-chain
+Obsoletes:	apache-tomcat-admin
 
 %description admin
 Administration Web Application for Apache Tomcat.
