@@ -1,5 +1,4 @@
-# TODO
-# - packages for *.renametojar files (-cgi and -ssi in server/lib)
+#
 # Conditional build:
 %bcond_without	javadoc		# skip building javadocs
 %bcond_with	jta		# put jta jar into tomcat lib dir.
@@ -31,6 +30,23 @@ Patch6:		apache-%{name}-struts.patch
 Patch7:		apache-%{name}-admin-struts.patch
 Patch8:		apache-%{name}-no_links_to_examples.patch
 URL:		http://tomcat.apache.org/
+# http://tomcat.apache.org/security-5.html
+# Requires upgrade to 6.0.20 or (in future) 5.5.28. Or patch:
+# http://svn.apache.org/viewvc?rev=781362&view=rev
+BuildRequires:	security(CVE-2009-0033)
+# http://tomcat.apache.org/security-5.html
+# Requires upgrade to 6.0.20 or (in future) 5.5.28. Or patch:
+# http://svn.apache.org/viewvc?rev=781379&view=rev
+BuildRequires:	security(CVE-2009-0580)
+# http://tomcat.apache.org/security-5.html
+# Requires upgrade to 6.0.20 or (in future) 5.5.28. Or patches:
+# http://svn.apache.org/viewvc?rev=781542&view=rev
+# http://svn.apache.org/viewvc?rev=681156&view=rev
+BuildRequires:	security(CVE-2009-0783)
+# http://tomcat.apache.org/security-5.html
+# Requires upgrade to 6.0.20 or (in future) 5.5.28. Or patch:
+# http://svn.apache.org/viewvc?rev=750928&view=rev
+BuildRequires:	security(CVE-2009-0781)
 %if %{with java_sun}
 BuildRequires:	java-sun >= 1.5
 BuildRequires:	java-sun-jre >= 1.5
