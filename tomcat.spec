@@ -8,7 +8,7 @@ Summary:	Apache Servlet/JSP Engine, RI for Servlet 2.4/JSP 2.0 API
 Summary(pl.UTF-8):	Silnik Servlet/JSP Apache będący wzorcową implementacją API Servlet 2.4/JSP 2.0
 Name:		tomcat
 Version:	5.5.27
-Release:	1
+Release:	2
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
 Source0:	http://www.apache.org/dist/tomcat/tomcat-5/v%{version}/src/apache-%{name}-%{version}-src.tar.gz
@@ -29,24 +29,14 @@ Patch5:		apache-%{name}-dbcp.patch
 Patch6:		apache-%{name}-struts.patch
 Patch7:		apache-%{name}-admin-struts.patch
 Patch8:		apache-%{name}-no_links_to_examples.patch
+# Following patches are applied in tomcat svn. Remove them while updating to 5.5.28
+# See: http://tomcat.apache.org/security-5.html
+Patch100:	tomcat-CVE-2008-5515.patch
+Patch101:	tomcat-CVE-2009-0033.patch
+Patch102:	tomcat-CVE-2009-0580.patch
+Patch103:	tomcat-CVE-2009-0781.patch
+Patch104:	tomcat-CVE-2009-0783.patch
 URL:		http://tomcat.apache.org/
-# http://tomcat.apache.org/security-5.html
-# Requires upgrade to 6.0.20 or (in future) 5.5.28. Or patch:
-# http://svn.apache.org/viewvc?rev=781362&view=rev
-BuildRequires:	security(CVE-2009-0033)
-# http://tomcat.apache.org/security-5.html
-# Requires upgrade to 6.0.20 or (in future) 5.5.28. Or patch:
-# http://svn.apache.org/viewvc?rev=781379&view=rev
-BuildRequires:	security(CVE-2009-0580)
-# http://tomcat.apache.org/security-5.html
-# Requires upgrade to 6.0.20 or (in future) 5.5.28. Or patches:
-# http://svn.apache.org/viewvc?rev=781542&view=rev
-# http://svn.apache.org/viewvc?rev=681156&view=rev
-BuildRequires:	security(CVE-2009-0783)
-# http://tomcat.apache.org/security-5.html
-# Requires upgrade to 6.0.20 or (in future) 5.5.28. Or patch:
-# http://svn.apache.org/viewvc?rev=750928&view=rev
-BuildRequires:	security(CVE-2009-0781)
 %if %{with java_sun}
 BuildRequires:	java-sun >= 1.5
 BuildRequires:	java-sun-jre >= 1.5
@@ -206,6 +196,12 @@ servletów Apache Tomcat.
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
+
+%patch100 -p0
+%patch101 -p0
+%patch102 -p0
+%patch103 -p0
+%patch104 -p0
 
 # we don't need those scripts
 rm -f container/catalina/src/bin/*.bat
