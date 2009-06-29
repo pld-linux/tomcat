@@ -1,3 +1,5 @@
+# TODO
+# - rename %{name}-jasper -> java-jasper?
 #
 # Conditional build:
 %bcond_without	javadoc		# skip building javadocs
@@ -8,7 +10,7 @@ Summary:	Apache Servlet/JSP Engine, RI for Servlet 2.4/JSP 2.0 API
 Summary(pl.UTF-8):	Silnik Servlet/JSP Apache będący wzorcową implementacją API Servlet 2.4/JSP 2.0
 Name:		tomcat
 Version:	5.5.27
-Release:	2
+Release:	1
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
 Source0:	http://www.apache.org/dist/tomcat/tomcat-5/v%{version}/src/apache-%{name}-%{version}-src.tar.gz
@@ -124,8 +126,6 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_vardir		%{_var}/lib/tomcat
 %define		_sysconfdir	/etc/tomcat
 
-%define find_jar() %{expand:%%define jarfile {%(jar=$(find-jar %1); echo ${jar:-%%nil})}}%{?jarfile}%{!?jarfile:%{error:find-jar %1 failed}}%{nil}
-
 %description
 Tomcat is the servlet container that is used in the official Reference
 Implementation for the Java Servlet and JavaServer Pages technologies.
@@ -157,7 +157,7 @@ The Tomcat Servlet/JSP Container documentation.
 Dokumentacja do Tomcata - kontenera Servlet/JSP.
 
 %package admin
-Summary:	Apache Tomcat`s Administration Web Application
+Summary:	Apache Tomcat's Administration Web Application
 Summary(pl.UTF-8):	Panel Administracyjny dla Apache Tomcat
 Group:		Networking/Daemons/Java/Servlets
 Requires:	%{name} = %{version}-%{release}
@@ -421,8 +421,7 @@ fi
 %{_tomcatdir}/work
 %{_tomcatdir}/shared
 %dir %{_vardir}
-# these directory has to be writeable because /admin need to modify config
-# files and create temporary files
+# these directories have to be writeable because /admin needs to modify config files and create temporary files
 %dir %attr(775,root,tomcat) %{_vardir}/conf
 %dir %attr(775,root,tomcat) %{_vardir}/conf/Catalina
 %dir %{_vardir}/conf/Catalina/localhost
