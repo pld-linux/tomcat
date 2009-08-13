@@ -16,11 +16,13 @@ Source0:	http://www.apache.org/dist/tomcat/tomcat-6/v%{version}/src/apache-%{nam
 # Source0-md5:	9bdbb1c1d79302c80057a70b18fe6721
 Source1:	apache-%{name}.init
 Source2:	apache-%{name}.sysconfig
+Source3:	%{name}-build.properties
 Source10:	apache-%{name}-context-ROOT.xml
 Source11:	apache-%{name}-context-balancer.xml
 Source12:	apache-%{name}-context-jsp-examples.xml
 Source13:	apache-%{name}-context-tomcat-docs.xml
 Source14:	apache-%{name}-context-webdav.xml
+Patch0:		%{name}-build.xml.patch
 # Patch0:		apache-%{name}-skip-servletapi.patch
 # Patch1:		apache-%{name}-nsis.patch
 # Patch2:		apache-%{name}-native.patch
@@ -31,6 +33,10 @@ Source14:	apache-%{name}-context-webdav.xml
 # Patch7:		apache-%{name}-admin-struts.patch
 # Patch8:		apache-%{name}-no_links_to_examples.patch
 URL:		http://tomcat.apache.org/
+BuildRequires:	apr-devel
+BuildRequires:	autoconf
+BuildRequires:	libtool
+BuildRequires:	openssl-devel
 %if %{with java_sun}
 BuildRequires:	java-sun >= 1.5
 BuildRequires:	java-sun-jre >= 1.5
@@ -64,7 +70,7 @@ BuildRequires:	java-jdbc-mysql
 BuildRequires:	java-log4j
 BuildRequires:	java-mail >= 0:1.3.1
 BuildRequires:	java-puretls
-BuildRequires:	java-servletapi5 = %{version}
+# BuildRequires:	java-servletapi5 = %{version}
 BuildRequires:	java-struts >= 1.0.2
 BuildRequires:	java-xerces >= 0:2.7.1
 BuildRequires:	java-xml-commons
@@ -180,74 +186,19 @@ servletów Apache Tomcat.
 
 %prep
 %setup -q -n apache-%{name}-%{version}-src
-#%%patch0 -p1
-#%%patch1 -p1
-#%%patch2 -p1
-#%%patch3 -p1
-#%%patch4 -p1
-#%%patch5 -p1
-#%%patch6 -p1
-#%%patch7 -p1
-#%%patch8 -p1
+
+%patch0 -p0
 
 # we don't need those scripts
 rm -f container/catalina/src/bin/*.bat
 rm -f container/catalina/src/bin/{startup,shutdown}.sh
 
-# servletapi built from java-servletapi.spec
-rm -rf servletapi
-
-# Remove pre-built jars
-find -name '*.jar' | xargs rm -fv
+cp %{SOURCE3} build.properties
 
 %build
 TOPDIR=$(pwd)
 
-# build tomcat 5.5
-cat > build.properties <<EOF
-commons-beanutils.jar=$(find-jar commons-beanutils-core)
-commons-launcher.jar=$(find-jar commons-launcher)
-commons-daemon.jar=$(find-jar commons-daemon)
-commons-digester.jar=$(find-jar commons-digester)
-commons-el.jar=$(find-jar commons-el)
-commons-logging-api.jar=$(find-jar commons-logging-api)
-commons-logging.jar=$(find-jar commons-logging)
-commons-modeler.jar=$(find-jar commons-modeler)
-xercesImpl.jar=$(find-jar jaxp_parser_impl)
-xml-apis.jar=$(find-jar xml-commons-apis)
-jdt.jar=$(find-jar org.eclipse.jdt.core)
-jasper-compiler-jdt.home=$TOPDIR/tomcat-deps
-commons-httpclient.jar=$(find-jar commons-httpclient)
-commons-collections.jar=$(find-jar commons-collections)
-commons-fileupload.jar=$(find-jar commons-fileupload)
-commons-io.jar=$(find-jar commons-io)
-jmx.jar=$(find-jar jmx)
-jmx-tools.jar=$(find-jar jmx)
-junit.jar=$(find-jar junit)
-struts.jar=$(find-jar struts-core)
-struts-core.jar=$(find-jar struts-core)
-struts-taglib.jar=$(find-jar struts-taglib)
-jcert.jar=$(find-jar jcert)
-jnet.jar=$(find-jar jnet)
-jsse.jar=$(find-jar jsse)
-%{?with_jta:jta.jar=$(find-jar jta)}
-puretls.jar=$(find-jar puretls)
-servlet-api.jar=$(find-jar servlet-api)
-servletapi.build.notrequired=true
-jsp-api.jar=$(find-jar jsp-api)
-jspapi.build.notrequired=true
-log4j.jar=$(find-jar log4j)
-tomcat-dbcp.jar=$(find-jar commons-dbcp-tomcat5)
-struts.lib=%{_javadir}-struts
-EOF
-
-if grep '=$' build.properties; then
-	: Some .jar could not be found
-	exit 1
-fi
-
-%ant \
-	-Dcompile.source=1.4
+%ant -Drpm.javadir=%{_javadir} -Drpm.libdir=%{_libdir}
 
 %install
 rm -rf $RPM_BUILD_ROOT
