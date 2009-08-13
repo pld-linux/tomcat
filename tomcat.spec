@@ -8,12 +8,12 @@
 Summary:	Apache Servlet/JSP Engine, RI for Servlet 2.5/JSP 2.1 API
 Summary(pl.UTF-8):	Silnik Servlet/JSP Apache będący wzorcową implementacją API Servlet 2.5/JSP 2.1
 Name:		tomcat
-Version:	6.0.18
+Version:	6.0.20
 Release:	0.1
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
 Source0:	http://www.apache.org/dist/tomcat/tomcat-6/v%{version}/src/apache-%{name}-%{version}-src.tar.gz
-# Source0-md5:	9bdbb1c1d79302c80057a70b18fe6721
+# Source0-md5:	44f49e7e14028b6a53c3c346bd18c72f
 Source1:	apache-%{name}.init
 Source2:	apache-%{name}.sysconfig
 Source3:	%{name}-build.properties
@@ -45,39 +45,11 @@ BuildRequires:	java-gcj-compat-devel
 %endif
 BuildRequires:	ant >= 1.5.3
 BuildRequires:	ant-trax
-BuildRequires:	eclipse-jdt
-BuildRequires:	jaas
-BuildRequires:	java-regexp >= 0:1.3
-BuildRequires:	java-commons-beanutils >= 1.7
-BuildRequires:	java-commons-chain
-BuildRequires:	java-commons-collections >= 0:3.1
-BuildRequires:	java-commons-collections-tomcat5 >= 0:3.1
+BuildRequires:	eclipse-jdt >= 3.2
+BuildRequires:	java-commons-collections >= 0:2.0
 BuildRequires:	java-commons-daemon >= 1.0
-BuildRequires:	java-commons-dbcp >= 0:1.2.1
-BuildRequires:	java-commons-dbcp-tomcat5 >= 0:1.2.1
-BuildRequires:	java-commons-digester >= 0:1.7
-BuildRequires:	java-commons-el >= 0:1.0
-BuildRequires:	java-commons-fileupload >= 0:1.0
-BuildRequires:	java-commons-httpclient
-BuildRequires:	java-commons-io >= 1.4
-BuildRequires:	java-commons-launcher >= 0:0.9
-BuildRequires:	java-commons-logging >= 0:1.0.4
-BuildRequires:	java-commons-modeler >= 2.0
-BuildRequires:	java-commons-pool >= 0:1.2
-BuildRequires:	java-commons-pool-tomcat5 >= 0:1.2
-BuildRequires:	java-jdbc-mysql
-%{?with_jta:BuildRequires:	java-jta >= 0:1.0.1}
-BuildRequires:	java-log4j
-BuildRequires:	java-mail >= 0:1.3.1
-BuildRequires:	java-puretls
-# BuildRequires:	java-servletapi5 = %{version}
-BuildRequires:	java-struts >= 1.0.2
-BuildRequires:	java-xerces >= 0:2.7.1
-BuildRequires:	java-xml-commons
-BuildRequires:	jaxp_parser_impl >= 0:2.7.1
-BuildRequires:	jdbc-stdext >= 0:2.0
-BuildRequires:	jmx
-BuildRequires:	jndi >= 0:1.2.1
+BuildRequires:	java-commons-dbcp >= 0:1.1
+BuildRequires:	java-commons-dbcp-tomcat5 >= 0:1.1
 BuildRequires:	jpackage-utils
 BuildRequires:	junit >= 0:3.8.1
 BuildRequires:	rpmbuild(macros) >= 1.300
