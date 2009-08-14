@@ -1,4 +1,6 @@
 # TODO
+# - %files
+# - review %install section: which jar libs should we link to $TOMCATDIR/lib?
 # - packages for *.renametojar files (-cgi and -ssi in server/lib)
 # Conditional build:
 %bcond_without	javadoc		# skip building javadocs
@@ -23,15 +25,6 @@ Source12:	apache-%{name}-context-jsp-examples.xml
 Source13:	apache-%{name}-context-tomcat-docs.xml
 Source14:	apache-%{name}-context-webdav.xml
 Patch0:		%{name}-build.xml.patch
-# Patch0:		apache-%{name}-skip-servletapi.patch
-# Patch1:		apache-%{name}-nsis.patch
-# Patch2:		apache-%{name}-native.patch
-# Patch3:		apache-%{name}-skip-jdt.patch
-# Patch4:		apache-%{name}-no-connectors.patch
-# Patch5:		apache-%{name}-dbcp.patch
-# Patch6:		apache-%{name}-struts.patch
-# Patch7:		apache-%{name}-admin-struts.patch
-# Patch8:		apache-%{name}-no_links_to_examples.patch
 URL:		http://tomcat.apache.org/
 BuildRequires:	apr-devel
 BuildRequires:	autoconf
@@ -174,21 +167,17 @@ TOPDIR=$(pwd)
 
 %install
 rm -rf $RPM_BUILD_ROOT
-cd build/build
+cd output/build
+
 TOMCATDIR=$RPM_BUILD_ROOT%{_tomcatdir}
 CATALINADIR=$RPM_BUILD_ROOT/var/lib/tomcat
 
-randpw=$(echo $RANDOM$$ | md5sum | cut -c 1-15)
-%{__sed} -i -e "s:SHUTDOWN:${randpw}:" conf/{server,server-minimal}.xml
-
-install -d $TOMCATDIR/bin \
-	    $TOMCATDIR/common/{lib,classes,endorsed} \
-	    $TOMCATDIR/server/{lib,classes} \
-	    $TOMCATDIR/webapps \
-	    $RPM_BUILD_ROOT%{_logdir}/tomcat \
+install -d $TOMCATDIR \
+	    $CATALINADIR/temp \
 	    $RPM_BUILD_ROOT%{_vardir}/webapps \
 	    $RPM_BUILD_ROOT%{_vardir}/work \
 	    $RPM_BUILD_ROOT%{_vardir}/conf \
+	    $RPM_BUILD_ROOT%{_logdir}/tomcat \
 	    $RPM_BUILD_ROOT/etc/sysconfig \
 	    $RPM_BUILD_ROOT/etc/rc.d/init.d
 
@@ -196,16 +185,14 @@ install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/tomcat
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/tomcat
 
 cp -a conf/* $CATALINADIR/conf
+install -d $CATALINADIR/conf/Catalina/localhost
 install %{SOURCE10} $CATALINADIR/conf/Catalina/localhost/ROOT.xml
 install %{SOURCE11} $CATALINADIR/conf/Catalina/localhost/balancer.xml
 install %{SOURCE12} $CATALINADIR/conf/Catalina/localhost/jsp-examples.xml
 install %{SOURCE13} $CATALINADIR/conf/Catalina/localhost/tomcat-docs.xml
 install %{SOURCE14} $CATALINADIR/conf/Catalina/localhost/webdav.xml
-cp -HR bin common server $TOMCATDIR
 
-cp -a server/webapps $TOMCATDIR/server
-cp -a webapps $TOMCATDIR
-cp -a shared $TOMCATDIR
+cp -a bin lib webapps $TOMCATDIR
 cp -a temp $CATALINADIR
 
 ln -sf %{_logdir}/tomcat $CATALINADIR/logs
@@ -221,35 +208,35 @@ for jar in $jars; do
 	ln -sf $jar $TOMCATDIR/bin
 done
 
-jars="commons-el commons-dbcp-tomcat5 commons-pool-tomcat5 servlet-api jsp-api commons-modeler jdbc-mysql"
-for jar in $jars; do
-	jar=$(find-jar $jar)
-	ln -sf $jar $TOMCATDIR/common/lib
-done
+# jars="commons-el commons-dbcp-tomcat5 commons-pool-tomcat5 servlet-api jsp-api commons-modeler jdbc-mysql"
+# for jar in $jars; do
+# 	jar=$(find-jar $jar)
+# 	ln -sf $jar $TOMCATDIR/common/lib
+# done
+# 
+# jars="jaxp_parser_impl xml-commons-apis"
+# for jar in $jars; do
+# 	jar=$(find-jar $jar)
+# 	ln -sf $jar $TOMCATDIR/common/endorsed
+# done
 
-jars="jaxp_parser_impl xml-commons-apis"
-for jar in $jars; do
-	jar=$(find-jar $jar)
-	ln -sf $jar $TOMCATDIR/common/endorsed
-done
+# jars="struts-core struts-taglib commons-collections commons-beanutils-core commons-digester commons-chain"
+# for jar in $jars; do
+# 	jar=$(find-jar $jar)
+# 	ln -sf $jar $TOMCATDIR/server/webapps/admin/WEB-INF/lib
+# done
 
-jars="struts-core struts-taglib commons-collections commons-beanutils-core commons-digester commons-chain"
-for jar in $jars; do
-	jar=$(find-jar $jar)
-	ln -sf $jar $TOMCATDIR/server/webapps/admin/WEB-INF/lib
-done
-
-jars="commons-modeler"
-for jar in $jars; do
-	jar=$(find-jar $jar)
-	ln -sf $jar $TOMCATDIR/server/lib
-done
+# jars="commons-modeler"
+# for jar in $jars; do
+# 	jar=$(find-jar $jar)
+# 	ln -sf $jar $TOMCATDIR/server/lib
+# done
 
 install -d $RPM_BUILD_ROOT%{_javadir}
-mv $TOMCATDIR/common/lib/jasper*.jar $RPM_BUILD_ROOT%{_javadir}
-ln -sf %{_javadir}/jasper-compiler-jdt.jar $TOMCATDIR/common/lib
-ln -sf %{_javadir}/jasper-compiler.jar $TOMCATDIR/common/lib
-ln -sf %{_javadir}/jasper-runtime.jar $TOMCATDIR/common/lib
+mv $TOMCATDIR/lib/jasper*.jar $RPM_BUILD_ROOT%{_javadir}
+ln -sf %{_javadir}/jasper-compiler-jdt.jar $TOMCATDIR/lib
+ln -sf %{_javadir}/jasper-compiler.jar $TOMCATDIR/lib
+ln -sf %{_javadir}/jasper-runtime.jar $TOMCATDIR/lib
 
 %clean
 rm -rf $RPM_BUILD_ROOT
