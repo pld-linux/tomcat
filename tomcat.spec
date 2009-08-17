@@ -7,8 +7,12 @@
 %bcond_with	jta		# put jta jar into tomcat lib dir.
 %bcond_without	java_sun	# build with gcj (does not work)
 #
-Summary:	Apache Servlet/JSP Engine, RI for Servlet 2.5/JSP 2.1 API
-Summary(pl.UTF-8):	Silnik Servlet/JSP Apache będący wzorcową implementacją API Servlet 2.5/JSP 2.1
+
+%define		jspapiver	2.1
+%define		servletapiver	2.5
+
+Summary:	Apache Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP %{jspapiver}API
+Summary(pl.UTF-8):	Silnik Servlet/JSP Apache będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
 Name:		tomcat
 Version:	6.0.20
 Release:	0.1
@@ -55,18 +59,13 @@ Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
 Requires:	%{name}-jasper = %{version}-%{release}
-Requires:	jaas
 Requires:	java-commons-daemon
 Requires:	java-commons-logging
-Requires:	java-jdbc-mysql
-Requires:	java-regexp
-Requires:	java-xml-commons
+Requires:	java-servletapi = %{epoch}:%{version}-%{release}
 Requires:	javamail >= 1.2
 Requires:	jaxp_parser_impl
-Requires:	jdbc-stdext >= 2.0
 Requires:	jndi >= 1.2.1
 Requires:	jre >= 1.2
-Requires:	jsse >= 1.0.2
 %{?with_jta:Requires:	jta >= 1.0.1}
 Requires:	rc-scripts
 Provides:	group(servlet)
@@ -165,14 +164,31 @@ container.
 Jasper jest kompilatorem Java ServerPages używanym przez kontener
 servletów Apache Tomcat.
 
+%package -n java-servletapi
+Summary:	Java servlet and JSP implementation classes
+Summary(pl.UTF-8):	Klasy z implementacją Java Servlet i JSP
+Group:		Libraries/Java
+Provides:	java(JSP) = %{jspapiver}
+Provides:	java(JavaServlet) = %{servletapiver}
+Obsoletes:	java-servletapi5
+
+%description -n java-servletapi
+Implementation classes of the Java Servlet and JSP APIs (packages
+javax.servlet, javax.servlet.http, javax.servlet.jsp, and
+javax.servlet.jsp.tagext).
+
+%description -l pl.UTF-8 -n java-servletapi
+Implementacje klas API Java Servlet i JSP (pakiety javax.servlet,
+javax.servlet.http, javax.servlet.jsp i java.servlet.jsp.tagext).
+
 %prep
 %setup -q -n apache-%{name}-%{version}-src
 
 %patch0 -p0
 
 # we don't need those scripts
-rm -f container/catalina/src/bin/*.bat
-rm -f container/catalina/src/bin/{startup,shutdown}.sh
+rm bin/*.bat
+rm bin/{startup,shutdown}.sh
 
 cp %{SOURCE3} build.properties
 
@@ -226,11 +242,19 @@ done
 
 install -d $RPM_BUILD_ROOT%{_javadir}
 mv $TOMCATDIR/lib/jasper*.jar $RPM_BUILD_ROOT%{_javadir}
+mv $TOMCATDIR/lib/jsp-api.jar $RPM_BUILD_ROOT%{_javadir}/jsp-api-%{jspapiver}.jar
+mv $TOMCATDIR/lib/servlet-api.jar $RPM_BUILD_ROOT%{_javadir}/servlet-api-%{servletapiver}.jar
+
+ln -s jsp-api-%{jspapiver}.jar $RPM_BUILD_ROOT%{_javadir}/jsp-api.jar
+ln -s servlet-api-%{servletapiver}.jar $RPM_BUILD_ROOT%{_javadir}/servlet-api.jar
 
 # XXX add softlinks jasper-compiler.jar and jasper-runtime for compatibility with tomcat 5.5?
 ln -sf %{_javadir}/jasper-compiler-jdt.jar $TOMCATDIR/lib
 ln -sf %{_javadir}/jasper-el.jar $TOMCATDIR/lib
 ln -sf %{_javadir}/jasper.jar $TOMCATDIR/lib
+
+ln -sf %{_javadir}/jsp-api-%{jspapiver}.jar $TOMCATDIR/lib
+ln -sf %{_javadir}/servlet-api-%{servletapiver}.jar $TOMCATDIR/lib
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -279,7 +303,7 @@ fi
 
 # %config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/balancer.xml
 # %{_tomcatdir}/webapps/balancer
-# 
+#
 # %config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/webdav.xml
 # %{_tomcatdir}/webapps/webdav
 
@@ -305,7 +329,7 @@ fi
 %defattr(644,root,root,755)
 %config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/docs.xml
 %{_tomcatdir}/webapps/docs
- 
+
 %files webapp-manager
 %defattr(644,root,root,755)
 %config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/manager.xml
@@ -326,3 +350,8 @@ fi
 %{_javadir}/jasper-compiler-jdt.jar
 %{_javadir}/jasper-el.jar
 %{_javadir}/jasper.jar
+
+%files -n java-servletapi
+%defattr(644,root,root,755)
+%{_javadir}/jsp-api*.jar
+%{_javadir}/servlet-api*.jar
