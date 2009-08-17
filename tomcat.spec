@@ -1,6 +1,6 @@
 # TODO
-# - %files
 # - review %install section: which jar libs should we link to $TOMCATDIR/lib?
+# - review dependencies
 # - packages for *.renametojar files (-cgi and -ssi in server/lib)
 # Conditional build:
 %bcond_without	javadoc		# skip building javadocs
