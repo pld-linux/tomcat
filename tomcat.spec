@@ -1,10 +1,8 @@
 # TODO
-# - review %install section: which jar libs should we link to $TOMCATDIR/lib?
 # - review dependencies
 # - packages for *.renametojar files (-cgi and -ssi in server/lib)
 # Conditional build:
 %bcond_without	javadoc		# skip building javadocs
-%bcond_with	jta		# put jta jar into tomcat lib dir.
 %bcond_without	java_sun	# build with gcj (does not work)
 #
 
@@ -66,7 +64,6 @@ Requires:	javamail >= 1.2
 Requires:	jaxp_parser_impl
 Requires:	jndi >= 1.2.1
 Requires:	jre >= 1.2
-%{?with_jta:Requires:	jta >= 1.0.1}
 Requires:	rc-scripts
 Provides:	group(servlet)
 Provides:	group(tomcat)
@@ -300,12 +297,6 @@ fi
 
 %config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/ROOT.xml
 %{_tomcatdir}/webapps/ROOT
-
-# %config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/balancer.xml
-# %{_tomcatdir}/webapps/balancer
-#
-# %config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/webdav.xml
-# %{_tomcatdir}/webapps/webdav
 
 %{_tomcatdir}/logs
 %{_tomcatdir}/work
