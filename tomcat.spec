@@ -56,13 +56,8 @@ Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
 Requires:	%{name}-jasper = %{version}-%{release}
 Requires:	jaas
-Requires:	java-commons-beanutils
-Requires:	java-commons-collections
-Requires:	java-commons-digester
-Requires:	java-commons-el
+Requires:	java-commons-daemon
 Requires:	java-commons-logging
-Requires:	java-commons-modeler
-Requires:	java-commons-pool-tomcat5
 Requires:	java-jdbc-mysql
 Requires:	java-regexp
 Requires:	java-xml-commons
@@ -113,7 +108,7 @@ Summary(pl.UTF-8):	Dokumentacja do Tomcata - kontenera Servlet/JSP
 Group:		Documentation
 Obsoletes:	apache-tomcat-doc
 Obsoletes:	jakarta-tomcat-doc
-Obsoletes:	%{name}-doc
+Obsoletes:	tomcat-doc
 
 %description webapp-docs
 The Tomcat Servlet/JSP Container documentation.
@@ -136,6 +131,7 @@ Zarządca aplikacji w Tomcacie.
 Summary:	The Apache Tomcat Servlet/JSP virtual hosts manager
 Summary(pl.UTF-8):	Zarządca wirtualnych hostów w Tomcacie
 Group:		Networking/Daemons/Java/Servlets
+Obsoletes:	tomcat-admin
 
 %description webapp-host-manager
 The Apache Tomcat Servlet/JSP virtual hosts manager.
@@ -153,19 +149,6 @@ The Apache Tomcat Servlet/JSP example applications.
 
 %description webapp-examples -l pl.UTF-8
 Przykładowe aplikacje dla Tomcata.
-
-# %package admin
-# Summary:	Apache Tomcat`s Administration Web Application
-# Summary(pl.UTF-8):	Panel Administracyjny dla Apache Tomcat
-# Group:		Networking/Daemons/Java/Servlets
-# Requires:	%{name} = %{version}-%{release}
-# Requires:	java-commons-chain
-# 
-# %description admin
-# Administration Web Application for Apache Tomcat.
-# 
-# %description admin -l pl.UTF-8
-# Panel Administracyjny dla Apache Tomcat.
 
 %package jasper
 Summary:	JSP compiler
@@ -240,30 +223,6 @@ for jar in $jars; do
 	jar=$(find-jar $jar)
 	ln -sf $jar $TOMCATDIR/bin
 done
-
-# jars="commons-el commons-dbcp-tomcat5 commons-pool-tomcat5 servlet-api jsp-api commons-modeler jdbc-mysql"
-# for jar in $jars; do
-# 	jar=$(find-jar $jar)
-# 	ln -sf $jar $TOMCATDIR/common/lib
-# done
-# 
-# jars="jaxp_parser_impl xml-commons-apis"
-# for jar in $jars; do
-# 	jar=$(find-jar $jar)
-# 	ln -sf $jar $TOMCATDIR/common/endorsed
-# done
-
-# jars="struts-core struts-taglib commons-collections commons-beanutils-core commons-digester commons-chain"
-# for jar in $jars; do
-# 	jar=$(find-jar $jar)
-# 	ln -sf $jar $TOMCATDIR/server/webapps/admin/WEB-INF/lib
-# done
-
-# jars="commons-modeler"
-# for jar in $jars; do
-# 	jar=$(find-jar $jar)
-# 	ln -sf $jar $TOMCATDIR/server/lib
-# done
 
 install -d $RPM_BUILD_ROOT%{_javadir}
 mv $TOMCATDIR/lib/jasper*.jar $RPM_BUILD_ROOT%{_javadir}
