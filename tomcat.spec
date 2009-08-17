@@ -4,6 +4,7 @@
 # Conditional build:
 %bcond_without	javadoc		# skip building javadocs
 %bcond_without	java_sun	# build with gcj (does not work)
+%bcond_without	extras		# skip building extras
 #
 
 %define		jspapiver	2.1
@@ -27,6 +28,7 @@ Source12:	%{name}-context-manager.xml
 Source13:	%{name}-context-host-manager.xml
 Source14:	%{name}-context-examples.xml
 Patch0:		%{name}-build.xml.patch
+Patch1:		%{name}-extras.xml.patch
 URL:		http://tomcat.apache.org/
 BuildRequires:	apr-devel
 BuildRequires:	autoconf
@@ -45,6 +47,10 @@ BuildRequires:	java-commons-collections >= 0:2.0
 BuildRequires:	java-commons-daemon >= 1.0
 BuildRequires:	java-commons-dbcp >= 0:1.1
 BuildRequires:	java-commons-dbcp-tomcat5 >= 0:1.1
+%if %{with extras}
+BuildRequires:	java-geronimo-spec-jaxrpc
+BuildRequires:	java-wsdl4j
+%endif
 BuildRequires:	jpackage-utils
 BuildRequires:	junit >= 0:3.8.1
 BuildRequires:	rpmbuild(macros) >= 1.300
@@ -62,6 +68,10 @@ Requires:	java-commons-logging
 Requires:	java-servletapi = %{epoch}:%{version}-%{release}
 Requires:	javamail >= 1.2
 Requires:	jaxp_parser_impl
+%if %{with extras}
+Requires:	java-geronimo-spec-jaxrpc
+Requires:	java-wsdl4j
+%endif
 Requires:	jndi >= 1.2.1
 Requires:	jre >= 1.2
 Requires:	rc-scripts
@@ -174,7 +184,7 @@ Implementation classes of the Java Servlet and JSP APIs (packages
 javax.servlet, javax.servlet.http, javax.servlet.jsp, and
 javax.servlet.jsp.tagext).
 
-%description -l pl.UTF-8 -n java-servletapi
+%description -n java-servletapi -l pl.UTF-8
 Implementacje klas API Java Servlet i JSP (pakiety javax.servlet,
 javax.servlet.http, javax.servlet.jsp i java.servlet.jsp.tagext).
 
@@ -182,6 +192,7 @@ javax.servlet.http, javax.servlet.jsp i java.servlet.jsp.tagext).
 %setup -q -n apache-%{name}-%{version}-src
 
 %patch0 -p0
+%patch1 -p0
 
 # we don't need those scripts
 rm bin/*.bat
@@ -193,6 +204,17 @@ cp %{SOURCE3} build.properties
 TOPDIR=$(pwd)
 
 %ant -Drpm.javadir=%{_javadir} -Drpm.libdir=%{_libdir}
+%ant -f dist.xml dist-javadoc
+
+%if %{with extras}
+mkdir -p output/extras/webservices
+
+ln -s %{_javadir}/java-geronimo-spec-jaxrpc.jar output/extras/webservices/jaxrpc.jar
+ln -s %{_javadir}/wsdl4j.jar output/extras/webservices/wsdl4j.jar
+
+%ant -f extras.xml webservices
+%endif
+
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -280,7 +302,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc KEYS RELEASE-NOTES RUNNING.txt
+%doc KEYS RELEASE-NOTES RELEASE-PLAN-6.0.txt RUNNING.txt
 %attr(754,root,root) /etc/rc.d/init.d/tomcat
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/tomcat
 %{_sysconfdir}
