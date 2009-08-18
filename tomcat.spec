@@ -219,7 +219,7 @@ TOPDIR=$(pwd)
 mkdir -p output/extras/webservices
 
 ln -s %{_javadir}/geronimo-spec-jaxrpc.jar output/extras/webservices/jaxrpc.jar
-ln -s %{_javadir}/jsr109.jar output/extras/webservices/jsr109.jar
+ln -s %{_javadir}/jsr109.jar output/extras/webservices/wsdl4j.jar
 
 %ant -f extras.xml webservices
 %endif
