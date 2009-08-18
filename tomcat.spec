@@ -204,7 +204,10 @@ cp %{SOURCE3} build.properties
 TOPDIR=$(pwd)
 
 %ant -Drpm.javadir=%{_javadir} -Drpm.libdir=%{_libdir}
+
+%if %{with javadoc}
 %ant -f dist.xml dist-javadoc
+%endif
 
 %if %{with extras}
 mkdir -p output/extras/webservices
