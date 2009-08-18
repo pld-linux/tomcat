@@ -1,0 +1,21 @@
+--- extras.xml~	2009-05-14 01:15:14.000000000 +0200
++++ extras.xml	2009-08-17 17:19:55.000000000 +0200
+@@ -175,18 +175,6 @@
+ 	
+ 	    <mkdir dir="${tomcat.extras}/webservices"/>
+ 	
+-	    <antcall target="downloadfile">
+-	      <param name="sourcefile" value="${jaxrpc-src.loc}"/>
+-	      <param name="destfile" value="${tomcat.extras}/webservices/jaxrpc.jar"/>
+-	      <param name="destdir" value="${tomcat.extras}/webservices/"/>
+-	    </antcall>
+-	
+-	    <antcall target="downloadfile">
+-	      <param name="sourcefile" value="${wsdl4j-src.loc}"/>
+-	      <param name="destfile" value="${tomcat.extras}/webservices/wsdl4j.jar"/>
+-	      <param name="destdir" value="${tomcat.extras}/webservices/"/>
+-	    </antcall>
+-	
+ 	    <!-- Classpath -->
+ 	    <path id="tomcat.webservices.classpath">
+ 	      <pathelement path="${tomcat.classpath}"/>
