@@ -1,44 +1,39 @@
 # TODO
-# - rename %{name}-jasper -> java-jasper?
-#
+# - review dependencies
+# - packages for *.renametojar files (-cgi and -ssi in server/lib)
 # Conditional build:
 %bcond_without	javadoc		# skip building javadocs
-%bcond_with	jta		# put jta jar into tomcat lib dir.
 %bcond_without	java_sun	# build with gcj (does not work)
+%bcond_without	webservices	# skip building webservices
 #
-Summary:	Apache Servlet/JSP Engine, RI for Servlet 2.4/JSP 2.0 API
-Summary(pl.UTF-8):	Silnik Servlet/JSP Apache będący wzorcową implementacją API Servlet 2.4/JSP 2.0
+
+%define		jspapiver	2.1
+%define		servletapiver	2.5
+
+Summary:	Apache Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP %{jspapiver}API
+Summary(pl.UTF-8):	Silnik Servlet/JSP Apache będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
 Name:		tomcat
-Version:	5.5.27
-Release:	1
+Version:	6.0.20
+Release:	0.1
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
-Source0:	http://www.apache.org/dist/tomcat/tomcat-5/v%{version}/src/apache-%{name}-%{version}-src.tar.gz
-# Source0-md5:	eb3f196013550b9b1684e4ff18593a8e
+Source0:	http://www.apache.org/dist/tomcat/tomcat-6/v%{version}/src/apache-%{name}-%{version}-src.tar.gz
+# Source0-md5:	44f49e7e14028b6a53c3c346bd18c72f
 Source1:	apache-%{name}.init
 Source2:	apache-%{name}.sysconfig
-Source10:	apache-%{name}-context-ROOT.xml
-Source11:	apache-%{name}-context-balancer.xml
-Source12:	apache-%{name}-context-jsp-examples.xml
-Source13:	apache-%{name}-context-tomcat-docs.xml
-Source14:	apache-%{name}-context-webdav.xml
-Patch0:		apache-%{name}-skip-servletapi.patch
-Patch1:		apache-%{name}-nsis.patch
-Patch2:		apache-%{name}-native.patch
-Patch3:		apache-%{name}-skip-jdt.patch
-Patch4:		apache-%{name}-no-connectors.patch
-Patch5:		apache-%{name}-dbcp.patch
-Patch6:		apache-%{name}-struts.patch
-Patch7:		apache-%{name}-admin-struts.patch
-Patch8:		apache-%{name}-no_links_to_examples.patch
-# Following patches are applied in tomcat svn. Remove them while updating to 5.5.28
-# See: http://tomcat.apache.org/security-5.html
-Patch100:	tomcat-CVE-2008-5515.patch
-Patch101:	tomcat-CVE-2009-0033.patch
-Patch102:	tomcat-CVE-2009-0580.patch
-Patch103:	tomcat-CVE-2009-0781.patch
-Patch104:	tomcat-CVE-2009-0783.patch
+Source3:	%{name}-build.properties
+Source10:	%{name}-context-ROOT.xml
+Source11:	%{name}-context-docs.xml
+Source12:	%{name}-context-manager.xml
+Source13:	%{name}-context-host-manager.xml
+Source14:	%{name}-context-examples.xml
+Patch0:		%{name}-build.xml.patch
+Patch1:		%{name}-extras.xml.patch
 URL:		http://tomcat.apache.org/
+BuildRequires:	apr-devel
+BuildRequires:	autoconf
+BuildRequires:	libtool
+BuildRequires:	openssl-devel
 %if %{with java_sun}
 BuildRequires:	java-sun >= 1.5
 BuildRequires:	java-sun-jre >= 1.5
@@ -47,41 +42,16 @@ BuildRequires:	java-gcj-compat-devel
 %endif
 BuildRequires:	ant >= 1.5.3
 BuildRequires:	ant-trax
-BuildRequires:	eclipse-jdt
-BuildRequires:	jaas
-BuildRequires:	java-regexp >= 0:1.3
-BuildRequires:	java-commons-beanutils >= 1.7
-BuildRequires:	java-commons-chain
-BuildRequires:	java-commons-collections >= 0:3.1
-BuildRequires:	java-commons-collections-tomcat5 >= 0:3.1
+BuildRequires:	eclipse-jdt >= 3.2
+BuildRequires:	java-commons-collections >= 0:2.0
 BuildRequires:	java-commons-daemon >= 1.0
-BuildRequires:	java-commons-dbcp >= 0:1.2.1
-BuildRequires:	java-commons-dbcp-tomcat5 >= 0:1.2.1
-BuildRequires:	java-commons-digester >= 0:1.7
-BuildRequires:	java-commons-el >= 0:1.0
-BuildRequires:	java-commons-fileupload >= 0:1.0
-BuildRequires:	java-commons-httpclient
-BuildRequires:	java-commons-io >= 1.4
-BuildRequires:	java-commons-launcher >= 0:0.9
-BuildRequires:	java-commons-logging >= 0:1.0.4
-BuildRequires:	java-commons-modeler >= 2.0
-BuildRequires:	java-commons-pool >= 0:1.2
-BuildRequires:	java-commons-pool-tomcat5 >= 0:1.2
-BuildRequires:	java-jdbc-mysql
-%{?with_jta:BuildRequires:	java-jta >= 0:1.0.1}
-BuildRequires:	java-log4j
-BuildRequires:	java-mail >= 0:1.3.1
-BuildRequires:	java-puretls
-BuildRequires:	java-servletapi5 = %{version}
-BuildRequires:	java-struts >= 1.0.2
-BuildRequires:	java-xerces >= 0:2.7.1
-BuildRequires:	java-xml-commons
-BuildRequires:	jaxp_parser_impl >= 0:2.7.1
-BuildRequires:	jdbc-stdext >= 0:2.0
-BuildRequires:	jmx
-BuildRequires:	jndi >= 0:1.2.1
+BuildRequires:	java-commons-dbcp >= 0:1.1
+BuildRequires:	java-commons-dbcp-tomcat5 >= 0:1.1
+%if %{with webservices}
+BuildRequires:	java-geronimo-spec-jaxrpc
+BuildRequires:	java(JSR109)
+%endif
 BuildRequires:	jpackage-utils
-BuildRequires:	junit >= 0:3.8.1
 BuildRequires:	rpmbuild(macros) >= 1.300
 Requires(post,postun):	/sbin/ldconfig
 Requires(post,preun):	/sbin/chkconfig
@@ -92,29 +62,15 @@ Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
 Requires:	%{name}-jasper = %{version}-%{release}
-Requires:	jaas
-Requires:	java-commons-beanutils
-Requires:	java-commons-collections
-Requires:	java-commons-digester
-Requires:	java-commons-el
+Requires:	java-commons-daemon
 Requires:	java-commons-logging
-Requires:	java-commons-modeler
-Requires:	java-commons-pool-tomcat5
-Requires:	java-jdbc-mysql
-Requires:	java-regexp
-Requires:	java-servletapi5 = %{version}
-Requires:	java-xml-commons
-Requires:	javamail >= 1.2
+Requires:	java-servletapi = %{epoch}:%{version}-%{release}
 Requires:	jaxp_parser_impl
-Requires:	jdbc-stdext >= 2.0
 Requires:	jndi >= 1.2.1
 Requires:	jre >= 1.2
-Requires:	jsse >= 1.0.2
-%{?with_jta:Requires:	jta >= 1.0.1}
 Requires:	rc-scripts
 Provides:	group(servlet)
 Provides:	group(tomcat)
-Provides:	java-servlet-container
 Provides:	user(tomcat)
 Obsoletes:	apache-tomcat
 Obsoletes:	jakarta-tomcat
@@ -125,6 +81,8 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define 	_logdir		%{_var}/log
 %define		_vardir		%{_var}/lib/tomcat
 %define		_sysconfdir	/etc/tomcat
+
+%define find_jar() %{expand:%%define jarfile {%(jar=$(find-jar %1); echo ${jar:-%%nil})}}%{?jarfile}%{!?jarfile:%{error:find-jar %1 failed}}%{nil}
 
 %description
 Tomcat is the servlet container that is used in the official Reference
@@ -143,32 +101,63 @@ wzorcową technologii Java Servlet i JavaServer Pages. Specyfikacje
 Java Servlet i JavaServer Pages są rozwijane przez Suna zgodnie z Java
 Community Process.
 
-%package doc
+%package webapp-docs
 Summary:	The Apache Tomcat Servlet/JSP Container documentation
 Summary(pl.UTF-8):	Dokumentacja do Tomcata - kontenera Servlet/JSP
 Group:		Documentation
 Obsoletes:	apache-tomcat-doc
 Obsoletes:	jakarta-tomcat-doc
+Obsoletes:	tomcat-doc
 
-%description doc
+%description webapp-docs
 The Tomcat Servlet/JSP Container documentation.
 
-%description doc -l pl.UTF-8
+%description webapp-docs -l pl.UTF-8
 Dokumentacja do Tomcata - kontenera Servlet/JSP.
 
-%package admin
-Summary:	Apache Tomcat's Administration Web Application
-Summary(pl.UTF-8):	Panel Administracyjny dla Apache Tomcat
+%package webapp-manager
+Summary:	The Apache Tomcat Servlet/JSP application manager
+Summary(pl.UTF-8):	Zarządca aplikacji w Tomcacie
 Group:		Networking/Daemons/Java/Servlets
-Requires:	%{name} = %{version}-%{release}
-Requires:	java-commons-chain
-Obsoletes:	apache-tomcat-admin
 
-%description admin
-Administration Web Application for Apache Tomcat.
+%description webapp-manager
+The Apache Tomcat Servlet/JSP application manager.
 
-%description admin -l pl.UTF-8
-Panel Administracyjny dla Apache Tomcat.
+%description webapp-manager -l pl.UTF-8
+Zarządca aplikacji w Tomcacie.
+
+%package webapp-host-manager
+Summary:	The Apache Tomcat Servlet/JSP virtual hosts manager
+Summary(pl.UTF-8):	Zarządca wirtualnych hostów w Tomcacie
+Group:		Networking/Daemons/Java/Servlets
+Obsoletes:	tomcat-admin
+
+%description webapp-host-manager
+The Apache Tomcat Servlet/JSP virtual hosts manager.
+
+%description webapp-host-manager -l pl.UTF-8
+Zarządca wirtualnych hostów w Tomcacie.
+
+%package webapp-examples
+Summary:	The Apache Tomcat Servlet/JSP example applications
+Summary(pl.UTF-8):	Przykładowe aplikacje dla Tomcata
+Group:		Networking/Daemons/Java/Servlets
+
+%description webapp-examples
+The Apache Tomcat Servlet/JSP example applications.
+
+%description webapp-examples -l pl.UTF-8
+Przykładowe aplikacje dla Tomcata.
+
+%package webservices
+Summary:	Web Services support (JSR 109)
+Group:		Libraries/Java
+Requires:	java-geronimo-spec-jaxrpc
+Requires:	java(JSR109)
+
+%description webservices
+Factories for JSR 109 which may be used to resolve web services
+references.
 
 %package jasper
 Summary:	JSP compiler
@@ -185,105 +174,67 @@ container.
 Jasper jest kompilatorem Java ServerPages używanym przez kontener
 servletów Apache Tomcat.
 
+%package -n java-servletapi
+Summary:	Java servlet and JSP implementation classes
+Summary(pl.UTF-8):	Klasy z implementacją Java Servlet i JSP
+Group:		Libraries/Java
+Provides:	java(JSP) = %{jspapiver}
+Provides:	java(Servlet) = %{servletapiver}
+Obsoletes:	java-servletapi5
+
+%description -n java-servletapi
+Implementation classes of the Java Servlet and JSP APIs (packages
+javax.servlet, javax.servlet.http, javax.servlet.jsp, and
+javax.servlet.jsp.tagext).
+
+%description -n java-servletapi -l pl.UTF-8
+Implementacje klas API Java Servlet i JSP (pakiety javax.servlet,
+javax.servlet.http, javax.servlet.jsp i java.servlet.jsp.tagext).
+
 %prep
 %setup -q -n apache-%{name}-%{version}-src
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
-%patch6 -p1
-%patch7 -p1
-%patch8 -p1
 
-%patch100 -p0
-%patch101 -p0
-%patch102 -p0
-%patch103 -p0
-%patch104 -p0
+%patch0 -p0
+%patch1 -p0
 
 # we don't need those scripts
-rm -f container/catalina/src/bin/*.bat
-rm -f container/catalina/src/bin/{startup,shutdown}.sh
+rm bin/*.bat
+rm bin/{startup,shutdown}.sh
 
-# causes file(1) rpm to abort, and not really neccessary file
-# file: Thumbs.db: ERROR: Cannot read short stream (Invalid argument)
-# rpm: error: magic_file(ms, "Thumbs.db") failed: mode 37777700644 Cannot read short stream (Invalid argument)
-rm container/webapps/admin/images/Thumbs.db
-
-# servletapi built from java-servletapi5.spec
-rm -rf servletapi
-
-# Remove pre-built jars
-find -name '*.jar' | xargs rm -fv
+cp %{SOURCE3} build.properties
 
 %build
 TOPDIR=$(pwd)
 
-# build tomcat 5.5
-cat > build.properties <<EOF
-commons-beanutils.jar=$(find-jar commons-beanutils-core)
-commons-launcher.jar=$(find-jar commons-launcher)
-commons-daemon.jar=$(find-jar commons-daemon)
-commons-digester.jar=$(find-jar commons-digester)
-commons-el.jar=$(find-jar commons-el)
-commons-logging-api.jar=$(find-jar commons-logging-api)
-commons-logging.jar=$(find-jar commons-logging)
-commons-modeler.jar=$(find-jar commons-modeler)
-xercesImpl.jar=$(find-jar jaxp_parser_impl)
-xml-apis.jar=$(find-jar xml-commons-apis)
-jdt.jar=$(find-jar org.eclipse.jdt.core)
-jasper-compiler-jdt.home=$TOPDIR/tomcat-deps
-commons-httpclient.jar=$(find-jar commons-httpclient)
-commons-collections.jar=$(find-jar commons-collections)
-commons-fileupload.jar=$(find-jar commons-fileupload)
-commons-io.jar=$(find-jar commons-io)
-jmx.jar=$(find-jar jmx)
-jmx-tools.jar=$(find-jar jmx)
-junit.jar=$(find-jar junit)
-struts.jar=$(find-jar struts-core)
-struts-core.jar=$(find-jar struts-core)
-struts-taglib.jar=$(find-jar struts-taglib)
-jcert.jar=$(find-jar jcert)
-jnet.jar=$(find-jar jnet)
-jsse.jar=$(find-jar jsse)
-%{?with_jta:jta.jar=$(find-jar jta)}
-puretls.jar=$(find-jar puretls)
-servlet-api.jar=$(find-jar servlet-api)
-servletapi.build.notrequired=true
-jsp-api.jar=$(find-jar jsp-api)
-jspapi.build.notrequired=true
-log4j.jar=$(find-jar log4j)
-tomcat-dbcp.jar=$(find-jar commons-dbcp-tomcat5)
-struts.lib=%{_javadir}-struts
-EOF
+%ant -Drpm.javadir=%{_javadir} -Drpm.libdir=%{_libdir}
 
-if grep '=$' build.properties; then
-	: Some .jar could not be found
-	exit 1
-fi
+%if %{with javadoc}
+%ant -f dist.xml dist-javadoc
+%endif
 
-%ant \
-	-Dcompile.source=1.4
+%if %{with webservices}
+mkdir -p output/extras/webservices
+
+ln -s %{_javadir}/geronimo-spec-jaxrpc.jar output/extras/webservices/jaxrpc.jar
+ln -s %{_javadir}/jsr109.jar output/extras/webservices/wsdl4j.jar
+
+%ant -f extras.xml webservices
+%endif
+
 
 %install
 rm -rf $RPM_BUILD_ROOT
-cd build/build
+cd output/build
+
 TOMCATDIR=$RPM_BUILD_ROOT%{_tomcatdir}
 CATALINADIR=$RPM_BUILD_ROOT/var/lib/tomcat
 
-randpw=$(echo $RANDOM$$ | md5sum | cut -c 1-15)
-%{__sed} -i -e "s:SHUTDOWN:${randpw}:" conf/{server,server-minimal}.xml
-
-install -d $TOMCATDIR/bin \
-	    $TOMCATDIR/common/{lib,classes,endorsed} \
-	    $TOMCATDIR/server/{lib,classes} \
-	    $TOMCATDIR/webapps \
-	    $RPM_BUILD_ROOT%{_logdir}/tomcat \
+install -d $TOMCATDIR \
+	    $CATALINADIR/temp \
 	    $RPM_BUILD_ROOT%{_vardir}/webapps \
 	    $RPM_BUILD_ROOT%{_vardir}/work \
 	    $RPM_BUILD_ROOT%{_vardir}/conf \
+	    $RPM_BUILD_ROOT%{_logdir}/tomcat \
 	    $RPM_BUILD_ROOT/etc/sysconfig \
 	    $RPM_BUILD_ROOT/etc/rc.d/init.d
 
@@ -291,16 +242,14 @@ install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/tomcat
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/tomcat
 
 cp -a conf/* $CATALINADIR/conf
+install -d $CATALINADIR/conf/Catalina/localhost
 install %{SOURCE10} $CATALINADIR/conf/Catalina/localhost/ROOT.xml
-install %{SOURCE11} $CATALINADIR/conf/Catalina/localhost/balancer.xml
-install %{SOURCE12} $CATALINADIR/conf/Catalina/localhost/jsp-examples.xml
-install %{SOURCE13} $CATALINADIR/conf/Catalina/localhost/tomcat-docs.xml
-install %{SOURCE14} $CATALINADIR/conf/Catalina/localhost/webdav.xml
-cp -HR bin common server $TOMCATDIR
+install %{SOURCE11} $CATALINADIR/conf/Catalina/localhost/docs.xml
+install %{SOURCE12} $CATALINADIR/conf/Catalina/localhost/manager.xml
+install %{SOURCE13} $CATALINADIR/conf/Catalina/localhost/host-manager.xml
+install %{SOURCE14} $CATALINADIR/conf/Catalina/localhost/examples.xml
 
-cp -a server/webapps $TOMCATDIR/server
-cp -a webapps $TOMCATDIR
-cp -a shared $TOMCATDIR
+cp -a bin lib webapps $TOMCATDIR
 cp -a temp $CATALINADIR
 
 ln -sf %{_logdir}/tomcat $CATALINADIR/logs
@@ -316,35 +265,28 @@ for jar in $jars; do
 	ln -sf $jar $TOMCATDIR/bin
 done
 
-jars="commons-el commons-dbcp-tomcat5 commons-pool-tomcat5 servlet-api jsp-api commons-modeler jdbc-mysql"
-for jar in $jars; do
-	jar=$(find-jar $jar)
-	ln -sf $jar $TOMCATDIR/common/lib
-done
-
-jars="jaxp_parser_impl xml-commons-apis"
-for jar in $jars; do
-	jar=$(find-jar $jar)
-	ln -sf $jar $TOMCATDIR/common/endorsed
-done
-
-jars="struts-core struts-taglib commons-collections commons-beanutils-core commons-digester commons-chain"
-for jar in $jars; do
-	jar=$(find-jar $jar)
-	ln -sf $jar $TOMCATDIR/server/webapps/admin/WEB-INF/lib
-done
-
-jars="commons-modeler"
-for jar in $jars; do
-	jar=$(find-jar $jar)
-	ln -sf $jar $TOMCATDIR/server/lib
-done
-
 install -d $RPM_BUILD_ROOT%{_javadir}
-mv $TOMCATDIR/common/lib/jasper*.jar $RPM_BUILD_ROOT%{_javadir}
-ln -sf %{_javadir}/jasper-compiler-jdt.jar $TOMCATDIR/common/lib
-ln -sf %{_javadir}/jasper-compiler.jar $TOMCATDIR/common/lib
-ln -sf %{_javadir}/jasper-runtime.jar $TOMCATDIR/common/lib
+mv $TOMCATDIR/lib/jasper*.jar $RPM_BUILD_ROOT%{_javadir}
+mv $TOMCATDIR/lib/jsp-api.jar $RPM_BUILD_ROOT%{_javadir}/jsp-api-%{jspapiver}.jar
+mv $TOMCATDIR/lib/servlet-api.jar $RPM_BUILD_ROOT%{_javadir}/servlet-api-%{servletapiver}.jar
+
+ln -s jsp-api-%{jspapiver}.jar $RPM_BUILD_ROOT%{_javadir}/jsp-api.jar
+ln -s servlet-api-%{servletapiver}.jar $RPM_BUILD_ROOT%{_javadir}/servlet-api.jar
+
+# XXX add softlinks jasper-compiler.jar and jasper-runtime for compatibility with tomcat 5.5?
+ln -sf %{_javadir}/jasper-compiler-jdt.jar $TOMCATDIR/lib
+ln -sf %{_javadir}/jasper-el.jar $TOMCATDIR/lib
+ln -sf %{_javadir}/jasper.jar $TOMCATDIR/lib
+
+ln -sf %{_javadir}/jsp-api-%{jspapiver}.jar $TOMCATDIR/lib
+ln -sf %{_javadir}/servlet-api-%{servletapiver}.jar $TOMCATDIR/lib
+
+%if %{with webservices}
+install ../extras/catalina-ws.jar $TOMCATDIR/lib/catalina-ws.jar
+
+ln -s %{_javadir}/geronimo-spec-jaxrpc.jar $TOMCATDIR/lib/jaxrpc.jar
+ln -s %{_javadir}/jsr109.jar $TOMCATDIR/lib/jsr109.jar
+%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -373,7 +315,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc build/{RELEASE-NOTES,RUNNING.txt}
+%doc KEYS RELEASE-NOTES RELEASE-PLAN-6.0.txt RUNNING.txt
 %attr(754,root,root) /etc/rc.d/init.d/tomcat
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/tomcat
 %{_sysconfdir}
@@ -381,55 +323,42 @@ fi
 %dir %{_tomcatdir}/conf
 %dir %{_tomcatdir}/bin
 %{_tomcatdir}/bin/catalina-tasks.xml
-%{_tomcatdir}/bin/jkstatus-tasks.xml
-%{_tomcatdir}/bin/jmxaccessor-tasks.xml
 %attr(755,root,root) %{_tomcatdir}/bin/*.sh
 %{_tomcatdir}/bin/*.jar
-%dir %{_tomcatdir}/common
-%dir %{_tomcatdir}/common/classes
-%dir %{_tomcatdir}/common/endorsed
-%dir %{_tomcatdir}/common/i18n
-%{_tomcatdir}/common/endorsed/*.jar
-%{_tomcatdir}/common/i18n/tomcat-i18n-en.jar
-%lang(es) %{_tomcatdir}/common/i18n/tomcat-i18n-es.jar
-%lang(fr) %{_tomcatdir}/common/i18n/tomcat-i18n-fr.jar
-%lang(ja) %{_tomcatdir}/common/i18n/tomcat-i18n-ja.jar
-%{_tomcatdir}/common/lib
-%dir %{_tomcatdir}/server
-%dir %{_tomcatdir}/server/classes
-%{_tomcatdir}/server/lib
-%dir %{_tomcatdir}/server/webapps
-
-%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/host-manager.xml
-%{_tomcatdir}/server/webapps/host-manager
-
-%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/manager.xml
-%{_tomcatdir}/server/webapps/manager
+%dir %{_tomcatdir}/lib
+%{_tomcatdir}/lib/annotations-api.jar
+%{_tomcatdir}/lib/catalina.jar
+%{_tomcatdir}/lib/commons-dbcp-tomcat5.jar
+%{_tomcatdir}/lib/jasper-el.jar
+%{_tomcatdir}/lib/jsp-api-2.1.jar
+%{_tomcatdir}/lib/tomcat-i18n-es.jar
+%{_tomcatdir}/lib/catalina-ant.jar
+%{_tomcatdir}/lib/catalina-tribes.jar
+%{_tomcatdir}/lib/el-api.jar
+%{_tomcatdir}/lib/jasper.jar
+%{_tomcatdir}/lib/servlet-api-2.5.jar
+%{_tomcatdir}/lib/tomcat-i18n-fr.jar
+%{_tomcatdir}/lib/catalina-ha.jar
+%{_tomcatdir}/lib/jasper-compiler-jdt.jar
+%{_tomcatdir}/lib/tomcat-coyote.jar
+%{_tomcatdir}/lib/tomcat-i18n-ja.jar
 
 %dir %{_tomcatdir}/webapps
 
 %config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/ROOT.xml
 %{_tomcatdir}/webapps/ROOT
 
-%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/balancer.xml
-%{_tomcatdir}/webapps/balancer
-
-%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/webdav.xml
-%{_tomcatdir}/webapps/webdav
-
 %{_tomcatdir}/logs
 %{_tomcatdir}/work
-%{_tomcatdir}/shared
 %dir %{_vardir}
-# these directories have to be writeable because /admin needs to modify config files and create temporary files
+# these directory has to be writeable because /admin need to modify config
+# files and create temporary files
 %dir %attr(775,root,tomcat) %{_vardir}/conf
 %dir %attr(775,root,tomcat) %{_vardir}/conf/Catalina
 %dir %{_vardir}/conf/Catalina/localhost
 # tomcat config has to be writeable because of tomcat-users.xml file and Catalina dir
-%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/MANIFEST.MF
 %config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/catalina.policy
 %config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/*.properties*
-%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/*.manifest
 %config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/*.xml
 %dir %attr(1730,root,tomcat) %{_vardir}/work
 %dir %attr(775,root,tomcat) %{_vardir}/webapps
@@ -437,18 +366,41 @@ fi
 %dir %attr(775,root,tomcat) %{_logdir}/tomcat
 %{_vardir}/logs
 
-%files doc
+%files webapp-docs
 %defattr(644,root,root,755)
-%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/tomcat-docs.xml
-%{_tomcatdir}/webapps/tomcat-docs
+%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/docs.xml
+%{_tomcatdir}/webapps/docs
 
-%files admin
+%files webapp-manager
 %defattr(644,root,root,755)
-%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/admin.xml
-%{_tomcatdir}/server/webapps/admin
+%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/manager.xml
+%{_tomcatdir}/webapps/manager
+
+%files webapp-host-manager
+%defattr(644,root,root,755)
+%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/host-manager.xml
+%{_tomcatdir}/webapps/host-manager
+
+%files webapp-examples
+%defattr(644,root,root,755)
+%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/examples.xml
+%{_tomcatdir}/webapps/examples
+
+%if %{with webservices}
+%files webservices
+%defattr(644,root,root,755)
+%{_tomcatdir}/lib/jsr109.jar
+%{_tomcatdir}/lib/jaxrpc.jar
+%{_tomcatdir}/lib/catalina-ws.jar
+%endif
 
 %files jasper
 %defattr(644,root,root,755)
 %{_javadir}/jasper-compiler-jdt.jar
-%{_javadir}/jasper-compiler.jar
-%{_javadir}/jasper-runtime.jar
+%{_javadir}/jasper-el.jar
+%{_javadir}/jasper.jar
+
+%files -n java-servletapi
+%defattr(644,root,root,755)
+%{_javadir}/jsp-api*.jar
+%{_javadir}/servlet-api*.jar

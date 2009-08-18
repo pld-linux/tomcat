@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- $Id$ -->
+<Context path="/docs" docBase="${catalina.home}/webapps/docs"
+        privileged="false" allowLinking="true">
+
+</Context>

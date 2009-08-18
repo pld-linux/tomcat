@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- $Id$ -->
-<Context path="/jsp-examples" docBase="${catalina.home}/webapps/jsp-examples"
+<Context path="/host-manager" docBase="${catalina.home}/webapps/host-manager"
         privileged="true" allowLinking="true">
 
 </Context>

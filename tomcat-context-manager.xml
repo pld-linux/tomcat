@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- $Id$ -->
-<Context path="/webdav" docBase="${catalina.home}/webapps/webdav"
+<Context path="/manager" docBase="${catalina.home}/webapps/manager"
         privileged="true" allowLinking="true">
 
 </Context>
