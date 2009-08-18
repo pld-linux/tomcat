@@ -1,15 +1,13 @@
-# TODO
-# - review dependencies
-# - packages for *.renametojar files (-cgi and -ssi in server/lib)
+
 # Conditional build:
 %bcond_without	javadoc		# skip building javadocs
 %bcond_without	java_sun	# build with gcj (does not work)
 %bcond_without	webservices	# skip building webservices
-#
 
 %define		jspapiver	2.1
 %define		servletapiver	2.5
 
+%include	/usr/lib/rpm/macros.java
 Summary:	Apache Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP %{jspapiver}API
 Summary(pl.UTF-8):	Silnik Servlet/JSP Apache będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
 Name:		tomcat
@@ -48,8 +46,8 @@ BuildRequires:	java-commons-daemon >= 1.0
 BuildRequires:	java-commons-dbcp >= 0:1.1
 BuildRequires:	java-commons-dbcp-tomcat5 >= 0:1.1
 %if %{with webservices}
-BuildRequires:	java-geronimo-spec-jaxrpc
 BuildRequires:	java(JSR109)
+BuildRequires:	java-geronimo-spec-jaxrpc
 %endif
 BuildRequires:	jpackage-utils
 BuildRequires:	rpmbuild(macros) >= 1.300
@@ -65,9 +63,9 @@ Requires:	%{name}-jasper = %{version}-%{release}
 Requires:	java-commons-daemon
 Requires:	java-commons-logging
 Requires:	java-servletapi = %{epoch}:%{version}-%{release}
+Requires:	java-sun-jre >= 1.2
 Requires:	jaxp_parser_impl
 Requires:	jndi >= 1.2.1
-Requires:	jre >= 1.2
 Requires:	rc-scripts
 Provides:	group(servlet)
 Provides:	group(tomcat)
@@ -152,8 +150,8 @@ Przykładowe aplikacje dla Tomcata.
 %package webservices
 Summary:	Web Services support (JSR 109)
 Group:		Libraries/Java
-Requires:	java-geronimo-spec-jaxrpc
 Requires:	java(JSR109)
+Requires:	java-geronimo-spec-jaxrpc
 
 %description webservices
 Factories for JSR 109 which may be used to resolve web services
