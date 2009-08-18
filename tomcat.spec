@@ -52,7 +52,6 @@ BuildRequires:	java-geronimo-spec-jaxrpc
 BuildRequires:	java(JSR109)
 %endif
 BuildRequires:	jpackage-utils
-BuildRequires:	junit >= 0:3.8.1
 BuildRequires:	rpmbuild(macros) >= 1.300
 Requires(post,postun):	/sbin/ldconfig
 Requires(post,preun):	/sbin/chkconfig
@@ -66,7 +65,6 @@ Requires:	%{name}-jasper = %{version}-%{release}
 Requires:	java-commons-daemon
 Requires:	java-commons-logging
 Requires:	java-servletapi = %{epoch}:%{version}-%{release}
-Requires:	javamail >= 1.2
 Requires:	jaxp_parser_impl
 Requires:	jndi >= 1.2.1
 Requires:	jre >= 1.2
