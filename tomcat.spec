@@ -4,7 +4,7 @@
 # Conditional build:
 %bcond_without	javadoc		# skip building javadocs
 %bcond_without	java_sun	# build with gcj (does not work)
-%bcond_without	extras		# skip building extras
+%bcond_without	webservices	# skip building webservices
 #
 
 %define		jspapiver	2.1
@@ -47,7 +47,7 @@ BuildRequires:	java-commons-collections >= 0:2.0
 BuildRequires:	java-commons-daemon >= 1.0
 BuildRequires:	java-commons-dbcp >= 0:1.1
 BuildRequires:	java-commons-dbcp-tomcat5 >= 0:1.1
-%if %{with extras}
+%if %{with webservices}
 BuildRequires:	java-geronimo-spec-jaxrpc
 BuildRequires:	java-wsdl4j
 %endif
@@ -68,7 +68,7 @@ Requires:	java-commons-logging
 Requires:	java-servletapi = %{epoch}:%{version}-%{release}
 Requires:	javamail >= 1.2
 Requires:	jaxp_parser_impl
-%if %{with extras}
+%if %{with webservices}
 Requires:	java-geronimo-spec-jaxrpc
 Requires:	java-wsdl4j
 %endif
@@ -156,6 +156,16 @@ The Apache Tomcat Servlet/JSP example applications.
 %description webapp-examples -l pl.UTF-8
 Przykładowe aplikacje dla Tomcata.
 
+%package webservices
+Summary:	Web Services support (JSR 109)
+Group:		Libraries/Java
+Requires:	java-geronimo-spec-jaxrpc
+Requires:	java-wsdl4j
+
+%description webservices
+Factories for JSR 109 which may be used to resolve web services
+references.
+
 %package jasper
 Summary:	JSP compiler
 Summary(pl.UTF-8):	Kompilator JSP
@@ -209,7 +219,7 @@ TOPDIR=$(pwd)
 %ant -f dist.xml dist-javadoc
 %endif
 
-%if %{with extras}
+%if %{with webservices}
 mkdir -p output/extras/webservices
 
 ln -s %{_javadir}/geronimo-spec-jaxrpc.jar output/extras/webservices/jaxrpc.jar
@@ -278,6 +288,13 @@ ln -sf %{_javadir}/jasper.jar $TOMCATDIR/lib
 ln -sf %{_javadir}/jsp-api-%{jspapiver}.jar $TOMCATDIR/lib
 ln -sf %{_javadir}/servlet-api-%{servletapiver}.jar $TOMCATDIR/lib
 
+%if %{with webservices}
+install ../extras/catalina-ws.jar $TOMCATDIR/lib/catalina-ws.jar
+
+ln -s %{_javadir}/geronimo-spec-jaxrpc.jar $TOMCATDIR/lib/jaxrpc.jar
+ln -s %{_javadir}/wsdl4j.jar $TOMCATDIR/lib/wsdl4j.jar
+%endif
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -315,8 +332,23 @@ fi
 %{_tomcatdir}/bin/catalina-tasks.xml
 %attr(755,root,root) %{_tomcatdir}/bin/*.sh
 %{_tomcatdir}/bin/*.jar
-%{_tomcatdir}/lib
-%dir %{_tomcatdir}/webapps
+%dir %{_tomcatdir}/lib
+%{_tomcatdir}/lib/annotations-api.jar
+%{_tomcatdir}/lib/catalina.jar
+%{_tomcatdir}/lib/commons-dbcp-tomcat5.jar
+%{_tomcatdir}/lib/jasper-el.jar
+%{_tomcatdir}/lib/jsp-api-2.1.jar
+%{_tomcatdir}/lib/tomcat-i18n-es.jar
+%{_tomcatdir}/lib/catalina-ant.jar
+%{_tomcatdir}/lib/catalina-tribes.jar
+%{_tomcatdir}/lib/el-api.jar
+%{_tomcatdir}/lib/jasper.jar
+%{_tomcatdir}/lib/servlet-api-2.5.jar
+%{_tomcatdir}/lib/tomcat-i18n-fr.jar
+%{_tomcatdir}/lib/catalina-ha.jar
+%{_tomcatdir}/lib/jasper-compiler-jdt.jar
+%{_tomcatdir}/lib/tomcat-coyote.jar
+%{_tomcatdir}/lib/tomcat-i18n-ja.jar
 
 %dir %{_tomcatdir}/webapps
 
@@ -360,6 +392,14 @@ fi
 %defattr(644,root,root,755)
 %config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/examples.xml
 %{_tomcatdir}/webapps/examples
+
+%if %{with webservices}
+%files webservices
+%defattr(644,root,root,755)
+%{_tomcatdir}/lib/wsdl4j.jar
+%{_tomcatdir}/lib/jaxrpc.jar
+%{_tomcatdir}/lib/catalina-ws.jar
+%endif
 
 %files jasper
 %defattr(644,root,root,755)
