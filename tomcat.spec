@@ -49,7 +49,7 @@ BuildRequires:	java-commons-dbcp >= 0:1.1
 BuildRequires:	java-commons-dbcp-tomcat5 >= 0:1.1
 %if %{with webservices}
 BuildRequires:	java-geronimo-spec-jaxrpc
-BuildRequires:	java-wsdl4j
+BuildRequires:	java(JSR109)
 %endif
 BuildRequires:	jpackage-utils
 BuildRequires:	junit >= 0:3.8.1
@@ -68,10 +68,6 @@ Requires:	java-commons-logging
 Requires:	java-servletapi = %{epoch}:%{version}-%{release}
 Requires:	javamail >= 1.2
 Requires:	jaxp_parser_impl
-%if %{with webservices}
-Requires:	java-geronimo-spec-jaxrpc
-Requires:	java-wsdl4j
-%endif
 Requires:	jndi >= 1.2.1
 Requires:	jre >= 1.2
 Requires:	rc-scripts
@@ -160,7 +156,7 @@ Przykładowe aplikacje dla Tomcata.
 Summary:	Web Services support (JSR 109)
 Group:		Libraries/Java
 Requires:	java-geronimo-spec-jaxrpc
-Requires:	java-wsdl4j
+Requires:	java(JSR109)
 
 %description webservices
 Factories for JSR 109 which may be used to resolve web services
@@ -223,7 +219,7 @@ TOPDIR=$(pwd)
 mkdir -p output/extras/webservices
 
 ln -s %{_javadir}/geronimo-spec-jaxrpc.jar output/extras/webservices/jaxrpc.jar
-ln -s %{_javadir}/wsdl4j.jar output/extras/webservices/wsdl4j.jar
+ln -s %{_javadir}/jsr109.jar output/extras/webservices/jsr109.jar
 
 %ant -f extras.xml webservices
 %endif
@@ -292,7 +288,7 @@ ln -sf %{_javadir}/servlet-api-%{servletapiver}.jar $TOMCATDIR/lib
 install ../extras/catalina-ws.jar $TOMCATDIR/lib/catalina-ws.jar
 
 ln -s %{_javadir}/geronimo-spec-jaxrpc.jar $TOMCATDIR/lib/jaxrpc.jar
-ln -s %{_javadir}/wsdl4j.jar $TOMCATDIR/lib/wsdl4j.jar
+ln -s %{_javadir}/jsr109.jar $TOMCATDIR/lib/jsr109.jar
 %endif
 
 %clean
@@ -396,7 +392,7 @@ fi
 %if %{with webservices}
 %files webservices
 %defattr(644,root,root,755)
-%{_tomcatdir}/lib/wsdl4j.jar
+%{_tomcatdir}/lib/jsr109.jar
 %{_tomcatdir}/lib/jaxrpc.jar
 %{_tomcatdir}/lib/catalina-ws.jar
 %endif
