@@ -73,7 +73,6 @@ Requires:	jre >= 1.2
 Requires:	rc-scripts
 Provides:	group(servlet)
 Provides:	group(tomcat)
-Provides:	java-servlet-container
 Provides:	user(tomcat)
 Obsoletes:	apache-tomcat
 Obsoletes:	jakarta-tomcat
@@ -182,7 +181,7 @@ Summary:	Java servlet and JSP implementation classes
 Summary(pl.UTF-8):	Klasy z implementacją Java Servlet i JSP
 Group:		Libraries/Java
 Provides:	java(JSP) = %{jspapiver}
-Provides:	java(JavaServlet) = %{servletapiver}
+Provides:	java(Servlet) = %{servletapiver}
 Obsoletes:	java-servletapi5
 
 %description -n java-servletapi
