@@ -355,9 +355,9 @@ fi
 %dir %attr(775,root,tomcat) %{_vardir}/conf/Catalina
 %dir %{_vardir}/conf/Catalina/localhost
 # tomcat config has to be writeable because of tomcat-users.xml file and Catalina dir
-%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/catalina.policy
-%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/*.properties*
-%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/*.xml
+%config(noreplace) %attr(660,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/catalina.policy
+%config(noreplace) %attr(660,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/*.properties*
+%config(noreplace) %attr(660,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/*.xml
 %dir %attr(1730,root,tomcat) %{_vardir}/work
 %dir %attr(775,root,tomcat) %{_vardir}/webapps
 %dir %attr(775,root,tomcat) %{_vardir}/temp
