@@ -255,10 +255,16 @@ ln -sf %{_vardir}/conf $TOMCATDIR/conf
 ln -sf %{_vardir}/conf $RPM_BUILD_ROOT%{_sysconfdir}
 
 # symlinks instead of copies
-jars="commons-daemon commons-logging-api commons-dbcp-tomcat5 commons-pool-tomcat5"
+jars="commons-daemon commons-logging-api"
 for jar in $jars; do
 	jar=$(find-jar $jar)
 	ln -sf $jar $TOMCATDIR/bin
+done
+
+jars="commons-pool-tomcat5 commons-dbcp-tomcat5"
+for jar in $jars; do
+	jar=$(find-jar $jar)
+	ln -sf $jar $TOMCATDIR/lib
 done
 
 install -d $RPM_BUILD_ROOT%{_javadir}
