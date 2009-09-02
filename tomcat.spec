@@ -60,8 +60,6 @@ Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
 Requires:	%{name}-jasper = %{version}-%{release}
-Requires:	java-commons-daemon
-Requires:	java-commons-logging
 Requires:	java-servletapi = %{epoch}:%{version}-%{release}
 Requires:	java-sun-jre >= 1.2
 Requires:	jaxp_parser_impl
@@ -257,7 +255,7 @@ ln -sf %{_vardir}/conf $TOMCATDIR/conf
 ln -sf %{_vardir}/conf $RPM_BUILD_ROOT%{_sysconfdir}
 
 # symlinks instead of copies
-jars="commons-daemon commons-logging-api"
+jars="commons-daemon commons-logging-api commons-dbcp-tomcat5 commons-pool-tomcat5"
 for jar in $jars; do
 	jar=$(find-jar $jar)
 	ln -sf $jar $TOMCATDIR/bin
@@ -327,6 +325,7 @@ fi
 %{_tomcatdir}/lib/annotations-api.jar
 %{_tomcatdir}/lib/catalina.jar
 %{_tomcatdir}/lib/commons-dbcp-tomcat5.jar
+%{_tomcatdir}/lib/commons-pool-tomcat5.jar
 %{_tomcatdir}/lib/jasper-el.jar
 %{_tomcatdir}/lib/jsp-api-2.1.jar
 %{_tomcatdir}/lib/tomcat-i18n-es.jar
