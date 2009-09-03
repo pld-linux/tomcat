@@ -59,7 +59,7 @@ Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
-Requires:	%{name}-jasper = %{version}-%{release}
+Requires:	%{name}-jasper = %{epoch}:%{version}-%{release}
 Requires:	java-servletapi = %{epoch}:%{version}-%{release}
 Requires:	java-sun-jre >= 1.2
 Requires:	jaxp_parser_impl
@@ -115,6 +115,7 @@ Dokumentacja do Tomcata - kontenera Servlet/JSP.
 Summary:	The Apache Tomcat Servlet/JSP application manager
 Summary(pl.UTF-8):	Zarządca aplikacji w Tomcacie
 Group:		Networking/Daemons/Java/Servlets
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 
 %description webapp-manager
 The Apache Tomcat Servlet/JSP application manager.
@@ -126,6 +127,7 @@ Zarządca aplikacji w Tomcacie.
 Summary:	The Apache Tomcat Servlet/JSP virtual hosts manager
 Summary(pl.UTF-8):	Zarządca wirtualnych hostów w Tomcacie
 Group:		Networking/Daemons/Java/Servlets
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 Obsoletes:	tomcat-admin
 
 %description webapp-host-manager
@@ -138,6 +140,7 @@ Zarządca wirtualnych hostów w Tomcacie.
 Summary:	The Apache Tomcat Servlet/JSP example applications
 Summary(pl.UTF-8):	Przykładowe aplikacje dla Tomcata
 Group:		Networking/Daemons/Java/Servlets
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 
 %description webapp-examples
 The Apache Tomcat Servlet/JSP example applications.
@@ -150,6 +153,7 @@ Summary:	Web Services support (JSR 109)
 Group:		Libraries/Java
 Requires:	java(JSR109)
 Requires:	java-geronimo-spec-jaxrpc
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 
 %description webservices
 Factories for JSR 109 which may be used to resolve web services
