@@ -12,7 +12,7 @@ Summary:	Apache Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP %{jspapi
 Summary(pl.UTF-8):	Silnik Servlet/JSP Apache będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
 Name:		tomcat
 Version:	6.0.20
-Release:	2
+Release:	3
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
 Source0:	http://www.apache.org/dist/tomcat/tomcat-6/v%{version}/src/apache-%{name}-%{version}-src.tar.gz
@@ -60,6 +60,7 @@ Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
 Requires:	%{name}-jasper = %{epoch}:%{version}-%{release}
+Requires:	java-jdbc-mysql
 Requires:	java-servletapi = %{epoch}:%{version}-%{release}
 Requires:	java-sun-jre >= 1.2
 Requires:	jaxp_parser_impl
@@ -265,7 +266,7 @@ for jar in $jars; do
 	ln -sf $jar $TOMCATDIR/bin
 done
 
-jars="commons-pool-tomcat5 commons-dbcp-tomcat5"
+jars="commons-pool-tomcat5 commons-dbcp-tomcat5 mysql-connector-java"
 for jar in $jars; do
 	jar=$(find-jar $jar)
 	ln -sf $jar $TOMCATDIR/lib
