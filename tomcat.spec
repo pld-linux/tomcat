@@ -334,21 +334,22 @@ fi
 %{_tomcatdir}/bin/*.jar
 %dir %{_tomcatdir}/lib
 %{_tomcatdir}/lib/annotations-api.jar
+%{_tomcatdir}/lib/catalina-ant.jar
+%{_tomcatdir}/lib/catalina-ha.jar
 %{_tomcatdir}/lib/catalina.jar
+%{_tomcatdir}/lib/catalina-tribes.jar
 %{_tomcatdir}/lib/commons-dbcp-tomcat5.jar
 %{_tomcatdir}/lib/commons-pool-tomcat5.jar
-%{_tomcatdir}/lib/jasper-el.jar
-%{_tomcatdir}/lib/jsp-api-2.1.jar
-%{_tomcatdir}/lib/tomcat-i18n-es.jar
-%{_tomcatdir}/lib/catalina-ant.jar
-%{_tomcatdir}/lib/catalina-tribes.jar
 %{_tomcatdir}/lib/el-api.jar
-%{_tomcatdir}/lib/jasper.jar
-%{_tomcatdir}/lib/servlet-api-2.5.jar
-%{_tomcatdir}/lib/tomcat-i18n-fr.jar
-%{_tomcatdir}/lib/catalina-ha.jar
 %{_tomcatdir}/lib/jasper-compiler-jdt.jar
+%{_tomcatdir}/lib/jasper-el.jar
+%{_tomcatdir}/lib/jasper.jar
+%{_tomcatdir}/lib/jsp-api-2.1.jar
+%{_tomcatdir}/lib/mysql-connector-java.jar
+%{_tomcatdir}/lib/servlet-api-2.5.jar
 %{_tomcatdir}/lib/tomcat-coyote.jar
+%{_tomcatdir}/lib/tomcat-i18n-es.jar
+%{_tomcatdir}/lib/tomcat-i18n-fr.jar
 %{_tomcatdir}/lib/tomcat-i18n-ja.jar
 
 %dir %{_tomcatdir}/webapps
@@ -397,9 +398,9 @@ fi
 %if %{with webservices}
 %files webservices
 %defattr(644,root,root,755)
+%{_tomcatdir}/lib/catalina-ws.jar
 %{_tomcatdir}/lib/jsr109.jar
 %{_tomcatdir}/lib/jaxrpc.jar
-%{_tomcatdir}/lib/catalina-ws.jar
 %endif
 
 %files jasper
