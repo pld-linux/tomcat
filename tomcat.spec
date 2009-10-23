@@ -1,3 +1,7 @@
+# TODO:
+# - verify if java-commons-dbcp and java-commons-pool are really required
+#   or build-required. (Note that java-commons-{dbcp,pool}-tomcat5 ARE
+#   required).
 
 # Conditional build:
 %bcond_without	javadoc		# skip building javadocs
@@ -12,7 +16,7 @@ Summary:	Apache Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP %{jspapi
 Summary(pl.UTF-8):	Silnik Servlet/JSP Apache będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
 Name:		tomcat
 Version:	6.0.20
-Release:	4
+Release:	5
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
 Source0:	http://www.apache.org/dist/tomcat/tomcat-6/v%{version}/src/apache-%{name}-%{version}-src.tar.gz
@@ -45,6 +49,8 @@ BuildRequires:	java-commons-collections >= 0:2.0
 BuildRequires:	java-commons-daemon >= 1.0
 BuildRequires:	java-commons-dbcp >= 0:1.1
 BuildRequires:	java-commons-dbcp-tomcat5 >= 0:1.1
+BuildRequires:	java-commons-pool
+BuildRequires:	java-commons-pool-tomcat5
 %if %{with webservices}
 BuildRequires:	java(JSR109)
 BuildRequires:	java-geronimo-spec-jaxrpc
@@ -62,6 +68,10 @@ Requires(pre):	/usr/sbin/useradd
 Requires:	%{name}-jasper = %{epoch}:%{version}-%{release}
 Requires:	java-jdbc-mysql
 Requires:	java-servletapi = %{epoch}:%{version}-%{release}
+Requires:	java-commons-dbcp >= 0:1.1
+Requires:	java-commons-dbcp-tomcat5 >= 0:1.1
+Requires:	java-commons-pool
+Requires:	java-commons-pool-tomcat5
 Requires:	java-sun-jre >= 1.2
 Requires:	jaxp_parser_impl
 Requires:	jndi >= 1.2.1
