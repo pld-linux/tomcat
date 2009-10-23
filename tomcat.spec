@@ -12,7 +12,7 @@ Summary:	Apache Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP %{jspapi
 Summary(pl.UTF-8):	Silnik Servlet/JSP Apache będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
 Name:		tomcat
 Version:	6.0.20
-Release:	3
+Release:	4
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
 Source0:	http://www.apache.org/dist/tomcat/tomcat-6/v%{version}/src/apache-%{name}-%{version}-src.tar.gz
@@ -165,6 +165,7 @@ Summary:	JSP compiler
 Summary(pl.UTF-8):	Kompilator JSP
 Group:		Libraries/Java
 Requires:	jpackage-utils
+Requires:	eclipse-jdt >= 3.2
 Obsoletes:	apache-tomcat-jasper
 
 %description jasper
@@ -266,7 +267,7 @@ for jar in $jars; do
 	ln -sf $jar $TOMCATDIR/bin
 done
 
-jars="commons-pool-tomcat5 commons-dbcp-tomcat5 mysql-connector-java"
+jars="commons-pool-tomcat5 commons-dbcp-tomcat5 mysql-connector-java org.eclipse.jdt.core"
 for jar in $jars; do
 	jar=$(find-jar $jar)
 	ln -sf $jar $TOMCATDIR/lib
@@ -281,7 +282,6 @@ ln -s jsp-api-%{jspapiver}.jar $RPM_BUILD_ROOT%{_javadir}/jsp-api.jar
 ln -s servlet-api-%{servletapiver}.jar $RPM_BUILD_ROOT%{_javadir}/servlet-api.jar
 
 # XXX add softlinks jasper-compiler.jar and jasper-runtime for compatibility with tomcat 5.5?
-ln -sf %{_javadir}/jasper-compiler-jdt.jar $TOMCATDIR/lib
 ln -sf %{_javadir}/jasper-el.jar $TOMCATDIR/lib
 ln -sf %{_javadir}/jasper.jar $TOMCATDIR/lib
 
@@ -341,9 +341,6 @@ fi
 %{_tomcatdir}/lib/commons-dbcp-tomcat5.jar
 %{_tomcatdir}/lib/commons-pool-tomcat5.jar
 %{_tomcatdir}/lib/el-api.jar
-%{_tomcatdir}/lib/jasper-compiler-jdt.jar
-%{_tomcatdir}/lib/jasper-el.jar
-%{_tomcatdir}/lib/jasper.jar
 %{_tomcatdir}/lib/jsp-api-2.1.jar
 %{_tomcatdir}/lib/mysql-connector-java.jar
 %{_tomcatdir}/lib/servlet-api-2.5.jar
@@ -405,9 +402,11 @@ fi
 
 %files jasper
 %defattr(644,root,root,755)
-%{_javadir}/jasper-compiler-jdt.jar
 %{_javadir}/jasper-el.jar
 %{_javadir}/jasper.jar
+%{_tomcatdir}/lib/jasper-el.jar
+%{_tomcatdir}/lib/jasper.jar
+%{_tomcatdir}/lib/org.eclipse.jdt.core.jar
 
 %files -n java-servletapi
 %defattr(644,root,root,755)
