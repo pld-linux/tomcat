@@ -57,7 +57,6 @@ BuildRequires:	java-geronimo-spec-jaxrpc
 %endif
 BuildRequires:	jpackage-utils
 BuildRequires:	rpmbuild(macros) >= 1.300
-Requires(post,postun):	/sbin/ldconfig
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
