@@ -51,7 +51,7 @@ stop() {
 		# Stop daemons.
 		msg_stopping tomcat
 		busy
-		su tomcat -s /bin/sh -c '/usr/share/tomcat/bin/catalina.sh stop' >/dev/null 2>&1
+		su tomcat -s /bin/sh -c '/usr/share/tomcat/bin/catalina.sh stop -force' >/dev/null 2>&1
 		[ $? -eq 0 ] && ok || fail
 		rm -f /var/lock/subsys/tomcat
 	else
