@@ -365,20 +365,20 @@ fi
 
 %{_tomcatdir}/logs
 %{_tomcatdir}/work
-%dir %{_vardir}
+%dir %attr(770,root,tomcat) %{_vardir}
 # these directory has to be writeable because /admin need to modify config
 # files and create temporary files
-%dir %attr(775,root,tomcat) %{_vardir}/conf
-%dir %attr(775,root,tomcat) %{_vardir}/conf/Catalina
+%dir %attr(770,root,tomcat) %{_vardir}/conf
+%dir %attr(770,root,tomcat) %{_vardir}/conf/Catalina
 %dir %{_vardir}/conf/Catalina/localhost
 # tomcat config has to be writeable because of tomcat-users.xml file and Catalina dir
 %config(noreplace) %attr(660,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/catalina.policy
 %config(noreplace) %attr(660,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/*.properties*
 %config(noreplace) %attr(660,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/*.xml
-%dir %attr(1730,root,tomcat) %{_vardir}/work
-%dir %attr(775,root,tomcat) %{_vardir}/webapps
-%dir %attr(775,root,tomcat) %{_vardir}/temp
-%dir %attr(775,root,tomcat) %{_logdir}/tomcat
+%dir %attr(770,root,tomcat) %{_vardir}/work
+%dir %attr(770,root,tomcat) %{_vardir}/webapps
+%dir %attr(770,root,tomcat) %{_vardir}/temp
+%dir %attr(770,root,tomcat) %{_logdir}/tomcat
 %{_vardir}/logs
 
 %files webapp-docs
