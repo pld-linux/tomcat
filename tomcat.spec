@@ -1,7 +1,3 @@
-# TODO:
-# - verify if java-commons-dbcp and java-commons-pool are really required
-#   or build-required. (Note that java-commons-{dbcp,pool}-tomcat5 ARE
-#   required).
 
 # Conditional build:
 %bcond_without	javadoc		# skip building javadocs
@@ -47,9 +43,7 @@ BuildRequires:	ant-trax
 BuildRequires:	eclipse-jdt >= 3.2
 BuildRequires:	java-commons-collections >= 0:2.0
 BuildRequires:	java-commons-daemon >= 1.0
-BuildRequires:	java-commons-dbcp >= 0:1.1
 BuildRequires:	java-commons-dbcp-tomcat5 >= 0:1.1
-BuildRequires:	java-commons-pool
 BuildRequires:	java-commons-pool-tomcat5
 %if %{with webservices}
 BuildRequires:	java(JSR109)
@@ -67,9 +61,7 @@ Requires(pre):	/usr/sbin/useradd
 Requires:	%{name}-jasper = %{epoch}:%{version}-%{release}
 Requires:	java-jdbc-mysql
 Requires:	java-servletapi = %{epoch}:%{version}-%{release}
-Requires:	java-commons-dbcp >= 0:1.1
 Requires:	java-commons-dbcp-tomcat5 >= 0:1.1
-Requires:	java-commons-pool
 Requires:	java-commons-pool-tomcat5
 Requires:	java-sun-jre >= 1.2
 Requires:	jaxp_parser_impl
