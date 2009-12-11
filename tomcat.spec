@@ -59,14 +59,15 @@ Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
 Requires:	%{name}-jasper = %{epoch}:%{version}-%{release}
-Requires:	java-jdbc-mysql
-Requires:	java-servletapi = %{epoch}:%{version}-%{release}
 Requires:	java-commons-dbcp-tomcat5 >= 0:1.1
 Requires:	java-commons-pool-tomcat5
+Requires:	java-jdbc-mysql
+Requires:	java-servletapi = %{epoch}:%{version}-%{release}
 Requires:	java-sun-jre >= 1.2
 Requires:	jaxp_parser_impl
 Requires:	jndi >= 1.2.1
 Requires:	rc-scripts
+Suggests:	tomcat-native
 Provides:	group(servlet)
 Provides:	group(tomcat)
 Provides:	user(tomcat)
@@ -153,9 +154,9 @@ Przykładowe aplikacje dla Tomcata.
 %package webservices
 Summary:	Web Services support (JSR 109)
 Group:		Libraries/Java
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	java(JSR109)
 Requires:	java-geronimo-spec-jaxrpc
-Requires:	%{name} = %{epoch}:%{version}-%{release}
 
 %description webservices
 Factories for JSR 109 which may be used to resolve web services
@@ -165,8 +166,8 @@ references.
 Summary:	JSP compiler
 Summary(pl.UTF-8):	Kompilator JSP
 Group:		Libraries/Java
-Requires:	jpackage-utils
 Requires:	eclipse-jdt >= 3.2
+Requires:	jpackage-utils
 Obsoletes:	apache-tomcat-jasper
 
 %description jasper
