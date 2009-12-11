@@ -1,3 +1,6 @@
-export CATALINA_BASE=/var/lib/tomcat
-export CATALINA_OPTS="-Xmx384M -XX:MaxPermSize=192m -XX:PermSize=128m"
-export JAVA_HOME=$(. /usr/share/java-utils/java-functions; set_jvm >&2; echo "$JAVA_HOME")
+### Java runtime options used when the "start", or "run" command is executed.
+# CATALINA_OPTS="-Xmx384M -XX:MaxPermSize=192m -XX:PermSize=128m"
+
+### Java runtime options used when the "start", "stop", or "run" command is
+### executed.
+# JAVA_HOME=""
