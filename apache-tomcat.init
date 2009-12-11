@@ -15,8 +15,17 @@
 # Get network config
 . /etc/sysconfig/network
 
+CATALINA_BASE=/var/lib/tomcat
+CATALINA_OPTS="-Xmx384M -XX:MaxPermSize=192m -XX:PermSize=128m -Djava.library.path=/usr/lib64:/usr/lib"
+JAVA_HOME=$(. /usr/share/java-utils/java-functions; set_jvm >&2; echo "$JAVA_HOME")
+
 # Get service config - may override defaults
 [ -f /etc/sysconfig/tomcat ] && . /etc/sysconfig/tomcat
+
+export CATALINA_BASE
+export CATALINA_OPTS
+export JAVA_OPTS
+export JAVA_HOME
 
 # Check that networking is up.
 if is_yes "${NETWORKING}"; then
