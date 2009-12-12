@@ -371,8 +371,11 @@ fi
 %{_tomcatdir}/lib/commons-dbcp-tomcat5.jar
 %{_tomcatdir}/lib/commons-pool-tomcat5.jar
 %{_tomcatdir}/lib/el-api.jar
+%{_tomcatdir}/lib/jasper-el.jar
+%{_tomcatdir}/lib/jasper.jar
 %{_tomcatdir}/lib/jsp-api-2.1.jar
 %{_tomcatdir}/lib/mysql-connector-java.jar
+%{_tomcatdir}/lib/org.eclipse.jdt.core.jar
 %{_tomcatdir}/lib/servlet-api-2.5.jar
 %{_tomcatdir}/lib/tomcat-coyote.jar
 %{_tomcatdir}/lib/tomcat-i18n-es.jar
@@ -434,9 +437,6 @@ fi
 %defattr(644,root,root,755)
 %{_javadir}/jasper-el.jar
 %{_javadir}/jasper.jar
-%{_tomcatdir}/lib/jasper-el.jar
-%{_tomcatdir}/lib/jasper.jar
-%{_tomcatdir}/lib/org.eclipse.jdt.core.jar
 
 %files catalina
 %defattr(644,root,root,755)
