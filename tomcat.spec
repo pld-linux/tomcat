@@ -8,8 +8,8 @@
 %define		servletapiver	2.5
 
 %include	/usr/lib/rpm/macros.java
-Summary:	Apache Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP %{jspapiver}API
-Summary(pl.UTF-8):	Silnik Servlet/JSP Apache będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
+Summary:	Web server and Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP %{jspapiver}API
+Summary(pl.UTF-8):	Serwer www i silnik Servlet/JSP będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
 Name:		tomcat
 Version:	6.0.20
 Release:	6
@@ -58,6 +58,8 @@ Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
+Requires:	%{name}-catalina = %{epoch}:%{version}-%{release}
+Requires:	%{name}-coyote = %{epoch}:%{version}-%{release}
 Requires:	%{name}-jasper = %{epoch}:%{version}-%{release}
 Requires:	java-commons-dbcp-tomcat5 >= 0:1.1
 Requires:	java-commons-pool-tomcat5
@@ -161,6 +163,27 @@ Requires:	java-geronimo-spec-jaxrpc
 %description webservices
 Factories for JSR 109 which may be used to resolve web services
 references.
+
+%package catalina
+Summary:	Tomcat's servlet container
+Group:		Libraries/Java
+Requires:	jpackage-utils
+
+%description catalina
+Catalina is Tomcat's servlet container. Catalina implements Sun
+Microsystems' specifications for servlet and JavaServer Pages (JSP).
+
+%package coyote
+Summary:	Tomcat HTTP connector
+Group:		Libraries/Java
+Requires:	jpackage-utils
+
+%description coyote
+Coyote is Tomcat's HTTP Connector component that supports the HTTP 1.1
+protocol for the web server or application container. Coyote listens
+for incoming connections on a specific TCP port on the server and
+forwards the request to the Tomcat Engine to process the request and
+send back a response to the requesting client.
 
 %package jasper
 Summary:	JSP compiler
@@ -279,6 +302,8 @@ install -d $RPM_BUILD_ROOT%{_javadir}
 mv $TOMCATDIR/lib/jasper*.jar $RPM_BUILD_ROOT%{_javadir}
 mv $TOMCATDIR/lib/jsp-api.jar $RPM_BUILD_ROOT%{_javadir}/jsp-api-%{jspapiver}.jar
 mv $TOMCATDIR/lib/servlet-api.jar $RPM_BUILD_ROOT%{_javadir}/servlet-api-%{servletapiver}.jar
+mv $TOMCATDIR/lib/catalina.jar $RPM_BUILD_ROOT%{_javadir}/tomcat6-catalina.jar
+mv $TOMCATDIR/lib/tomcat-coyote.jar $RPM_BUILD_ROOT%{_javadir}/tomcat6-coyote.jar
 
 ln -s jsp-api-%{jspapiver}.jar $RPM_BUILD_ROOT%{_javadir}/jsp-api.jar
 ln -s servlet-api-%{servletapiver}.jar $RPM_BUILD_ROOT%{_javadir}/servlet-api.jar
@@ -289,6 +314,9 @@ ln -sf %{_javadir}/jasper.jar $TOMCATDIR/lib
 
 ln -sf %{_javadir}/jsp-api-%{jspapiver}.jar $TOMCATDIR/lib
 ln -sf %{_javadir}/servlet-api-%{servletapiver}.jar $TOMCATDIR/lib
+
+ln -sf %{_javadir}/tomcat6-catalina.jar $TOMCATDIR/lib/catalina.jar
+ln -sf %{_javadir}/tomcat6-coyote.jar $TOMCATDIR/lib/tomcat-coyote.jar
 
 %if %{with webservices}
 install ../extras/catalina-ws.jar $TOMCATDIR/lib/catalina-ws.jar
@@ -409,6 +437,14 @@ fi
 %{_tomcatdir}/lib/jasper-el.jar
 %{_tomcatdir}/lib/jasper.jar
 %{_tomcatdir}/lib/org.eclipse.jdt.core.jar
+
+%files catalina
+%defattr(644,root,root,755)
+%{_javadir}/tomcat6-catalina.jar
+
+%files coyote
+%defattr(644,root,root,755)
+%{_javadir}/tomcat6-coyote.jar
 
 %files -n java-servletapi
 %defattr(644,root,root,755)
