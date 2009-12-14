@@ -58,8 +58,8 @@ Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
-Requires:	%{name}-catalina = %{epoch}:%{version}-%{release}
-Requires:	%{name}-coyote = %{epoch}:%{version}-%{release}
+Requires:	java-%{name}-catalina = %{epoch}:%{version}-%{release}
+Requires:	java-%{name}-coyote = %{epoch}:%{version}-%{release}
 Requires:	%{name}-jasper = %{epoch}:%{version}-%{release}
 Requires:	java-commons-dbcp-tomcat5 >= 0:1.1
 Requires:	java-commons-pool-tomcat5
