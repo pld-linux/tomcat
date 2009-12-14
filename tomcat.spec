@@ -164,21 +164,21 @@ Requires:	java-geronimo-spec-jaxrpc
 Factories for JSR 109 which may be used to resolve web services
 references.
 
-%package catalina
+%package -n java-tomcat-catalina
 Summary:	Tomcat's servlet container
 Group:		Libraries/Java
 Requires:	jpackage-utils
 
-%description catalina
+%description -n java-tomcat-catalina
 Catalina is Tomcat's servlet container. Catalina implements Sun
 Microsystems' specifications for servlet and JavaServer Pages (JSP).
 
-%package coyote
+%package -n java-tomcat-coyote
 Summary:	Tomcat HTTP connector
 Group:		Libraries/Java
 Requires:	jpackage-utils
 
-%description coyote
+%description -n java-tomcat-coyote
 Coyote is Tomcat's HTTP Connector component that supports the HTTP 1.1
 protocol for the web server or application container. Coyote listens
 for incoming connections on a specific TCP port on the server and
@@ -438,11 +438,11 @@ fi
 %{_javadir}/jasper-el.jar
 %{_javadir}/jasper.jar
 
-%files catalina
+%files -n java-tomcat-catalina
 %defattr(644,root,root,755)
 %{_javadir}/tomcat6-catalina.jar
 
-%files coyote
+%files -n java-tomcat-coyote
 %defattr(644,root,root,755)
 %{_javadir}/tomcat6-coyote.jar
 
