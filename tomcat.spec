@@ -61,7 +61,7 @@ Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
 Requires:	java-%{name}-catalina = %{epoch}:%{version}-%{release}
 Requires:	java-%{name}-coyote = %{epoch}:%{version}-%{release}
-Requires:	%{name}-jasper = %{epoch}:%{version}-%{release}
+Requires:	java-%{name}-jasper = %{epoch}:%{version}-%{release}
 Requires:	java-commons-dbcp-tomcat5 >= 0:1.1
 Requires:	java-commons-pool-tomcat5
 Requires:	java-jdbc-mysql
@@ -186,19 +186,20 @@ for incoming connections on a specific TCP port on the server and
 forwards the request to the Tomcat Engine to process the request and
 send back a response to the requesting client.
 
-%package jasper
+%package -n java-tomcat-jasper
 Summary:	JSP compiler
 Summary(pl.UTF-8):	Kompilator JSP
 Group:		Libraries/Java
 Requires:	eclipse-jdt >= 3.2
 Requires:	jpackage-utils
 Obsoletes:	apache-tomcat-jasper
+Obsoletes:	tomcat-jasper
 
-%description jasper
+%description -n java-tomcat-jasper
 Jasper is Java ServerPages compiler used by Apache Tomcat servlet
 container.
 
-%description jasper -l pl.UTF-8
+%description -n java-tomcat-jasper -l pl.UTF-8
 Jasper jest kompilatorem Java ServerPages używanym przez kontener
 servletów Apache Tomcat.
 
@@ -435,7 +436,7 @@ fi
 %{_tomcatdir}/lib/jaxrpc.jar
 %endif
 
-%files jasper
+%files -n java-tomcat-jasper
 %defattr(644,root,root,755)
 %{_javadir}/jasper-el.jar
 %{_javadir}/jasper.jar
