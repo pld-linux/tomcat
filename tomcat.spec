@@ -27,6 +27,7 @@ Source13:	%{name}-context-host-manager.xml
 Source14:	%{name}-context-examples.xml
 Patch0:		%{name}-build.xml.patch
 Patch1:		%{name}-extras.xml.patch
+Patch2:		%{name}-bug47316.patch
 URL:		http://tomcat.apache.org/
 BuildRequires:	apr-devel
 BuildRequires:	autoconf
@@ -223,6 +224,7 @@ javax.servlet.http, javax.servlet.jsp i java.servlet.jsp.tagext).
 
 %patch0 -p0
 %patch1 -p0
+%patch2 -p0
 
 # we don't need those scripts
 rm bin/*.bat
