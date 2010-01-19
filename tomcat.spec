@@ -376,10 +376,10 @@ fi
 %{_tomcatdir}/lib/el-api.jar
 %{_tomcatdir}/lib/jasper-el.jar
 %{_tomcatdir}/lib/jasper.jar
-%{_tomcatdir}/lib/jsp-api-2.1.jar
+%{_tomcatdir}/lib/jsp-api.jar
 %{_tomcatdir}/lib/mysql-connector-java.jar
 %{_tomcatdir}/lib/org.eclipse.jdt.core.jar
-%{_tomcatdir}/lib/servlet-api-2.5.jar
+%{_tomcatdir}/lib/servlet-api.jar
 %{_tomcatdir}/lib/tomcat-coyote.jar
 %{_tomcatdir}/lib/tomcat-i18n-es.jar
 %{_tomcatdir}/lib/tomcat-i18n-fr.jar
