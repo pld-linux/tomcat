@@ -315,8 +315,8 @@ ln -s servlet-api-%{servletapiver}.jar $RPM_BUILD_ROOT%{_javadir}/servlet-api.ja
 ln -sf %{_javadir}/jasper-el.jar $TOMCATDIR/lib
 ln -sf %{_javadir}/jasper.jar $TOMCATDIR/lib
 
-ln -sf %{_javadir}/jsp-api-%{jspapiver}.jar $TOMCATDIR/lib
-ln -sf %{_javadir}/servlet-api-%{servletapiver}.jar $TOMCATDIR/lib
+ln -sf %{_javadir}/jsp-api-%{jspapiver}.jar $TOMCATDIR/lib/jsp-api.jar
+ln -sf %{_javadir}/servlet-api-%{servletapiver}.jar $TOMCATDIR/lib/servlet-api.jar
 
 ln -sf %{_javadir}/tomcat6-catalina.jar $TOMCATDIR/lib/catalina.jar
 ln -sf %{_javadir}/tomcat6-coyote.jar $TOMCATDIR/lib/tomcat-coyote.jar
