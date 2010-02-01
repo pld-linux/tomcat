@@ -11,12 +11,12 @@
 Summary:	Web server and Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP %{jspapiver}API
 Summary(pl.UTF-8):	Serwer www i silnik Servlet/JSP będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
 Name:		tomcat
-Version:	6.0.20
-Release:	7
+Version:	6.0.24
+Release:	1
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
 Source0:	http://www.apache.org/dist/tomcat/tomcat-6/v%{version}/src/apache-%{name}-%{version}-src.tar.gz
-# Source0-md5:	44f49e7e14028b6a53c3c346bd18c72f
+# Source0-md5:	543218290008e0dd6a329f69136973ca
 Source1:	apache-%{name}.init
 Source2:	apache-%{name}.sysconfig
 Source3:	%{name}-build.properties
@@ -27,7 +27,6 @@ Source13:	%{name}-context-host-manager.xml
 Source14:	%{name}-context-examples.xml
 Patch0:		%{name}-build.xml.patch
 Patch1:		%{name}-extras.xml.patch
-Patch2:		%{name}-bug47316.patch
 URL:		http://tomcat.apache.org/
 BuildRequires:	apr-devel
 BuildRequires:	autoconf
@@ -225,7 +224,6 @@ javax.servlet.http, javax.servlet.jsp i java.servlet.jsp.tagext).
 
 %patch0 -p0
 %patch1 -p0
-%patch2 -p0
 
 # we don't need those scripts
 rm bin/*.bat
