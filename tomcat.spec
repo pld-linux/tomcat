@@ -49,6 +49,7 @@ BuildRequires:	java-commons-pool-tomcat5
 BuildRequires:	java(JSR109)
 BuildRequires:	java-geronimo-spec-jaxrpc
 %endif
+BuildRequires:	java-jdbc-mysql
 BuildRequires:	jpackage-utils
 BuildRequires:	rpmbuild(macros) >= 1.300
 Requires(post,preun):	/sbin/chkconfig
