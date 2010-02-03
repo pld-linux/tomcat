@@ -28,10 +28,6 @@ Source14:	%{name}-context-examples.xml
 Patch0:		%{name}-build.xml.patch
 Patch1:		%{name}-extras.xml.patch
 URL:		http://tomcat.apache.org/
-BuildRequires:	apr-devel
-BuildRequires:	autoconf
-BuildRequires:	libtool
-BuildRequires:	openssl-devel
 %if %{with java_sun}
 BuildRequires:	java-sun >= 1.5
 BuildRequires:	java-sun-jre >= 1.5
@@ -41,7 +37,7 @@ BuildRequires:	java-gcj-compat-devel
 BuildRequires:	ant >= 1.5.3
 BuildRequires:	ant-trax
 BuildRequires:	eclipse-jdt >= 3.2
-BuildRequires:	java-commons-collections >= 0:2.0
+#BuildRequires:	java-commons-collections >= 0:2.0
 BuildRequires:	java-commons-daemon >= 1.0
 BuildRequires:	java-commons-dbcp-tomcat5 >= 0:1.1
 BuildRequires:	java-commons-pool-tomcat5
@@ -51,6 +47,7 @@ BuildRequires:	java-geronimo-spec-jaxrpc
 %endif
 BuildRequires:	java-jdbc-mysql
 BuildRequires:	jpackage-utils
+BuildRequires:	rpm-javaprov
 BuildRequires:	rpmbuild(macros) >= 1.300
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
