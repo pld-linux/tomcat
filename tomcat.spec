@@ -37,7 +37,6 @@ BuildRequires:	java-gcj-compat-devel
 BuildRequires:	ant >= 1.5.3
 BuildRequires:	ant-trax
 BuildRequires:	eclipse-jdt >= 3.2
-#BuildRequires:	java-commons-collections >= 0:2.0
 BuildRequires:	java-commons-daemon >= 1.0
 BuildRequires:	java-commons-dbcp-tomcat5 >= 0:1.1
 BuildRequires:	java-commons-pool-tomcat5
