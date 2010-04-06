@@ -11,12 +11,12 @@
 Summary:	Web server and Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP %{jspapiver}API
 Summary(pl.UTF-8):	Serwer www i silnik Servlet/JSP będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
 Name:		tomcat
-Version:	6.0.24
+Version:	6.0.26
 Release:	1
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
 Source0:	http://www.apache.org/dist/tomcat/tomcat-6/v%{version}/src/apache-%{name}-%{version}-src.tar.gz
-# Source0-md5:	543218290008e0dd6a329f69136973ca
+# Source0-md5:	83b46d9346bcbc517dbf6f1cac9ef8b1
 Source1:	apache-%{name}.init
 Source2:	apache-%{name}.sysconfig
 Source3:	%{name}-build.properties
