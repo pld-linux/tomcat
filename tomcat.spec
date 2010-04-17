@@ -32,7 +32,7 @@ URL:		http://tomcat.apache.org/
 BuildRequires:	java-sun >= 1.5
 BuildRequires:	java-sun-jre >= 1.5
 %else
-BuildRequires:	java-gcj-compat-devel
+BuildRequires:	icedtea6-jdk
 %endif
 BuildRequires:	ant >= 1.5.3
 BuildRequires:	ant-trax
@@ -62,7 +62,7 @@ Requires:	java-commons-dbcp-tomcat5 >= 0:1.1
 Requires:	java-commons-pool-tomcat5
 Requires:	java-jdbc-mysql
 Requires:	java-servletapi = %{epoch}:%{version}-%{release}
-Requires:	java-sun-jre >= 1.2
+Requires:	jre >= 1.2
 Requires:	jaxp_parser_impl
 Requires:	jndi >= 1.2.1
 Requires:	rc-scripts
