@@ -12,7 +12,7 @@ Summary:	Web server and Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP 
 Summary(pl.UTF-8):	Serwer www i silnik Servlet/JSP będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
 Name:		tomcat
 Version:	6.0.26
-Release:	2
+Release:	3
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
 Source0:	http://www.apache.org/dist/tomcat/tomcat-6/v%{version}/src/apache-%{name}-%{version}-src.tar.gz
@@ -55,6 +55,8 @@ Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
+Requires:	java(jaxp_parser_impl)
+Requires:	java(jndi) >= 1.2.1
 Requires:	java-%{name}-catalina = %{epoch}:%{version}-%{release}
 Requires:	java-%{name}-coyote = %{epoch}:%{version}-%{release}
 Requires:	java-%{name}-jasper = %{epoch}:%{version}-%{release}
@@ -63,8 +65,6 @@ Requires:	java-commons-pool-tomcat5
 Requires:	java-jdbc-mysql
 Requires:	java-servletapi = %{epoch}:%{version}-%{release}
 Requires:	jre >= 1.2
-Requires:	jaxp_parser_impl
-Requires:	jndi >= 1.2.1
 Requires:	rc-scripts
 Suggests:	tomcat-native
 Provides:	group(servlet)
@@ -203,8 +203,8 @@ servletów Apache Tomcat.
 Summary:	Java servlet and JSP implementation classes
 Summary(pl.UTF-8):	Klasy z implementacją Java Servlet i JSP
 Group:		Libraries/Java
-Provides:	java(JSP) = %{jspapiver}
-Provides:	java(Servlet) = %{servletapiver}
+Provides:	java(jsp) = %{jspapiver}
+Provides:	java(servlet) = %{servletapiver}
 Obsoletes:	java-servletapi5
 
 %description -n java-servletapi
