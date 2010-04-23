@@ -1,7 +1,6 @@
 
 # Conditional build:
 %bcond_without	javadoc		# skip building javadocs
-%bcond_without	java_sun	# build with gcj (does not work)
 %bcond_without	webservices	# skip building webservices
 
 %define		jspapiver	2.1
@@ -12,7 +11,7 @@ Summary:	Web server and Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP 
 Summary(pl.UTF-8):	Serwer www i silnik Servlet/JSP będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
 Name:		tomcat
 Version:	6.0.26
-Release:	4
+Release:	5
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
 Source0:	http://www.apache.org/dist/tomcat/tomcat-6/v%{version}/src/apache-%{name}-%{version}-src.tar.gz
@@ -28,12 +27,6 @@ Source14:	%{name}-context-examples.xml
 Patch0:		%{name}-build.xml.patch
 Patch1:		%{name}-extras.xml.patch
 URL:		http://tomcat.apache.org/
-%if %{with java_sun}
-BuildRequires:	java-sun >= 1.5
-BuildRequires:	java-sun-jre >= 1.5
-%else
-BuildRequires:	icedtea6-jdk
-%endif
 BuildRequires:	ant >= 1.5.3
 BuildRequires:	ant-trax
 BuildRequires:	eclipse-jdt >= 3.2
