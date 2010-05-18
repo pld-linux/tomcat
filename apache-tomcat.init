@@ -1,23 +1,24 @@
 #!/bin/sh
 #
-# tomcat	Jakarta Tomcat Servlet/JSP container
+# tomcat	Tomcat Servlet/JSP container
 #
 # chkconfig:    345  84 16
 #
-# description:	Jakarta Tomcat Servlet/JSP container
+# description:	Tomcat Servlet/JSP container
 #
 # $Id$
 
 
-# Source function library
+# Source function libraries
 . /etc/rc.d/init.d/functions
+. /usr/share/java-utils/java-functions
 
 # Get network config
 . /etc/sysconfig/network
 
 CATALINA_BASE=/var/lib/tomcat
 CATALINA_OPTS="-Xmx384M -XX:MaxPermSize=192m -XX:PermSize=128m -Djava.library.path=/usr/lib64:/usr/lib"
-JAVA_HOME=$(. /usr/share/java-utils/java-functions; set_jvm >&2; echo "$JAVA_HOME")
+set_jvm
 
 # Get service config - may override defaults
 [ -f /etc/sysconfig/tomcat ] && . /etc/sysconfig/tomcat
@@ -26,6 +27,9 @@ export CATALINA_BASE
 export CATALINA_OPTS
 export JAVA_OPTS
 export JAVA_HOME
+COMMONSDAEMON=$(find-jar commons-daemon)
+TOMCATLIBS=/usr/share/tomcat/bin/bootstrap.jar:$(build-classpath-directory /usr/share/tomcat/lib)
+CLASSPATH=${CLASSPATH:+"$CLASSPATH:"}$COMMONSDAEMON:$TOMCATLIBS
 
 # Check that networking is up.
 if is_yes "${NETWORKING}"; then
@@ -42,7 +46,16 @@ start() {
 	if [ ! -f /var/lock/subsys/tomcat ]; then
 		msg_starting tomcat
 		busy
-		su tomcat -s /bin/sh -c '/usr/share/tomcat/bin/catalina.sh start' >/dev/null 2>&1
+		cd /usr/share/tomcat
+		jsvc -user tomcat \
+			-procname tomcat \
+			-cp $CLASSPATH \
+			-home $JAVA_HOME \
+			-pidfile /var/run/tomcat.pid \
+			-outfile /var/log/tomcat/catalina.out \
+			-errfile /var/log/tomcat/catalina.err \
+			$CATALINA_OPTS \
+			org.apache.catalina.startup.Bootstrap
 		[ $? -ne 0 ] && RETVAL=1
 		if [ $RETVAL -eq 0 ]; then
 		   	ok
@@ -60,7 +73,13 @@ stop() {
 		# Stop daemons.
 		msg_stopping tomcat
 		busy
-		su tomcat -s /bin/sh -c '/usr/share/tomcat/bin/catalina.sh stop -force' >/dev/null 2>&1
+		jsvc -user tomcat \
+			-stop \
+			-cp $CLASSPATH \
+			-pidfile /var/run/tomcat.pid \
+			-outfile /var/log/tomcat/catalina.out \
+			-errfile /var/log/tomcat/catalina.err \
+			org.apache.catalina.startup.Bootstrap
 		[ $? -eq 0 ] && ok || fail
 		rm -f /var/lock/subsys/tomcat
 	else
@@ -98,7 +117,7 @@ case "$1" in
 	condrestart 7
 	;;
   status)
-	status tomcat java
+	status --pidfile /var/run/tomcat.pid tomcat tomcat
 	RETVAL=0
 	;;
   *)
