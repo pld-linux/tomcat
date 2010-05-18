@@ -57,7 +57,9 @@ Requires:	java-commons-dbcp-tomcat5 >= 0:1.1
 Requires:	java-commons-pool-tomcat5
 Requires:	java-jdbc-mysql
 Requires:	java-servletapi = %{epoch}:%{version}-%{release}
+Requires:	jpackage-utils
 Requires:	jre >= 1.2
+Requires:	jsvc
 Requires:	rc-scripts
 Suggests:	tomcat-native
 Provides:	group(servlet)
