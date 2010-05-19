@@ -38,6 +38,7 @@ BuildRequires:	java(JSR109)
 BuildRequires:	java-geronimo-spec-jaxrpc
 %endif
 BuildRequires:	java-jdbc-mysql
+BuildRequires:	jdk
 BuildRequires:	jpackage-utils
 BuildRequires:	rpm-javaprov
 BuildRequires:	rpmbuild(macros) >= 1.300
