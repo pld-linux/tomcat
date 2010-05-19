@@ -46,7 +46,7 @@ start() {
 	if [ ! -f /var/lock/subsys/tomcat ]; then
 		msg_starting tomcat
 		busy
-		cd /usr/share/tomcat
+		cd $CATALINA_BASE
 		jsvc -user tomcat \
 			-procname tomcat \
 			-cp $CLASSPATH \
