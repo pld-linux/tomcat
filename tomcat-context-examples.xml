@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- $Id$ -->
-<Context path="/examples" docBase="${catalina.home}/webapps/examples"
+<Context path="/examples" docBase="/usr/share/tomcat/webapps/examples"
         privileged="false" allowLinking="true">
 
 </Context>
