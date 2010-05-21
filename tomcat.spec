@@ -57,6 +57,7 @@ Requires:	java-%{name}-jasper = %{epoch}:%{version}-%{release}
 Requires:	java-commons-dbcp-tomcat5 >= 0:1.1
 Requires:	java-commons-pool-tomcat5
 Requires:	java-jdbc-mysql
+Requires:	java-mail
 Requires:	java-servletapi = %{epoch}:%{version}-%{release}
 Requires:	jpackage-utils
 Requires:	jre >= 1.2
@@ -286,7 +287,7 @@ for jar in $jars; do
 	ln -sf $jar $TOMCATDIR/bin
 done
 
-jars="commons-pool-tomcat5 commons-dbcp-tomcat5 mysql-connector-java org.eclipse.jdt.core"
+jars="commons-pool-tomcat5 commons-dbcp-tomcat5 mysql-connector-java org.eclipse.jdt.core mail"
 for jar in $jars; do
 	jar=$(find-jar $jar)
 	ln -sf $jar $TOMCATDIR/lib
