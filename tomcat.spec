@@ -370,6 +370,7 @@ fi
 %{_tomcatdir}/lib/jasper-el.jar
 %{_tomcatdir}/lib/jasper.jar
 %{_tomcatdir}/lib/jsp-api.jar
+%{_tomcatdir}/lib/mail.jar
 %{_tomcatdir}/lib/mysql-connector-java.jar
 %{_tomcatdir}/lib/org.eclipse.jdt.core.jar
 %{_tomcatdir}/lib/servlet-api.jar
