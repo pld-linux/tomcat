@@ -1,14 +1,15 @@
---- build.xml~	2009-05-14 01:15:28.000000000 +0200
-+++ build.xml	2009-08-13 16:50:16.000000000 +0200
-@@ -439,12 +439,6 @@
-   
+--- build.xml~	2010-06-29 16:33:40.000000000 +0200
++++ build.xml	2010-07-09 18:26:01.000000000 +0200
+@@ -471,13 +471,6 @@
+ 
    <target name="deploy" depends="build-only,build-docs,warn.dbcp">
  
 -    <copy tofile="${tomcat.build}/bin/tomcat-native.tar.gz"
 -            file="${tomcat-native.tar.gz}" />
+-    <copy tofile="${tomcat.build}/bin/commons-daemon-native.tar.gz"
+-            file="${commons-daemon.native.src.tgz}" />
 -
--    <copy todir="${tomcat.build}/bin" file="${commons-daemon.jar}" />
--    <copy todir="${tomcat.build}/bin" file="${commons-daemon.jsvc.tar.gz}" />
+-    <copy tofile="${tomcat.build}/bin/commons-daemon.jar" file="${commons-daemon.jar}" />
 -
      <!-- Copy scripts -->
      <copy todir="${tomcat.build}/bin">
