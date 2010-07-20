@@ -11,7 +11,7 @@ Summary:	Web server and Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP 
 Summary(pl.UTF-8):	Serwer www i silnik Servlet/JSP będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
 Name:		tomcat
 Version:	6.0.28
-Release:	1
+Release:	2
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
 Source0:	http://www.apache.org/dist/tomcat/tomcat-6/v%{version}/src/apache-%{name}-%{version}-src.tar.gz
@@ -26,6 +26,7 @@ Source13:	%{name}-context-host-manager.xml
 Source14:	%{name}-context-examples.xml
 Patch0:		%{name}-build.xml.patch
 Patch1:		%{name}-extras.xml.patch
+Patch2:		server.xml-URIEncoding-utf8.patch
 URL:		http://tomcat.apache.org/
 BuildRequires:	ant >= 1.5.3
 BuildRequires:	ant-trax
@@ -216,20 +217,22 @@ javax.servlet.http, javax.servlet.jsp i java.servlet.jsp.tagext).
 
 %prep
 %setup -q -n apache-%{name}-%{version}-src
-
 %patch0 -p0
 %patch1 -p0
+%patch2 -p1
 
 # we don't need those scripts
 rm bin/*.bat
 rm bin/{startup,shutdown}.sh
 
-cp %{SOURCE3} build.properties
+cp -a %{SOURCE3} build.properties
 
 %build
 TOPDIR=$(pwd)
 
-%ant -Drpm.javadir=%{_javadir} -Drpm.libdir=%{_libdir}
+%ant \
+	-Drpm.javadir=%{_javadir} \
+	-Drpm.libdir=%{_libdir}
 
 %if %{with javadoc}
 %ant -f dist.xml dist-javadoc
@@ -243,7 +246,6 @@ ln -s %{_javadir}/jsr109.jar output/extras/webservices/wsdl4j.jar
 
 %ant -f extras.xml webservices
 %endif
-
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -261,16 +263,16 @@ install -d $TOMCATDIR \
 	    $RPM_BUILD_ROOT/etc/sysconfig \
 	    $RPM_BUILD_ROOT/etc/rc.d/init.d
 
-install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/tomcat
-install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/tomcat
+install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/tomcat
+cp -a %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/tomcat
 
 cp -a conf/* $CATALINADIR/conf
 install -d $CATALINADIR/conf/Catalina/localhost
-install %{SOURCE10} $CATALINADIR/conf/Catalina/localhost/ROOT.xml
-install %{SOURCE11} $CATALINADIR/conf/Catalina/localhost/docs.xml
-install %{SOURCE12} $CATALINADIR/conf/Catalina/localhost/manager.xml
-install %{SOURCE13} $CATALINADIR/conf/Catalina/localhost/host-manager.xml
-install %{SOURCE14} $CATALINADIR/conf/Catalina/localhost/examples.xml
+cp -a %{SOURCE10} $CATALINADIR/conf/Catalina/localhost/ROOT.xml
+cp -a %{SOURCE11} $CATALINADIR/conf/Catalina/localhost/docs.xml
+cp -a %{SOURCE12} $CATALINADIR/conf/Catalina/localhost/manager.xml
+cp -a %{SOURCE13} $CATALINADIR/conf/Catalina/localhost/host-manager.xml
+cp -a %{SOURCE14} $CATALINADIR/conf/Catalina/localhost/examples.xml
 
 cp -a bin lib webapps $TOMCATDIR
 cp -a temp $CATALINADIR

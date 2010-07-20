@@ -1,0 +1,41 @@
+Setup URIEncoding="UTF-8" to use unversal URI encoding.
+
+http://wiki.hudson-ci.org/display/HUDSON/Tomcat
+
+Some versions of Tomcat (such as 5.0.28) uses iso-8859-1 to decode URLs, which
+is in a clear violation of the relevant RFCs. To fix this problem, add the
+following URIEncoding attribute to the connector definition in
+$TOMCAT_HOME/conf/server.xml.
+
+--- apache-tomcat-6.0.28-src/conf/server.xml~	2010-06-29 17:33:40.000000000 +0300
++++ apache-tomcat-6.0.28-src/conf/server.xml	2010-07-20 09:12:35.045149469 +0300
+@@ -68,12 +68,14 @@
+     -->
+     <Connector port="8080" protocol="HTTP/1.1" 
+                connectionTimeout="20000" 
++               URIEncoding="UTF-8"
+                redirectPort="8443" />
+     <!-- A "Connector" using the shared thread pool-->
+     <!--
+     <Connector executor="tomcatThreadPool"
+                port="8080" protocol="HTTP/1.1" 
+                connectionTimeout="20000" 
++               URIEncoding="UTF-8"
+                redirectPort="8443" />
+     -->           
+     <!-- Define a SSL HTTP/1.1 Connector on port 8443
+@@ -82,12 +84,12 @@
+          described in the APR documentation -->
+     <!--
+     <Connector port="8443" protocol="HTTP/1.1" SSLEnabled="true"
+-               maxThreads="150" scheme="https" secure="true"
++               maxThreads="150" scheme="https" secure="true" URIEncoding="UTF-8"
+                clientAuth="false" sslProtocol="TLS" />
+     -->
+ 
+     <!-- Define an AJP 1.3 Connector on port 8009 -->
+-    <Connector port="8009" protocol="AJP/1.3" redirectPort="8443" />
++    <Connector port="8009" protocol="AJP/1.3" URIEncoding="UTF-8" redirectPort="8443" />
+ 
+ 
+     <!-- An Engine represents the entry point (within Catalina) that processes
