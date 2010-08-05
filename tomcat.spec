@@ -11,7 +11,7 @@ Summary:	Web server and Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP 
 Summary(pl.UTF-8):	Serwer www i silnik Servlet/JSP będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
 Name:		tomcat
 Version:	6.0.29
-Release:	1
+Release:	2
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
 Source0:	http://www.apache.org/dist/tomcat/tomcat-6/v%{version}/src/apache-%{name}-%{version}-src.tar.gz
@@ -77,7 +77,6 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_tomcatdir	%{_datadir}/tomcat
 %define 	_logdir		%{_var}/log
 %define		_vardir		%{_var}/lib/tomcat
-%define		_sysconfdir	/etc/tomcat
 
 %define find_jar() %{expand:%%define jarfile {%(jar=$(find-jar %1); echo ${jar:-%%nil})}}%{?jarfile}%{!?jarfile:%{error:find-jar %1 failed}}%{nil}
 
@@ -255,6 +254,11 @@ cd output/build
 TOMCATDIR=$RPM_BUILD_ROOT%{_tomcatdir}
 CATALINADIR=$RPM_BUILD_ROOT/var/lib/tomcat
 
+# useful for constructing relative symlinks. Is there a better way?
+TOMCATDIRREV=$(echo %{_tomcatdir} | sed 's#[^/]\+#..#g;s#^/##')
+CATALINADIRREV=$(echo /var/lib/tomcat | sed 's#[^/]\+#..#g;s#^/##')
+SYSCONFDIRREV=$(echo %{_sysconfdir} | sed 's#[^/]\+#..#g;s#^/##')
+
 install -d $TOMCATDIR \
 	    $CATALINADIR/temp \
 	    $RPM_BUILD_ROOT%{_vardir}/webapps \
@@ -278,11 +282,11 @@ cp -a %{SOURCE14} $CATALINADIR/conf/Catalina/localhost/examples.xml
 cp -a bin lib webapps $TOMCATDIR
 cp -a temp $CATALINADIR
 
-ln -sf %{_logdir}/tomcat $CATALINADIR/logs
-ln -sf %{_logdir}/tomcat $TOMCATDIR/logs
-ln -sf %{_vardir}/work $TOMCATDIR/work
-ln -sf %{_vardir}/conf $TOMCATDIR/conf
-ln -sf %{_vardir}/conf $RPM_BUILD_ROOT%{_sysconfdir}
+ln -sf $CATALINADIRREV%{_logdir}/tomcat $CATALINADIR/logs
+ln -sf $TOMCATDIRREV%{_logdir}/tomcat $TOMCATDIR/logs
+ln -sf $TOMCATDIRREV%{_vardir}/work $TOMCATDIR/work
+ln -sf $TOMCATDIRREV%{_vardir}/conf $TOMCATDIR/conf
+ln -sf $SYSCONFDIRREV%{_vardir}/conf $RPM_BUILD_ROOT%{_sysconfdir}/tomcat
 
 # symlinks instead of copies
 jars="commons-daemon commons-logging-api"
@@ -354,7 +358,7 @@ fi
 %doc KEYS RELEASE-NOTES RELEASE-PLAN-6.0.txt RUNNING.txt
 %attr(754,root,root) /etc/rc.d/init.d/tomcat
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/tomcat
-%{_sysconfdir}
+%{_sysconfdir}/tomcat
 %dir %{_tomcatdir}
 %dir %{_tomcatdir}/conf
 %dir %{_tomcatdir}/bin
