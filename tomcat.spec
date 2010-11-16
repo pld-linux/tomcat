@@ -11,7 +11,7 @@ Summary:	Web server and Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP 
 Summary(pl.UTF-8):	Serwer www i silnik Servlet/JSP będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
 Name:		tomcat
 Version:	6.0.29
-Release:	2
+Release:	3
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
 Source0:	http://www.apache.org/dist/tomcat/tomcat-6/v%{version}/src/apache-%{name}-%{version}-src.tar.gz
@@ -30,10 +30,10 @@ Patch2:		server.xml-URIEncoding-utf8.patch
 URL:		http://tomcat.apache.org/
 BuildRequires:	ant >= 1.5.3
 BuildRequires:	ant-trax
-BuildRequires:	eclipse-jdt >= 3.2
 BuildRequires:	java-commons-daemon >= 1.0
 BuildRequires:	java-commons-dbcp-tomcat5 >= 0:1.1
 BuildRequires:	java-commons-pool-tomcat5
+BuildRequires:	java-eclipse-jdt >= 3.2
 %if %{with webservices}
 BuildRequires:	java(JSR109)
 BuildRequires:	java-geronimo-spec-jaxrpc
@@ -184,7 +184,7 @@ send back a response to the requesting client.
 Summary:	JSP compiler
 Summary(pl.UTF-8):	Kompilator JSP
 Group:		Libraries/Java
-Requires:	eclipse-jdt >= 3.2
+Requires:	java-eclipse-jdt >= 3.2
 Requires:	jpackage-utils
 Obsoletes:	apache-tomcat-jasper
 Obsoletes:	tomcat-jasper
@@ -203,8 +203,8 @@ Summary(pl.UTF-8):	Klasy z implementacją Java Servlet i JSP
 Group:		Libraries/Java
 Provides:	java(jsp) = %{jspapiver}
 Provides:	java(servlet) = %{servletapiver}
-Obsoletes:	java-servletapi5
 Obsoletes:	jakarta-servletapi5
+Obsoletes:	java-servletapi5
 
 %description -n java-servletapi
 Implementation classes of the Java Servlet and JSP APIs (packages
