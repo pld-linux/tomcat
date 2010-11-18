@@ -1,0 +1,380 @@
+--- apache-tomcat-6.0.29-src/java/org/apache/catalina/startup/UserConfig.java.orig	2010-07-19 15:02:32.000000000 +0200
++++ apache-tomcat-6.0.29-src/java/org/apache/catalina/startup/UserConfig.java	2010-11-18 13:50:33.433156115 +0100
+@@ -83,6 +83,58 @@
+ 
+ 
+     /**
++     * The connection URL for the LDAP server we will contact.
++     */
++    private String connectionURL = null;
++
++
++    /**
++     * The connection username for the LDAP server we will contact.
++     */
++    private String connectionName = null;
++
++
++    /**
++     * The connection password for the LDAP server we will contact.
++     */
++    private String connectionPassword = null;
++
++
++    /**
++     *  The type of authentication to use
++     */
++    private String authentication = null;
++
++    /**
++     * The base element for user searches.
++     */
++    private String searchBase = "";
++
++
++    /**
++     * The message format used to search for users.
++     */
++    private String searchFilter = "(objectClass=posixAccount)";
++
++
++    /**
++     * Should we search the entire subtree for matching users?
++     */
++    private boolean searchSubtree = false;
++
++
++    /**
++     * The attibute that denotes user name(s).
++     */
++    private String userAttr = "uid";
++
++
++    /**
++     * The attibute that denotes user home directory.
++     */
++    private String homeAttr = "homeDirectory";
++
++    /**
+      * The string resources for this package.
+      */
+     private static final StringManager sm =
+@@ -186,6 +238,146 @@
+ 
+     }
+ 
++
++    /**
++     * The connection URL for the LDAP server we will contact.
++     */
++    public String getConnectionURL() {
++
++        return (this.connectionURL);
++
++    }
++    public void setConnectionURL(String connectionURL) {
++
++        this.connectionURL = connectionURL;
++
++    }
++
++
++    /**
++     * The connection username for the LDAP server we will contact.
++     */
++    public String getConnectionName() {
++
++        return (this.connectionName);
++
++    }
++    public void setConnectionName(String connectionName) {
++
++        this.connectionName = connectionName;
++
++    }
++
++
++    /**
++     * The connection password for the LDAP server we will contact.
++     */
++    public String getConnectionPassword() {
++
++        return (this.connectionPassword);
++
++    }
++    public void setConnectionPassword(String connectionPassword) {
++
++        this.connectionPassword = connectionPassword;
++
++    }
++
++    /**
++     * Return the type of authentication to use.
++     */
++    public String getAuthentication() {
++
++	return (this.authentication);
++
++    }
++
++    /**
++     * Set the type of authentication to use.
++     *
++     * @param authentication The authentication
++     */
++    public void setAuthentication(String authentication) {
++
++	this.authentication = authentication;
++
++    }
++
++
++    /**
++     * The base element for user searches.
++     */
++    public String getSearchBase() {
++
++        return (this.searchBase);
++
++    }
++    public void setSearchBase(String searchBase) {
++
++        this.searchBase = searchBase;
++
++    }
++
++
++    /**
++     * The message format used to search for users.
++     */
++    public String getSearchFilter() {
++
++        return (this.searchFilter);
++
++    }
++    public void setSearchFilter(String searchFilter) {
++
++        this.searchFilter = searchFilter;
++
++    }
++
++
++    /**
++     * Should we search the entire subtree for matching users?
++     */
++    public boolean getSearchSubtree() {
++
++        return (this.searchSubtree);
++
++    }
++    public void setSearchSubtree(String searchSubtree) {
++
++        this.searchSubtree = searchSubtree;
++
++    }
++
++
++    /**
++     * The attibute that denotes user name(s).
++     */
++    public String getUserAttr() {
++
++        return (this.userAttr);
++
++    }
++    public void setUserAttr(String userAttr) {
++
++        this.userAttr = userAttr;
++
++    }
++
++
++    /**
++     * The attibute that denotes user home directory.
++     */
++    public String getHomeAttr() {
++
++        return (this.homeAttr);
++
++    }
++    public void setHomeAttr(String homeAttr) {
++
++        this.homeAttr = homeAttr;
++
++    }
++
+ 
+     /**
+      * Return the user database class name for this component.
+--- /dev/null	2010-10-22 13:07:45.106999849 +0200
++++ apache-tomcat-6.0.29-src/java/org/apache/catalina/startup/LDAPUserDatabase.java	2010-11-18 13:50:32.671156104 +0100
+@@ -0,0 +1,169 @@
++/*
++ * Licensed to the Apache Software Foundation (ASF) under one or more
++ * contributor license agreements.  See the NOTICE file distributed with
++ * this work for additional information regarding copyright ownership.
++ * The ASF licenses this file to You under the Apache License, Version 2.0
++ * (the "License"); you may not use this file except in compliance with
++ * the License.  You may obtain a copy of the License at
++ * 
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ * 
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++
++package org.apache.catalina.startup;
++
++
++import java.util.Collection;
++import java.util.Hashtable;
++import java.util.Enumeration;
++import java.util.Vector;
++import javax.naming.directory.DirContext;
++import javax.naming.directory.InitialDirContext;
++import javax.naming.directory.Attribute;
++import javax.naming.directory.Attributes;
++import javax.naming.directory.SearchControls;
++import javax.naming.directory.SearchResult;
++import javax.naming.Context;
++import javax.naming.NamingException;
++import javax.naming.NamingEnumeration;
++
++/**
++ * Concrete implementation of the <code>UserDatabase</code> interface
++ * that retrieves user data from LDAP server.
++ *
++ * @author Jan Rękorajski
++ * @version 0.1
++ */
++
++public final class LDAPUserDatabase
++    implements UserDatabase {
++
++    // --------------------------------------------------------- Constructors
++
++    /**
++     * Initialize a new instance of this user database component.
++     */
++    public LDAPUserDatabase() {
++        super();
++    }
++
++    // --------------------------------------------------- Instance Variables
++
++    /**
++     * The set of home directories for all defined users, keyed by username.
++     */
++    private Hashtable homes = new Hashtable();
++
++    /**
++     * The UserConfig listener with which we are associated.
++     */
++    private UserConfig userConfig = null;
++
++    // ----------------------------------------------------------- Properties
++
++    /**
++     * Return the UserConfig listener with which we are associated.
++     */
++    public UserConfig getUserConfig() {
++        return (this.userConfig);
++    }
++
++    /**
++     * Set the UserConfig listener with which we are associated.
++     *
++     * @param userConfig The new UserConfig listener
++     */
++    public void setUserConfig(UserConfig userConfig) {
++        this.userConfig = userConfig;
++        init();
++    }
++
++    // ------------------------------------------------------- Public Methods
++
++    /**
++     * Return an absolute pathname to the home directory for the specified user.
++     *
++     * @param user User for which a home directory should be retrieved
++     */
++    public String getHome(String user) {
++        return ((String) homes.get(user));
++    }
++
++
++    /**
++     * Return an enumeration of the usernames defined on this server.
++     */
++    public Enumeration getUsers() {
++        return (homes.keys());
++    }
++
++    // ------------------------------------------------------ Private Methods
++
++
++    /**
++     * Initialize our set of users and home directories.
++     */
++    private void init() {
++    	static String INIT_CTX = "com.sun.jndi.ldap.LdapCtxFactory";
++
++	String connectionURL = userConfig.getConnectionURL();
++	String connectionName = userConfig.getConnectionName();
++	String connectionPassword = userConfig.getConnectionPassword();
++	String authentication = userConfig.getAuthentication();
++	String searchBase = userConfig.getSearchBase();
++	String searchFilter = userConfig.getSearchFilter();
++	boolean searchSubtree = userConfig.getSearchSubtree();
++	String userAttr = userConfig.getUserAttr();
++	String homeAttr = userConfig.getHomeAttr();
++
++	try {
++		Hashtable<String,String> env = new Hashtable<String,String>();
++
++		env.put(Context.INITIAL_CONTEXT_FACTORY, INIT_CTX);
++		if (connectionName != null)
++			env.put(Context.SECURITY_PRINCIPAL, connectionName);
++		if (connectionPassword != null)
++			env.put(Context.SECURITY_CREDENTIALS, connectionPassword);
++		if (connectionURL != null)
++			env.put(Context.PROVIDER_URL, connectionURL);
++		if (authentication != null)
++			env.put(Context.SECURITY_AUTHENTICATION, authentication);
++
++		DirContext dirContext = new InitialDirContext(env);
++
++		SearchControls constraints = new SearchControls();
++		if (searchSubtree) {
++			constraints.setSearchScope(SearchControls.SUBTREE_SCOPE);
++		} else {
++			constraints.setSearchScope(SearchControls.ONELEVEL_SCOPE);
++		}
++		NamingEnumeration results = dirContext.search(searchBase, searchFilter, constraints);
++	        while (results != null && results.hasMore()) {
++	    	    SearchResult sr = (SearchResult)results.next();
++	    	    String username = null;
++	    	    String home = null;
++	    	    Attributes attr = sr.getAttributes();
++		    Attribute a = attr.get(homeAttr);
++		    if (a != null && a.size() == 1)
++    			   home = (String)a.get();
++		    Attribute a = attr.get(userAttr);
++		    if ((home != null) && (a != null)) {
++			    // Add all possible names of this user and corresponding directory
++			    for (int i = 0; i < a.size(); i++) {
++				    username = (String)a.get(i);
++				    if (username != null)
++					    homes.put(username, home);
++			    }
++		    }
++	        }
++	} catch (Exception e) {
++	//        e.printStackTrace();
++	}
++    }
++}
