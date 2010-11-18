@@ -167,7 +167,7 @@
 +        return (this.searchSubtree);
 +
 +    }
-+    public void setSearchSubtree(String searchSubtree) {
++    public void setSearchSubtree(boolean searchSubtree) {
 +
 +        this.searchSubtree = searchSubtree;
 +
@@ -208,7 +208,7 @@
       * Return the user database class name for this component.
 --- /dev/null	2010-10-22 13:07:45.106999849 +0200
 +++ apache-tomcat-6.0.29-src/java/org/apache/catalina/startup/LDAPUserDatabase.java	2010-11-18 13:50:32.671156104 +0100
-@@ -0,0 +1,169 @@
+@@ -0,0 +1,170 @@
 +/*
 + * Licensed to the Apache Software Foundation (ASF) under one or more
 + * contributor license agreements.  See the NOTICE file distributed with
@@ -321,7 +321,7 @@
 +     * Initialize our set of users and home directories.
 +     */
 +    private void init() {
-+    	static String INIT_CTX = "com.sun.jndi.ldap.LdapCtxFactory";
++    	String INIT_CTX = "com.sun.jndi.ldap.LdapCtxFactory";
 +
 +	String connectionURL = userConfig.getConnectionURL();
 +	String connectionName = userConfig.getConnectionName();
@@ -363,13 +363,14 @@
 +		    Attribute a = attr.get(homeAttr);
 +		    if (a != null && a.size() == 1)
 +    			   home = (String)a.get();
-+		    Attribute a = attr.get(userAttr);
++		    a = attr.get(userAttr);
 +		    if ((home != null) && (a != null)) {
 +			    // Add all possible names of this user and corresponding directory
 +			    for (int i = 0; i < a.size(); i++) {
 +				    username = (String)a.get(i);
-+				    if (username != null)
++				    if (username != null) {
 +					    homes.put(username, home);
++				    }
 +			    }
 +		    }
 +	        }
