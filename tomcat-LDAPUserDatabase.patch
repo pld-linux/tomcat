@@ -1,6 +1,7 @@
---- apache-tomcat-6.0.29-src/java/org/apache/catalina/startup/UserConfig.java.orig	2010-07-19 15:02:32.000000000 +0200
-+++ apache-tomcat-6.0.29-src/java/org/apache/catalina/startup/UserConfig.java	2010-11-18 13:50:33.433156115 +0100
-@@ -83,6 +83,58 @@
+diff -urN apache-tomcat-6.0.29-src.orig/java/org/apache/catalina/startup/UserConfig.java apache-tomcat-6.0.29-src/java/org/apache/catalina/startup/UserConfig.java
+--- apache-tomcat-6.0.29-src.orig/java/org/apache/catalina/startup/UserConfig.java	2010-07-19 15:02:32.000000000 +0200
++++ apache-tomcat-6.0.29-src/java/org/apache/catalina/startup/UserConfig.java	2010-11-18 22:02:22.953623269 +0100
+@@ -83,6 +83,65 @@
  
  
      /**
@@ -25,6 +26,13 @@
 +     *  The type of authentication to use
 +     */
 +    private String authentication = null;
++
++
++    /**
++     *  The page size for paged LDAP query.
++     */
++    private int pageSize = 0;
++
 +
 +    /**
 +     * The base element for user searches.
@@ -59,7 +67,7 @@
       * The string resources for this package.
       */
      private static final StringManager sm =
-@@ -186,6 +238,146 @@
+@@ -186,6 +245,167 @@
  
      }
  
@@ -125,6 +133,27 @@
 +    public void setAuthentication(String authentication) {
 +
 +	this.authentication = authentication;
++
++    }
++
++
++    /**
++     * Return the page size for paged LDAP query.
++     */
++    public int getPageSize() {
++
++	return (this.pageSize);
++
++    }
++
++    /**
++     * Set the page size for paged LDAP query.
++     *
++     * @param pagesize The page size
++     */
++    public void setPageSize(int pageSize) {
++
++	this.pageSize = pageSize;
 +
 +    }
 +
@@ -206,9 +235,10 @@
  
      /**
       * Return the user database class name for this component.
---- /dev/null	2010-10-22 13:07:45.106999849 +0200
-+++ apache-tomcat-6.0.29-src/java/org/apache/catalina/startup/LDAPUserDatabase.java	2010-11-18 13:50:32.671156104 +0100
-@@ -0,0 +1,170 @@
+diff -urN apache-tomcat-6.0.29-src.orig/java/org/apache/catalina/startup/LDAPUserDatabase.java apache-tomcat-6.0.29-src/java/org/apache/catalina/startup/LDAPUserDatabase.java
+--- apache-tomcat-6.0.29-src.orig/java/org/apache/catalina/startup/LDAPUserDatabase.java	1970-01-01 01:00:00.000000000 +0100
++++ apache-tomcat-6.0.29-src/java/org/apache/catalina/startup/LDAPUserDatabase.java	2010-11-18 22:09:07.816261633 +0100
+@@ -0,0 +1,196 @@
 +/*
 + * Licensed to the Apache Software Foundation (ASF) under one or more
 + * contributor license agreements.  See the NOTICE file distributed with
@@ -229,20 +259,22 @@
 +
 +package org.apache.catalina.startup;
 +
-+
-+import java.util.Collection;
 +import java.util.Hashtable;
 +import java.util.Enumeration;
-+import java.util.Vector;
-+import javax.naming.directory.DirContext;
-+import javax.naming.directory.InitialDirContext;
++
++import javax.naming.Context;
++import javax.naming.NamingEnumeration;
++import javax.naming.NamingException;
 +import javax.naming.directory.Attribute;
 +import javax.naming.directory.Attributes;
 +import javax.naming.directory.SearchControls;
 +import javax.naming.directory.SearchResult;
-+import javax.naming.Context;
-+import javax.naming.NamingException;
-+import javax.naming.NamingEnumeration;
++import javax.naming.ldap.Control;
++import javax.naming.ldap.InitialLdapContext;
++import javax.naming.ldap.LdapContext;
++import javax.naming.ldap.PagedResultsControl;
++import javax.naming.ldap.PagedResultsResponseControl;
++
 +
 +/**
 + * Concrete implementation of the <code>UserDatabase</code> interface
@@ -321,8 +353,6 @@
 +     * Initialize our set of users and home directories.
 +     */
 +    private void init() {
-+    	String INIT_CTX = "com.sun.jndi.ldap.LdapCtxFactory";
-+
 +	String connectionURL = userConfig.getConnectionURL();
 +	String connectionName = userConfig.getConnectionName();
 +	String connectionPassword = userConfig.getConnectionPassword();
@@ -332,11 +362,12 @@
 +	boolean searchSubtree = userConfig.getSearchSubtree();
 +	String userAttr = userConfig.getUserAttr();
 +	String homeAttr = userConfig.getHomeAttr();
++	int pageSize = userConfig.getPageSize();
 +
 +	try {
 +		Hashtable<String,String> env = new Hashtable<String,String>();
 +
-+		env.put(Context.INITIAL_CONTEXT_FACTORY, INIT_CTX);
++		env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
 +		if (connectionName != null)
 +			env.put(Context.SECURITY_PRINCIPAL, connectionName);
 +		if (connectionPassword != null)
@@ -346,34 +377,59 @@
 +		if (authentication != null)
 +			env.put(Context.SECURITY_AUTHENTICATION, authentication);
 +
-+		DirContext dirContext = new InitialDirContext(env);
++		LdapContext ctx = new InitialLdapContext(env, null);
 +
 +		SearchControls constraints = new SearchControls();
++		String returnAttrs[] = { userAttr, homeAttr };
++		constraints.setReturningAttributes(returnAttrs);
 +		if (searchSubtree) {
 +			constraints.setSearchScope(SearchControls.SUBTREE_SCOPE);
 +		} else {
 +			constraints.setSearchScope(SearchControls.ONELEVEL_SCOPE);
 +		}
-+		NamingEnumeration results = dirContext.search(searchBase, searchFilter, constraints);
-+	        while (results != null && results.hasMore()) {
-+	    	    SearchResult sr = (SearchResult)results.next();
-+	    	    String username = null;
-+	    	    String home = null;
-+	    	    Attributes attr = sr.getAttributes();
-+		    Attribute a = attr.get(homeAttr);
-+		    if (a != null && a.size() == 1)
-+    			   home = (String)a.get();
-+		    a = attr.get(userAttr);
-+		    if ((home != null) && (a != null)) {
-+			    // Add all possible names of this user and corresponding directory
-+			    for (int i = 0; i < a.size(); i++) {
-+				    username = (String)a.get(i);
-+				    if (username != null) {
-+					    homes.put(username, home);
++
++		// Request the paged results control
++		if (pageSize > 0) {
++			Control[] ctls = new Control[]{ new PagedResultsControl(pageSize, Control.NONCRITICAL) };
++			ctx.setRequestControls(ctls);
++		}
++
++		byte[] cookie = null;
++		do {
++			NamingEnumeration results = ctx.search(searchBase, searchFilter, constraints);
++			while (results != null && results.hasMore()) {
++			    SearchResult sr = (SearchResult)results.next();
++			    String username = null;
++			    String home = null;
++			    Attributes attr = sr.getAttributes();
++			    Attribute a = attr.get(homeAttr);
++			    if (a != null && a.size() == 1)
++				   home = (String)a.get();
++			    a = attr.get(userAttr);
++			    if ((home != null) && (a != null)) {
++				    // Add all possible names of this user and corresponding directory
++				    for (int i = 0; i < a.size(); i++) {
++					    username = (String)a.get(i);
++					    if (username != null) {
++						    homes.put(username, home);
++					    }
 +				    }
 +			    }
-+		    }
-+	        }
++			}
++			cookie = null;
++			Control[] controls = ctx.getResponseControls();
++			if (controls != null) {
++				for (int i = 0; i < controls.length; i++) {
++					if (controls[i] instanceof PagedResultsResponseControl) {
++						PagedResultsResponseControl prrc = (PagedResultsResponseControl)controls[i];
++						cookie = prrc.getCookie();
++					}
++				}
++			}
++			if (cookie != null) {
++				ctx.setRequestControls(new Control[]{ new PagedResultsControl(pageSize, cookie, Control.CRITICAL) });
++			}
++		} while ((cookie != null) && (cookie.length != 0));
 +	} catch (Exception e) {
 +	//        e.printStackTrace();
 +	}
