@@ -2,7 +2,7 @@
 #CATALINA_OPTS="-Xmx384M -XX:MaxPermSize=192m -XX:PermSize=128m"
 
 # Start Tomcat with SecurityManager 
-SECURITY_MANAGER="yes"
+#SECURITY_MANAGER="yes"
 
 # Enable SecurityManager debugging
 # WARNING - This will generate many megabytes of output!
