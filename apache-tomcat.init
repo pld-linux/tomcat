@@ -16,21 +16,6 @@
 # Get network config
 . /etc/sysconfig/network
 
-CATALINA_BASE=/var/lib/tomcat
-CATALINA_OPTS="-Xmx384M -XX:MaxPermSize=192m -XX:PermSize=128m -Djava.library.path=/usr/lib64:/usr/lib"
-set_jvm
-
-# Get service config - may override defaults
-[ -f /etc/sysconfig/tomcat ] && . /etc/sysconfig/tomcat
-
-export CATALINA_BASE
-export CATALINA_OPTS
-export JAVA_OPTS
-export JAVA_HOME
-COMMONSDAEMON=$(find-jar commons-daemon)
-TOMCATLIBS=/usr/share/tomcat/bin/bootstrap.jar:$(build-classpath-directory /usr/share/tomcat/lib)
-CLASSPATH=${CLASSPATH:+"$CLASSPATH:"}$COMMONSDAEMON:$TOMCATLIBS
-
 # Check that networking is up.
 if is_yes "${NETWORKING}"; then
 	if [ ! -f /var/lock/subsys/network -a "$1" != stop -a "$1" != status ]; then
@@ -41,19 +26,53 @@ else
 	exit 0
 fi
 
+set_jvm
+
+# Set default options
+CATALINA_OPTS="-Xmx384M -XX:MaxPermSize=192m -XX:PermSize=128m"
+
+# Get service config - may override defaults
+[ -f /etc/sysconfig/tomcat ] && . /etc/sysconfig/tomcat
+
+unset TMPDIR
+unset TMP
+
+COMMONSDAEMON=$(find-jar commons-daemon)
+TOMCATLIBS=/usr/share/tomcat/bin/bootstrap.jar:$(build-classpath-directory /usr/share/tomcat/lib)
+CLASSPATH=${CLASSPATH:+"$CLASSPATH:"}$COMMONSDAEMON:$TOMCATLIBS
+
+CATALINA_HOME=/usr/share/tomcat
+CATALINA_BASE=/var/lib/tomcat
+CATALINA_TMPDIR=/var/lib/tomcat/temp
+
+JSVC_OPTS="-classpath ${CLASSPATH} \
+	-home ${JAVA_HOME} \
+	-pidfile /var/run/tomcat.pid \
+	-outfile /var/log/tomcat/catalina.out \
+	-errfile /var/log/tomcat/catalina.err"
+
+if is_yes "${SECURITY_MANAGER}"; then
+	CATALINA_OPTS="$CATALINA_OPTS \
+		-Djava.security.manager \
+		-Djava.security.policy==${CATALINA_BASE}/conf/catalina.policy"
+	if [ -n "${SECURITY_MANAGER_DEBUG}" ]; then
+		CATALINA_OPTS="$CATALINA_OPTS \
+			-Djava.security.debug=${SECURITY_MANAGER_DEBUG}"
+	fi
+fi
+
 start() {
 	# Check if the service is already running?
 	if [ ! -f /var/lock/subsys/tomcat ]; then
 		msg_starting tomcat
 		busy
 		cd $CATALINA_BASE
-		jsvc -user tomcat \
-			-procname tomcat \
-			-cp $CLASSPATH \
-			-home $JAVA_HOME \
-			-pidfile /var/run/tomcat.pid \
-			-outfile /var/log/tomcat/catalina.out \
-			-errfile /var/log/tomcat/catalina.err \
+		jsvc -user tomcat -procname tomcat \
+			$JSVC_OPTS \
+			-Dcatalina.base=${CATALINA_BASE} \
+			-Dcatalina.home=${CATALINA_HOME} \
+			-Djava.io.tmpdir=${CATALINA_TMPDIR} \
+			-Djava.library.path=/usr/lib64:/usr/lib \
 			$CATALINA_OPTS \
 			org.apache.catalina.startup.Bootstrap
 		[ $? -ne 0 ] && RETVAL=1
@@ -73,12 +92,8 @@ stop() {
 		# Stop daemons.
 		msg_stopping tomcat
 		busy
-		jsvc -user tomcat \
-			-stop \
-			-cp $CLASSPATH \
-			-pidfile /var/run/tomcat.pid \
-			-outfile /var/log/tomcat/catalina.out \
-			-errfile /var/log/tomcat/catalina.err \
+		jsvc -user tomcat -stop \
+			$JSVC_OPTS \
 			org.apache.catalina.startup.Bootstrap
 		[ $? -eq 0 ] && ok || fail
 		rm -f /var/lock/subsys/tomcat
