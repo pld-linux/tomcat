@@ -1,6 +1,12 @@
-### Java runtime options used when the "start", or "run" command is executed.
-# CATALINA_OPTS="-Xmx384M -XX:MaxPermSize=192m -XX:PermSize=128m"
+# Java runtime options used when starting Tomcat
+#CATALINA_OPTS="-Xmx384M -XX:MaxPermSize=192m -XX:PermSize=128m"
 
-### Java runtime options used when the "start", "stop", or "run" command is
-### executed.
-# JAVA_HOME=""
+# Start Tomcat with SecurityManager 
+SECURITY_MANAGER="yes"
+
+# Enable SecurityManager debugging
+# WARNING - This will generate many megabytes of output!
+#SECURITY_MANAGER_DEBUG="all"
+
+# Java Development Kit installation
+#JAVA_HOME=""
