@@ -1,0 +1,13 @@
+--- apache-tomcat-6.0.29-src/conf/catalina.policy~	2010-07-19 15:02:31.000000000 +0200
++++ apache-tomcat-6.0.29-src/conf/catalina.policy	2010-11-19 21:11:45.250112558 +0100
+@@ -52,6 +52,10 @@
+         permission java.security.AllPermission;
+ };
+ 
++// These permissions apply to all shared system extensions
++grant codeBase "file:/usr/share/java/-" {
++        permission java.security.AllPermission;
++};
+ 
+ // ========== CATALINA CODE PERMISSIONS =======================================
+ 
