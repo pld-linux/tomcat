@@ -11,7 +11,7 @@ Summary:	Web server and Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP 
 Summary(pl.UTF-8):	Serwer www i silnik Servlet/JSP będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
 Name:		tomcat
 Version:	6.0.29
-Release:	4
+Release:	5
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
 Source0:	http://www.apache.org/dist/tomcat/tomcat-6/v%{version}/src/apache-%{name}-%{version}-src.tar.gz
@@ -29,6 +29,7 @@ Patch1:		%{name}-extras.xml.patch
 Patch2:		server.xml-URIEncoding-utf8.patch
 Patch3:		%{name}-LDAPUserDatabase.patch
 Patch4:		%{name}-catalina.policy-javadir.patch
+Patch5:		%{name}-userdir.patch
 URL:		http://tomcat.apache.org/
 BuildRequires:	ant >= 1.5.3
 BuildRequires:	ant-trax
@@ -224,6 +225,7 @@ javax.servlet.http, javax.servlet.jsp i java.servlet.jsp.tagext).
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 # we don't need those scripts
 rm bin/*.bat

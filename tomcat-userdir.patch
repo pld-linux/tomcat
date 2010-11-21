@@ -1,0 +1,48 @@
+--- apache-tomcat-6.0.29-src/conf/server.xml~	2010-11-17 17:41:58.451654998 +0100
++++ apache-tomcat-6.0.29-src/conf/server.xml	2010-11-21 15:05:44.259477500 +0100
+@@ -142,6 +142,45 @@
+         <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"  
+                prefix="localhost_access_log." suffix=".txt" pattern="common" resolveHosts="false"/>
+         -->
++	<!--
++		Automatically map a request URI starting with a tilde
++		character ("~") and a username to a directory
++		(commonly named public_html) in that user's home directory
++		on the server.
++	-->
++	<!--
++		Use /etc/passwd file to identify valid users
++	-->
++	<!--
++	<Listener className="org.apache.catalina.startup.UserConfig"
++		directoryName="public_html"
++		userClass="org.apache.catalina.startup.PasswdUserDatabase"/>
++	-->
++	<!--
++		Use all directories found in a specified base directory
++		to be considered "user home" directories
++	-->
++        <!--
++	<Listener className="org.apache.catalina.startup.UserConfig"
++		directoryName="public_html"
++		homeBase="/home/users"
++		userClass="org.apache.catalina.startup.HomesUserDatabase"/>
++	-->
++	<!--
++		Use LDAP search to identify valid users
++	-->
++        <!--
++	<Listener className="org.apache.catalina.startup.UserConfig"
++		directoryName="public_html"
++		connectionURL="ldaps://ldap.example.com/"
++		connectionName="uid=tomcat,ou=people,dc=example,dc=com"
++		connectionPassword="secret"
++		searchBase="ou=People,dc=mim,dc=uw,dc=edu,dc=pl"
++		searchFilter="(objectClass=posixAccount)"
++		searchSubtree="false"
++		pageSize="1000"
++		userClass="org.apache.catalina.startup.LDAPUserDatabase"/>
++	-->
+ 
+       </Host>
+     </Engine>
