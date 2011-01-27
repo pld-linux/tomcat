@@ -133,7 +133,6 @@ case "$1" in
 	;;
   status)
 	status --pidfile /var/run/tomcat.pid tomcat tomcat
-	RETVAL=0
 	;;
   *)
 	msg_usage "$0 {start|stop|restart|try-restart|force-reload|status}"
