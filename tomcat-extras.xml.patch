@@ -1,33 +1,113 @@
---- extras.xml.orig	2010-01-19 14:43:39.000000000 +0100
-+++ extras.xml	2010-02-01 23:03:52.000000000 +0100
-@@ -110,11 +110,6 @@
+--- extras.xml.orig	2011-02-02 20:07:31.000000000 +0100
++++ extras.xml	2011-02-04 20:28:23.759726852 +0100
+@@ -108,44 +108,7 @@
+     <delete dir="${tomcat.extras}"/>
+   </target>
  
-   <target name="commons-logging">
- 
+-  <target name="commons-logging-prepare"
+-          depends="prepare"
+-          description="Prepare to build web services extras package">
+-
 -    <antcall target="downloadfile">
 -      <param name="sourcefile" value="${commons-logging-src.loc}"/>
--      <param name="destfile" value="${tomcat.extras}/logging/commons-logging-src.tar.gz"/>
--      <param name="destdir" value="${tomcat.extras}/logging/"/>
--    </antcall>
-     <gunzip src="${tomcat.extras}/logging/commons-logging-src.tar.gz"
-       dest="${tomcat.extras}/logging/commons-logging-src.tar"/>
-     <untar src="${tomcat.extras}/logging/commons-logging-src.tar"
-@@ -202,18 +197,6 @@
- 
-     <mkdir dir="${tomcat.extras}/webservices"/>
- 
--    <antcall target="downloadfile">
--      <param name="sourcefile" value="${jaxrpc-src.loc}"/>
--      <param name="destfile" value="${tomcat.extras}/webservices/jaxrpc.jar"/>
--      <param name="destdir" value="${tomcat.extras}/webservices/"/>
+-      <param name="destfile" value="${commons-logging-src.tar.gz}"/>
+-      <param name="destdir" value="${commons-logging.home}"/>
 -    </antcall>
 -
 -    <antcall target="downloadfile">
--      <param name="sourcefile" value="${wsdl4j-src.loc}"/>
--      <param name="destfile" value="${tomcat.extras}/webservices/wsdl4j.jar"/>
--      <param name="destdir" value="${tomcat.extras}/webservices/"/>
+-      <param name="sourcefile" value="${avalon-framework.loc}"/>
+-      <param name="destfile" value="${avalon-framework.jar}"/>
+-      <param name="destdir" value="${avalon-framework.home}"/>
 -    </antcall>
 -
+-    <antcall target="downloadfile">
+-      <param name="sourcefile" value="${log4j.loc}"/>
+-      <param name="destfile" value="${log4j.jar}"/>
+-      <param name="destdir" value="${log4j.home}"/>
+-    </antcall>
+-
+-    <antcall target="downloadfile">
+-      <param name="sourcefile" value="${logkit.loc}"/>
+-      <param name="destfile" value="${logkit.jar}"/>
+-      <param name="destdir" value="${logkit.home}"/>
+-    </antcall>
+-
+-    <antcall target="downloadfile">
+-      <param name="sourcefile" value="${servletapi.loc}"/>
+-      <param name="destfile" value="${servletapi.jar}"/>
+-      <param name="destdir" value="${servletapi.home}"/>
+-    </antcall>
+-
+-  </target>
+-
+   <target name="commons-logging"
+-          depends="commons-logging-prepare"
+           description="Build JULI for log4j extras package">
+ 
+     <gunzip src="${commons-logging-src.tar.gz}"
+@@ -236,18 +199,6 @@
+           depends="prepare"
+           description="Prepare to build web services extras package">
+ 
+-    <antcall target="downloadfile">
+-      <param name="sourcefile" value="${jaxrpc-lib.loc}"/>
+-      <param name="destfile" value="${jaxrpc-lib.jar}"/>
+-      <param name="destdir" value="${jaxrpc-lib.home}"/>
+-    </antcall>
+-
+-    <antcall target="downloadfile">
+-      <param name="sourcefile" value="${wsdl4j-lib.loc}"/>
+-      <param name="destfile" value="${wsdl4j-lib.jar}"/>
+-      <param name="destdir" value="${wsdl4j-lib.home}"/>
+-    </antcall>
+-
+     <copy file="${jaxrpc-lib.jar}"
+           tofile="${tomcat.extras}/webservices/jaxrpc.jar" />
+     <copy file="${wsdl4j-lib.jar}"
+@@ -326,25 +277,11 @@
+     </condition>
+   </target>
+ 
+-  <target name="setproxy" depends="proxyflags" if="useproxy">
+-    <taskdef name="setproxy"
+-            classname="org.apache.tools.ant.taskdefs.optional.net.SetProxy" />
+-    <setproxy proxyhost="${proxy.host}" proxyport="${proxy.port}"
+-              proxyuser="${proxy.user}" proxypassword="${proxy.password}" />
+-    <echo message="Using ${proxy.host}:${proxy.port} to download ${sourcefile}"/>
+-  </target>
+-
+   <target name="testexist">
+     <echo message="Testing  for ${destfile}"/>
+     <available file="${destfile}" property="exist"/>
+   </target>
+ 
+-  <target name="downloadfile" unless="exist" depends="setproxy,testexist">
+-    <!-- Download extract the file -->
+-    <mkdir dir="${destdir}" />
+-    <get src="${sourcefile}" dest="${destfile}" />
+-  </target>
+-
+   <!-- Helper target, used to create a md5 checksum file  -->
+   <!-- Requires 'file' as a parameter. -->
+   <target name="md5sum">
+--- extras.xml~	2011-02-04 20:30:36.817322838 +0100
++++ extras.xml	2011-02-04 20:48:43.431125625 +0100
+@@ -195,18 +195,7 @@
+     </antcall>
+   </target>
+ 
+-  <target name="webservices-prepare"
+-          depends="prepare"
+-          description="Prepare to build web services extras package">
+-
+-    <copy file="${jaxrpc-lib.jar}"
+-          tofile="${tomcat.extras}/webservices/jaxrpc.jar" />
+-    <copy file="${wsdl4j-lib.jar}"
+-          tofile="${tomcat.extras}/webservices/wsdl4j.jar" />
+-  </target>
+-
+   <target name="webservices"
+-          depends="webservices-prepare"
+           description="Build web services extras package">
+ 
      <!-- Classpath -->
-     <path id="tomcat.webservices.classpath">
-       <pathelement path="${tomcat.classpath}"/>
