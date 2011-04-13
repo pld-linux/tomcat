@@ -1,8 +1,61 @@
---- build.xml~	2010-06-29 16:33:40.000000000 +0200
-+++ build.xml	2010-07-09 18:26:01.000000000 +0200
-@@ -471,13 +471,6 @@
+--- apache-tomcat-7.0.8-src/build.xml.orig	2011-02-04 13:52:30.000000000 +0100
++++ apache-tomcat-7.0.8-src/build.xml	2011-02-05 13:57:36.775158905 +0100
+@@ -421,51 +421,7 @@
+     
+   </target>
  
-   <target name="deploy" depends="build-only,build-docs,warn.dbcp">
+-  <target name="validate" depends="download-validate" if="${execute.validate}">
+-    <!-- Required so we can cache checkstyle results -->
+-    <mkdir dir="${tomcat.output}/res/checkstyle"/>
+-
+-    <taskdef resource="checkstyletask.properties"
+-             classpath="${checkstyle.jar}" />
+-    <checkstyle config="res/checkstyle/checkstyle.xml">
+-      <fileset dir="." >
+-        <patternset refid="text.files" />
+-        <include name="**/*.bat"/>
+-        <include name="**/*.sh"/>
+-        <exclude name="bin/setenv.*"/>
+-        <exclude name=".*/**"/>
+-        <exclude name="output/**"/>
+-        <exclude name="modules/**"/>
+-        <exclude name="**/*.mdl"/>
+-        <exclude name="**/*_2.xml"/>
+-        <exclude name="res/checkstyle/header-al2.txt"/>
+-        <!-- Exclude auto-generated files -->
+-        <exclude name="java/org/apache/el/parser/ELParser*.java" />
+-        <exclude name="java/org/apache/el/parser/JJTELParserState.java" />
+-        <exclude name="java/org/apache/el/parser/Node.java" />
+-        <exclude name="java/org/apache/el/parser/ParseException.java" />
+-        <exclude name="java/org/apache/el/parser/SimpleCharStream.java" />
+-        <exclude name="java/org/apache/el/parser/Token*.java" />
+-        <!-- Exclude these else Gump runs validate on them -->
+-        <exclude name="**/org/apache/tomcat/dbcp/**"/>
+-        <exclude name="**/tomcat-deps/**"/>
+-      </fileset>
+-    </checkstyle>
+-    <!-- javax package checks -->
+-    <checkstyle config="res/checkstyle/javax-checkstyle.xml">
+-      <fileset dir="java/javax" >
+-        <include name="**/*.java"/>
+-      </fileset>
+-    </checkstyle>
+-    <!-- org package checks -->
+-    <checkstyle config="res/checkstyle/org-checkstyle.xml">
+-      <fileset dir="java/org" >
+-        <include name="**/*.java"/>
+-      </fileset>
+-    </checkstyle>
+-  </target>
+-
+-  <target name="compile" depends="build-prepare,download-compile,validate">
++  <target name="compile" depends="build-prepare">
+ 
+     <!-- Compile internal server components -->
+     <javac srcdir="java" destdir="${tomcat.classes}"
+@@ -744,13 +703,6 @@
+   <target name="deploy" depends="package,build-docs"
+           description="Default. Builds a working Tomcat instance">
  
 -    <copy tofile="${tomcat.build}/bin/tomcat-native.tar.gz"
 -            file="${tomcat-native.tar.gz}" />
@@ -14,3 +67,406 @@
      <!-- Copy scripts -->
      <copy todir="${tomcat.build}/bin">
        <fileset dir="bin">
+@@ -1006,7 +958,7 @@
+ 
+   </target>
+ 
+-  <target name="test-compile" depends="compile,download-test-compile" >
++  <target name="test-compile" depends="compile" >
+     <mkdir dir="${test.classes}"/>
+     <!-- Compile -->
+     <javac srcdir="test" destdir="${test.classes}"
+@@ -1103,52 +1055,10 @@
+     <mkdir dir="${tomcat.extras}/webservices"/>
+   </target>
+ 
+-  <target name="extras-commons-logging-prepare"
+-          depends="extras-prepare"
+-          description="Prepare to build web services extras package">
+-
+-    <antcall target="downloadfile-2">
+-      <param name="sourcefile.1" value="${commons-logging-src.loc.1}"/>
+-      <param name="sourcefile.2" value="${commons-logging-src.loc.2}"/>
+-      <param name="destfile" value="${commons-logging-src.tar.gz}"/>
+-      <param name="destdir" value="${commons-logging.home}"/>
+-    </antcall>
+-
+-    <antcall target="downloadfile">
+-      <param name="sourcefile" value="${avalon-framework.loc}"/>
+-      <param name="destfile" value="${avalon-framework.jar}"/>
+-      <param name="destdir" value="${avalon-framework.home}"/>
+-    </antcall>
+-
+-    <antcall target="downloadfile">
+-      <param name="sourcefile" value="${log4j.loc}"/>
+-      <param name="destfile" value="${log4j.jar}"/>
+-      <param name="destdir" value="${log4j.home}"/>
+-    </antcall>
+-
+-    <antcall target="downloadfile">
+-      <param name="sourcefile" value="${logkit.loc}"/>
+-      <param name="destfile" value="${logkit.jar}"/>
+-      <param name="destdir" value="${logkit.home}"/>
+-    </antcall>
+-
+-    <antcall target="downloadfile">
+-      <param name="sourcefile" value="${servletapi.loc}"/>
+-      <param name="destfile" value="${servletapi.jar}"/>
+-      <param name="destdir" value="${servletapi.home}"/>
+-    </antcall>
+-
+-  </target>
+-
+   <target name="extras-commons-logging"
+-          depends="extras-commons-logging-prepare,compile,build-manifests"
++          depends="extras-prepare,compile,build-manifests"
+           description="Build JULI for log4j extras package">
+ 
+-    <gunzip src="${commons-logging-src.tar.gz}"
+-      dest="${tomcat.extras}/logging/commons-logging-src.tar"/>
+-    <untar src="${tomcat.extras}/logging/commons-logging-src.tar"
+-      dest="${tomcat.extras}/logging/"/>
+-
+     <replace dir="${tomcat.extras}/logging/commons-logging-${commons-logging.version}-src/src/java/org/apache/commons"
+         encoding="ISO-8859-1">
+       <replacefilter token="org.apache.commons"
+@@ -1170,7 +1080,8 @@
+       file="${tomcat.extras}/logging/commons-logging-${commons-logging.version}-src/build.xml" />
+ 
+     <copy todir="${tomcat.extras}/logging/commons-logging-${commons-logging.version}-src">
+-      <fileset file="${avalon-framework.jar}" />
++      <fileset file="${avalon-framework-api.jar}" />
++      <fileset file="${avalon-framework-impl.jar}" />
+       <fileset file="${log4j.jar}" />
+       <fileset file="${logkit.jar}" />
+       <fileset file="${servletapi.jar}" />
+@@ -1250,18 +1161,6 @@
+           depends="extras-prepare"
+           description="Prepare to build web services extras package">
+ 
+-    <antcall target="downloadfile">
+-      <param name="sourcefile" value="${jaxrpc-lib.loc}"/>
+-      <param name="destfile" value="${jaxrpc-lib.jar}"/>
+-      <param name="destdir" value="${jaxrpc-lib.home}"/>
+-    </antcall>
+-
+-    <antcall target="downloadfile">
+-      <param name="sourcefile" value="${wsdl4j-lib.loc}"/>
+-      <param name="destfile" value="${wsdl4j-lib.jar}"/>
+-      <param name="destdir" value="${wsdl4j-lib.home}"/>
+-    </antcall>
+-
+     <copy file="${jaxrpc-lib.jar}"
+           tofile="${tomcat.extras}/webservices/jaxrpc.jar" />
+     <copy file="${wsdl4j-lib.jar}"
+@@ -1368,7 +1267,7 @@
+ 
+   </target>
+ 
+-  <target name="dist-prepare" depends="download-dist">
++  <target name="dist-prepare">
+     <mkdir dir="${tomcat.dist}"/>
+     <mkdir dir="${tomcat.dist}/bin"/>
+     <mkdir dir="${tomcat.dist}/conf"/>
+@@ -2092,301 +1991,7 @@
+           description="Delete the default output folders">
+     <delete dir="${tomcat.output}" />
+   </target>
+-
+     
+-  <!-- ================ Download and dependency building =================== -->
+-
+-  <target name="download-validate"
+-          description="Download components necessary to validate source"
+-          if="${execute.validate}">
+-
+-    <antcall target="downloadzip">
+-      <param name="sourcefile" value="${checkstyle.loc}"/>
+-      <param name="destfile" value="${checkstyle.jar}"/>
+-      <param name="destdir" value="${base.path}"/>
+-    </antcall>
+-
+-  </target>
+-
+-  <target name="download-compile"
+-          description="Download (and build) components necessary to compile" >
+-
+-    <antcall target="downloadfile-2">
+-      <param name="sourcefile.1" value="${tomcat-native.loc.1}"/>
+-      <param name="sourcefile.2" value="${tomcat-native.loc.2}"/>
+-      <param name="destfile" value="${tomcat-native.tar.gz}"/>
+-      <param name="destdir" value="${tomcat-native.home}"/>
+-    </antcall>
+-
+-    <!-- Download Commons Daemon -->
+-    <antcall target="downloadgz-2">
+-      <param name="sourcefile.1" value="${commons-daemon.bin.loc.1}"/>
+-      <param name="sourcefile.2" value="${commons-daemon.bin.loc.2}"/>
+-      <param name="destfile" value="${commons-daemon.jar}"/>
+-    </antcall>
+-
+-    <antcall target="downloadfile-2">
+-      <param name="sourcefile.1" value="${commons-daemon.native.src.loc.1}"/>
+-      <param name="sourcefile.2" value="${commons-daemon.native.src.loc.2}"/>
+-      <param name="destfile" value="${commons-daemon.native.src.tgz}"/>
+-      <param name="destdir" value="${commons-daemon.home}"/>
+-    </antcall>
+-
+-    <!-- Download src and build Tomcat DBCP bundle -->
+-    <antcall target="downloadgz-2">
+-      <param name="sourcefile.1" value="${commons-pool-src.loc.1}"/>
+-      <param name="sourcefile.2" value="${commons-pool-src.loc.2}"/>
+-      <param name="destfile" value="${commons-pool.home}/build.xml" />
+-    </antcall>
+-    <antcall target="downloadgz-2">
+-      <param name="sourcefile.1" value="${commons-dbcp-src.loc.1}"/>
+-      <param name="sourcefile.2" value="${commons-dbcp-src.loc.2}"/>
+-      <param name="destfile" value="${commons-dbcp.home}/build.xml" />
+-    </antcall>
+-    <mkdir dir="${tomcat-dbcp.home}"/>
+-    <condition property="no.build.dbcp">
+-      <and>
+-        <available file="${tomcat-dbcp.jar}"/>
+-        <available file="${tomcat-dbcp-src.jar}"/>
+-      </and>
+-    </condition>
+-    <antcall target="build-tomcat-dbcp" />
+-
+-    <!-- Download JDT (Eclipse compiler) -->
+-    <antcall target="downloadfile-2">
+-      <param name="sourcefile.1" value="${jdt.loc.1}"/>
+-      <param name="sourcefile.2" value="${jdt.loc.2}"/>
+-      <param name="destfile" value="${jdt.jar}"/>
+-      <param name="destdir" value="${jdt.home}"/>
+-    </antcall>
+-  </target>
+-
+-  <target name="download-test-compile"
+-          description="Download additional components for the tests" >
+-
+-    <antcall target="downloadzip">
+-      <param name="sourcefile" value="${junit.loc}"/>
+-      <param name="destfile" value="${junit.jar}"/>
+-      <param name="destdir" value="${base.path}"/>
+-    </antcall>
+-
+-  </target>
+-
+-  <target name="download-dist"
+-          description="Download additional components for a distribution" >
+-
+-    <antcall target="downloadfile-2">
+-      <param name="sourcefile.1" value="${tomcat-native.dll.1}/win32/tcnative-1.dll"/>
+-      <param name="sourcefile.2" value="${tomcat-native.dll.2}/win32/tcnative-1.dll"/>
+-      <param name="destfile" value="${tomcat-native.dll.win32}"/>
+-      <param name="destdir" value="${tomcat-native.home}"/>
+-    </antcall>
+-
+-    <antcall target="downloadfile-2">
+-      <param name="sourcefile.1" value="${tomcat-native.dll.1}/win64/x64/tcnative-1.dll"/>
+-      <param name="sourcefile.2" value="${tomcat-native.dll.2}/win64/x64/tcnative-1.dll"/>
+-      <param name="destfile" value="${tomcat-native.dll.x64}"/>
+-      <param name="destdir" value="${tomcat-native.home}"/>
+-    </antcall>
+-
+-    <antcall target="downloadfile-2">
+-      <param name="sourcefile.1" value="${tomcat-native.dll.1}/win64/ia64/tcnative-1.dll"/>
+-      <param name="sourcefile.2" value="${tomcat-native.dll.2}/win64/ia64/tcnative-1.dll"/>
+-      <param name="destfile" value="${tomcat-native.dll.i64}"/>
+-      <param name="destdir" value="${tomcat-native.home}"/>
+-    </antcall>
+-
+-    <antcall target="downloadzip-2">
+-      <param name="sourcefile.1" value="${commons-daemon.native.win.loc.1}"/>
+-      <param name="sourcefile.2" value="${commons-daemon.native.win.loc.2}"/>
+-      <param name="destfile" value="${commons-daemon.native.win.mgr.exe}"/>
+-      <param name="destdir" value="${commons-daemon.native.win.home}"/>
+-    </antcall>
+-
+-    <antcall target="downloadzip">
+-      <param name="sourcefile" value="${nsis.loc}"/>
+-      <param name="destfile" value="${nsis.exe}"/>
+-      <param name="destdir" value="${nsis.home}/.."/>
+-    </antcall>
+-
+-  </target>
+-
+-
+-  <!-- =============== Targets for dependencies that need to =============== -->
+-  <!-- ================  be built rather than used directly ================ -->
+-
+-  <target name="build-tomcat-dbcp" depends="build-manifests" unless="no.build.dbcp">
+-    <copy todir="${tomcat-dbcp.home}">
+-      <fileset dir="${commons-pool.home}">
+-        <include name="**/*.java" />
+-        <exclude name="**/test/**" />
+-      </fileset>
+-      <fileset dir="${commons-dbcp.home}">
+-        <include name="**/*.java" />
+-        <exclude name="**/test/**" />
+-        <exclude name="**/managed/**" />
+-      </fileset>
+-    </copy>
+-    <replace dir="${tomcat-dbcp.home}/src/java/org/apache/commons"
+-        encoding="ISO-8859-1">
+-      <replacefilter token="org.apache.commons"
+-            value="org.apache.tomcat.dbcp" />
+-    </replace>
+-    <replace dir="${tomcat-dbcp.home}/src/java/org/apache/commons/pool/impl"
+-        encoding="ISO-8859-1">
+-      <replacefilter token="enum"
+-            value="enumeration" />
+-    </replace>
+-
+-    <mkdir dir="${tomcat-dbcp.home}/src/java/org/apache/tomcat/dbcp" />
+-    <move todir="${tomcat-dbcp.home}/src/java/org/apache/tomcat/dbcp">
+-      <fileset dir="${tomcat-dbcp.home}/src/java/org/apache/commons" />
+-    </move>
+-    <mkdir dir="${tomcat-dbcp.home}/classes"/>
+-    <javac destdir="${tomcat-dbcp.home}/classes"
+-           optimize="off"
+-           debug="${compile.debug}"
+-           deprecation="${compile.deprecation}"
+-           source="${compile.source}"
+-           target="${compile.target}"
+-           sourcepath="${tomcat-dbcp.home}/src/java"
+-           srcdir="${tomcat-dbcp.home}/src/java"
+-           encoding="ISO-8859-1"
+-           includeantruntime="false">
+-      <include name="**" />
+-    </javac>
+-    <jarIt jarfile="${tomcat-dbcp.jar}"
+-      filesDir="${tomcat-dbcp.home}/classes"
+-      filesId="files.tomcat-dbcp" />
+-    <jarIt jarfile="${tomcat-dbcp-src.jar}"
+-      filesDir="${tomcat-dbcp.home}/src/java"
+-      filesId="files.tomcat-dbcp" />
+-  </target>
+-
+-  <!-- =============== Utility Targets to support downloads ================ -->
+-
+-  <target name="proxyflags">
+-    <!-- check proxy parameters. -->
+-    <condition property="useproxy">
+-      <equals arg1="${proxy.use}" arg2="on" />
+-    </condition>
+-  </target>
+-
+-  <target name="setproxy" depends="proxyflags" if="useproxy">
+-    <taskdef name="setproxy"
+-            classname="org.apache.tools.ant.taskdefs.optional.net.SetProxy" />
+-    <setproxy proxyhost="${proxy.host}" proxyport="${proxy.port}"
+-              proxyuser="${proxy.user}" proxypassword="${proxy.password}" />
+-    <echo message="Using ${proxy.host}:${proxy.port} to download ${sourcefile}"/>
+-  </target>
+-
+-  <target name="testexist">
+-    <echo message="Testing  for ${destfile}"/>
+-    <available file="${destfile}" property="exist"/>
+-  </target>
+-
+-  <target name="downloadgz" unless="exist" depends="setproxy,testexist">
+-    <!-- Download and extract the package -->
+-    <get src="${sourcefile}" dest="${base.path}/file.tar.gz" />
+-    <gunzip src="${base.path}/file.tar.gz" dest="${base.path}/file.tar"/>
+-    <untar src="${base.path}/file.tar" dest="${base.path}"/>
+-    <delete file="${base.path}/file.tar"/>
+-    <delete file="${base.path}/file.tar.gz"/>
+-  </target>
+-
+-  <target name="downloadgz-2" unless="exist" depends="setproxy,testexist">
+-    <!-- Download and extract the package from the two alternative locations -->
+-    <delete file="${base.path}/file.tar" quiet="true" />
+-    <delete file="${base.path}/file.tar.gz" quiet="true" />
+-    <antcall target="trydownload">
+-      <param name="sourcefile" value="${sourcefile.1}" />
+-      <param name="destfile" value="${base.path}/file.tar.gz" />
+-    </antcall>
+-    <antcall target="trydownload">
+-      <param name="sourcefile" value="${sourcefile.2}" />
+-      <param name="destfile" value="${base.path}/file.tar.gz" />
+-    </antcall>
+-    <gunzip src="${base.path}/file.tar.gz" dest="${base.path}/file.tar"/>
+-    <untar src="${base.path}/file.tar" dest="${base.path}"/>
+-    <delete file="${base.path}/file.tar"/>
+-    <delete file="${base.path}/file.tar.gz"/>
+-  </target>
+-
+-  <target name="downloadzip" unless="exist" depends="setproxy,testexist">
+-    <!-- Download and extract the package -->
+-    <get src="${sourcefile}" dest="${base.path}/file.zip" />
+-    <mkdir dir="${destdir}" />
+-    <unzip src="${base.path}/file.zip" dest="${destdir}"/>
+-    <delete file="${base.path}/file.zip"/>
+-  </target>
+-
+-  <target name="downloadzip-2" unless="exist" depends="testexist">
+-    <!-- Download and extract the package from the two alternative locations -->
+-    <delete file="${base.path}/file.zip" quiet="true" />
+-    <antcall target="trydownload">
+-      <param name="sourcefile" value="${sourcefile.1}" />
+-      <param name="destfile" value="${base.path}/file.zip" />
+-    </antcall>
+-    <antcall target="trydownload">
+-      <param name="sourcefile" value="${sourcefile.2}" />
+-      <param name="destfile" value="${base.path}/file.zip" />
+-    </antcall>
+-    <mkdir dir="${destdir}" />
+-    <unzip src="${base.path}/file.zip" dest="${destdir}"/>
+-    <delete file="${base.path}/file.zip"/>
+-  </target>
+-
+-  <target name="downloadfile" unless="exist" depends="setproxy,testexist">
+-    <!-- Download extract the file -->
+-    <mkdir dir="${destdir}" />
+-    <get src="${sourcefile}" dest="${destfile}" />
+-  </target>
+-
+-  <target name="downloadfile-2" unless="exist" depends="testexist">
+-    <!-- Download the file from the two alternative locations -->
+-    <mkdir dir="${destdir}" />
+-
+-    <antcall target="trydownload">
+-      <param name="sourcefile" value="${sourcefile.1}" />
+-    </antcall>
+-
+-    <antcall target="trydownload">
+-      <param name="sourcefile" value="${sourcefile.2}" />
+-    </antcall>
+-
+-    <available file="${destfile}" property="exist"/>
+-    <fail unless="exist" message="Failed to download [${destfile}]. All download sources are unavailable." />
+-  </target>
+-
+-  <target name="trydownload.check" depends="setproxy">
+-    <condition property="trydownload.run">
+-      <and>
+-        <not>
+-          <available file="${destfile}" />
+-        </not>
+-        <http url="${sourcefile}" />
+-      </and>
+-    </condition>
+-  </target>
+-
+-  <target name="trydownload" if="trydownload.run" depends="trydownload.check">
+-    <!-- Downloads a file if not yet downloaded and the source URL is available -->
+-    <get src="${sourcefile}" dest="${destfile}" />
+-  </target>
+-
+-  <!-- ============================ IDE Support ============================ -->
+-
+-  <target name="ide-eclipse" depends="deploy, extras-webservices-prepare"
+-          description="Prepares the source tree to be built in Eclipse">
+-
+-    <!-- Copy the sample project files into the root directory -->
+-    <copy file="${tomcat.home}/res/ide-support/eclipse/eclipse.project" tofile="${tomcat.home}/.project"/>
+-    <copy file="${tomcat.home}/res/ide-support/eclipse/eclipse.classpath" tofile="${tomcat.home}/.classpath"/>
+-
+-    <echo>Eclipse project files created.
+-Read the Building page on the Apache Tomcat documentation site for details on how to configure your Eclipse workplace.</echo>
+-  </target>
+-
+   <!-- ======================= Macros, Taskdefs etc ======================== -->
+ 
+   <macrodef name="jarIt" description="utility macro for standard JAR packaging">

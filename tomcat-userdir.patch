@@ -1,6 +1,6 @@
 --- apache-tomcat-6.0.29-src/conf/server.xml~	2010-11-17 17:41:58.451654998 +0100
 +++ apache-tomcat-6.0.29-src/conf/server.xml	2010-11-21 15:05:44.259477500 +0100
-@@ -142,6 +142,45 @@
+@@ -142,6 +142,46 @@
          <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"  
                 prefix="localhost_access_log." suffix=".txt" pattern="common" resolveHosts="false"/>
          -->
@@ -30,6 +30,7 @@
 +	-->
 +	<!--
 +		Use LDAP search to identify valid users
++		You may need to add ldap server's CA cert to global java keystore
 +	-->
 +        <!--
 +	<Listener className="org.apache.catalina.startup.UserConfig"

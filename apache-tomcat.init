@@ -47,9 +47,7 @@ CATALINA_TMPDIR=/var/lib/tomcat/temp
 
 JSVC_OPTS="-classpath ${CLASSPATH} \
 	-home ${JAVA_HOME} \
-	-pidfile /var/run/tomcat.pid \
-	-outfile /var/log/tomcat/catalina.out \
-	-errfile /var/log/tomcat/catalina.err"
+	-pidfile /var/run/tomcat.pid"
 
 if is_yes "${SECURITY_MANAGER}"; then
 	CATALINA_OPTS="$CATALINA_OPTS \
@@ -73,8 +71,10 @@ start() {
 			-Dcatalina.home=${CATALINA_HOME} \
 			-Djava.io.tmpdir=${CATALINA_TMPDIR} \
 			-Djava.library.path=/usr/lib64:/usr/lib \
+			-Djava.util.logging.config.file="${CATALINA_BASE}/conf/logging.properties" \
+			-Djava.util.logging.manager="org.apache.juli.ClassLoaderLogManager" \
 			$CATALINA_OPTS \
-			org.apache.catalina.startup.Bootstrap
+			org.apache.catalina.startup.Bootstrap >> /var/log/tomcat/catalina.out 2>&1
 		[ $? -ne 0 ] && RETVAL=1
 		if [ $RETVAL -eq 0 ]; then
 		   	ok

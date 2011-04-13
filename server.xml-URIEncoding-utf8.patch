@@ -7,9 +7,9 @@ is in a clear violation of the relevant RFCs. To fix this problem, add the
 following URIEncoding attribute to the connector definition in
 $TOMCAT_HOME/conf/server.xml.
 
---- apache-tomcat-6.0.28-src/conf/server.xml~	2010-06-29 17:33:40.000000000 +0300
-+++ apache-tomcat-6.0.28-src/conf/server.xml	2010-07-20 09:12:35.045149469 +0300
-@@ -68,12 +68,14 @@
+--- a/conf/server.xml.orig	2010-06-13 16:55:18.000000000 +0200
++++ b/conf/server.xml	2010-07-20 13:51:33.000000000 +0200
+@@ -66,12 +66,14 @@
      -->
      <Connector port="8080" protocol="HTTP/1.1" 
                 connectionTimeout="20000" 
@@ -24,7 +24,7 @@ $TOMCAT_HOME/conf/server.xml.
                 redirectPort="8443" />
      -->           
      <!-- Define a SSL HTTP/1.1 Connector on port 8443
-@@ -82,12 +84,12 @@
+@@ -80,12 +82,12 @@
           described in the APR documentation -->
      <!--
      <Connector port="8443" protocol="HTTP/1.1" SSLEnabled="true"

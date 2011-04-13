@@ -1,21 +1,23 @@
 
 # Conditional build:
 %bcond_without	javadoc		# skip building javadocs
-%bcond_without	webservices	# skip building webservices
 
-%define		jspapiver	2.1
-%define		servletapiver	2.5
+%define		jspapiver	2.2
+%define		servletapiver	3.0
+
+# Java Commons Logging version. Must be >= 1.1.
+%define		jclver	1.1.1
 
 %include	/usr/lib/rpm/macros.java
 Summary:	Web server and Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP %{jspapiver} API
 Summary(pl.UTF-8):	Serwer www i silnik Servlet/JSP będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
 Name:		tomcat
-Version:	6.0.32
+Version:	7.0.11
 Release:	1
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
-Source0:	http://www.apache.org/dist/tomcat/tomcat-6/v%{version}/src/apache-%{name}-%{version}-src.tar.gz
-# Source0-md5:	19a1eaa9c9938b520d3c360d8cf4af22
+Source0:	http://www.apache.org/dist/tomcat/tomcat-7/v%{version}/src/apache-%{name}-%{version}-src.tar.gz
+# Source0-md5:	b23694415d55a8b289f701b239d22f1d
 Source1:	apache-%{name}.init
 Source2:	apache-%{name}.sysconfig
 Source3:	%{name}-build.properties
@@ -24,29 +26,33 @@ Source11:	%{name}-context-docs.xml
 Source12:	%{name}-context-manager.xml
 Source13:	%{name}-context-host-manager.xml
 Source14:	%{name}-context-examples.xml
+Source100:	http://www.apache.org/dist/commons/logging/source/commons-logging-%{jclver}-src.tar.gz
+# Source100-md5:	e5cfa8cca13152d7545fde6b1783c60a
 Patch0:		%{name}-build.xml.patch
-Patch1:		%{name}-extras.xml.patch
-Patch2:		server.xml-URIEncoding-utf8.patch
-Patch3:		%{name}-LDAPUserDatabase.patch
-Patch4:		%{name}-catalina.policy-javadir.patch
-Patch5:		%{name}-userdir.patch
+Patch1:		server.xml-URIEncoding-utf8.patch
+Patch2:		%{name}-LDAPUserDatabase.patch
+Patch3:		%{name}-catalina.policy-javadir.patch
+Patch4:		%{name}-userdir.patch
+Patch100:	jcl-build.xml.patch
 URL:		http://tomcat.apache.org/
 BuildRequires:	ant >= 1.5.3
 BuildRequires:	ant-trax
+BuildRequires:	eclipse-jdt >= 3.2
+BuildRequires:	java(JSR109)
+BuildRequires:	java-avalon-logkit
 BuildRequires:	java-commons-daemon >= 1.0
 BuildRequires:	java-commons-dbcp-tomcat5 >= 0:1.1
 BuildRequires:	java-commons-pool-tomcat5
-BuildRequires:	java-eclipse-jdt >= 3.2
-%if %{with webservices}
-BuildRequires:	java(JSR109)
 BuildRequires:	java-geronimo-spec-jaxrpc
-%endif
 BuildRequires:	java-jdbc-mysql
+BuildRequires:	java-junit
+BuildRequires:	java-log4j
 BuildRequires:	java-mail
 BuildRequires:	jdk
 BuildRequires:	jpackage-utils
 BuildRequires:	rpm-javaprov
-BuildRequires:	rpmbuild(macros) >= 1.300
+BuildRequires:	rpmbuild(macros) >= 1.553
+BuildRequires:	sed >= 4.0
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
@@ -92,7 +98,6 @@ Sun under the Java Community Process.
 Tomcat is developed in an open and participatory environment and
 released under the Apache Software License. Tomcat is intended to be a
 collaboration of the best-of-breed developers from around the world.
-We invite you to participate in this open development project.
 
 %description -l pl.UTF-8
 Tomcat to kontener serwletowy używany przez oficjalną implementację
@@ -153,6 +158,7 @@ Przykładowe aplikacje dla Tomcata.
 
 %package webservices
 Summary:	Web Services support (JSR 109)
+Summary(pl.UTF-8):	Wsparcie dla Web Services (JSR 109)
 Group:		Libraries/Java
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	java(JSR109)
@@ -162,8 +168,24 @@ Requires:	java-geronimo-spec-jaxrpc
 Factories for JSR 109 which may be used to resolve web services
 references.
 
+%description webservices -l pl.UTF-8
+Wsparcie dla JSR 109 (Web Services).
+
+%package jmx
+Summary:	JMX remote interface for Tomcat
+Summary(pl.UTF-8):	Zdalny interfejs JMX dla Tomcata
+Group:		Libraries/Java
+Requires:	%{name} = %{epoch}:%{version}-%{release}
+
+%description jmx
+JMX remote interface for Tomcat.
+
+%description jmx -l pl.UTF-8
+Zdalny interfejs JMX dla Tomcata.
+
 %package -n java-tomcat-catalina
-Summary:	Tomcat's servlet container
+Summary:	Tomcat's servlet engine
+Summary(pl.UTF-8):	Silnik servletów dla Tomcata.
 Group:		Libraries/Java
 Requires:	jpackage-utils
 
@@ -171,8 +193,12 @@ Requires:	jpackage-utils
 Catalina is Tomcat's servlet container. Catalina implements Sun
 Microsystems' specifications for servlet and JavaServer Pages (JSP).
 
+%description -n java-tomcat-catalina -l pl.UTF-8
+Bibliotek Javy zawierające silnik servletów i JSP tomcata.
+
 %package -n java-tomcat-coyote
 Summary:	Tomcat HTTP connector
+Summary(pl.UTF-8):	Interfejs HTTP dla Tomcata
 Group:		Libraries/Java
 Requires:	jpackage-utils
 
@@ -182,6 +208,9 @@ protocol for the web server or application container. Coyote listens
 for incoming connections on a specific TCP port on the server and
 forwards the request to the Tomcat Engine to process the request and
 send back a response to the requesting client.
+
+%description -n java-tomcat-coyote -l pl.UTF-8
+Biblioteki Javy zawierające serwer HTTP 1.1 dla Tomcata.
 
 %package -n java-tomcat-jasper
 Summary:	JSP compiler
@@ -208,6 +237,7 @@ Provides:	java(jsp) = %{jspapiver}
 Provides:	java(servlet) = %{servletapiver}
 Obsoletes:	jakarta-servletapi5
 Obsoletes:	java-servletapi5
+Obsoletes:	jakarta-servletapi5
 
 %description -n java-servletapi
 Implementation classes of the Java Servlet and JSP APIs (packages
@@ -219,38 +249,56 @@ Implementacje klas API Java Servlet i JSP (pakiety javax.servlet,
 javax.servlet.http, javax.servlet.jsp i java.servlet.jsp.tagext).
 
 %prep
-%setup -q -n apache-%{name}-%{version}-src
-%patch0 -p0
-%patch1 -p0
+%setup -q -a100 -n apache-%{name}-%{version}-src
+%patch0 -p1
+%patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
-%patch5 -p1
+
+# Prepare java-commmons-logging sources
+mkdir -p output/extras/logging
+mv commons-logging-%{jclver}-src output/extras/logging
+cd output/extras/logging/commons-logging-%{jclver}-src
+%undos build.xml
+%patch100 -p1
+cd -
 
 # we don't need those scripts
 rm bin/*.bat
 rm bin/{startup,shutdown}.sh
 
 cp -a %{SOURCE3} build.properties
+cat >>build.properties <<EOF
+
+log4j.jar=%(find-jar log4j)
+log4j12.jar=%(find-jar log4j)
+junit.jar=%(find-jar junit)
+logkit.jar=%(find-jar avalon-logkit)
+avalon-framework-impl.jar=%(find-jar avalon-framework-impl.jar)
+avalon-framework-api.jar=%(find-jar avalon-framework-api.jar)
+servletapi.jar=$(pwd)/output/build/lib/servlet-api.jar
+EOF
 
 %build
-TOPDIR=$(pwd)
+export LC_ALL=en_US
 
+# Base package
 %ant \
 	-Drpm.javadir=%{_javadir} \
 	-Drpm.libdir=%{_libdir}
 
-%if %{with javadoc}
-%ant -f dist.xml dist-javadoc
-%endif
-
-%if %{with webservices}
+# Extras
 mkdir -p output/extras/webservices
 
 ln -sf %{_javadir}/geronimo-spec-jaxrpc.jar output/extras/webservices/jaxrpc.jar
 ln -sf %{_javadir}/jsr109.jar output/extras/webservices/wsdl4j.jar
 
-%ant -f extras.xml webservices
+%ant -Dcommons-logging-version=%{jclver} extras
+
+# Javadoc
+%if %{with javadoc}
+%ant javadoc
 %endif
 
 %install
@@ -311,8 +359,10 @@ install -d $RPM_BUILD_ROOT%{_javadir}
 mv $TOMCATDIR/lib/jasper*.jar $RPM_BUILD_ROOT%{_javadir}
 mv $TOMCATDIR/lib/jsp-api.jar $RPM_BUILD_ROOT%{_javadir}/jsp-api-%{jspapiver}.jar
 mv $TOMCATDIR/lib/servlet-api.jar $RPM_BUILD_ROOT%{_javadir}/servlet-api-%{servletapiver}.jar
-mv $TOMCATDIR/lib/catalina.jar $RPM_BUILD_ROOT%{_javadir}/tomcat6-catalina.jar
-mv $TOMCATDIR/lib/tomcat-coyote.jar $RPM_BUILD_ROOT%{_javadir}/tomcat6-coyote.jar
+mv $TOMCATDIR/lib/catalina.jar $RPM_BUILD_ROOT%{_javadir}/tomcat-catalina.jar
+mv $TOMCATDIR/lib/tomcat-coyote.jar $RPM_BUILD_ROOT%{_javadir}/tomcat-coyote.jar
+mv $TOMCATDIR/lib/tomcat-util.jar $RPM_BUILD_ROOT%{_javadir}/tomcat-util.jar
+mv $TOMCATDIR/lib/tomcat-api.jar $RPM_BUILD_ROOT%{_javadir}/tomcat-api.jar
 
 ln -s jsp-api-%{jspapiver}.jar $RPM_BUILD_ROOT%{_javadir}/jsp-api.jar
 ln -s servlet-api-%{servletapiver}.jar $RPM_BUILD_ROOT%{_javadir}/servlet-api.jar
@@ -324,15 +374,21 @@ ln -sf %{_javadir}/jasper.jar $TOMCATDIR/lib
 ln -sf %{_javadir}/jsp-api-%{jspapiver}.jar $TOMCATDIR/lib/jsp-api.jar
 ln -sf %{_javadir}/servlet-api-%{servletapiver}.jar $TOMCATDIR/lib/servlet-api.jar
 
-ln -sf %{_javadir}/tomcat6-catalina.jar $TOMCATDIR/lib/catalina.jar
-ln -sf %{_javadir}/tomcat6-coyote.jar $TOMCATDIR/lib/tomcat-coyote.jar
+ln -sf %{_javadir}/tomcat-catalina.jar $TOMCATDIR/lib/catalina.jar
+ln -sf %{_javadir}/tomcat-util.jar $TOMCATDIR/lib/util.jar
+ln -sf %{_javadir}/tomcat-api.jar $TOMCATDIR/lib/api.jar
 
-%if %{with webservices}
-install ../extras/catalina-ws.jar $TOMCATDIR/lib/catalina-ws.jar
+ln -sf %{_javadir}/tomcat-coyote.jar $TOMCATDIR/lib/tomcat-coyote.jar
+
+cp -a ../extras/catalina-ws.jar $TOMCATDIR/lib/catalina-ws.jar
+cp -a ../extras/catalina-jmx-remote.jar $TOMCATDIR/lib/catalina-jmx-remote.jar
+cp -a ../extras/tomcat-juli-adapters.jar $RPM_BUILD_ROOT%{_javadir}/tomcat-juli-adapters.jar
+cp -a ../extras/tomcat-juli.jar $RPM_BUILD_ROOT%{_javadir}/tomcat-juli.jar
+ln -sf %{_javadir}/tomcat-juli-adapters.jar $TOMCATDIR/lib/juli-adapters.jar
+ln -sf %{_javadir}/tomcat-juli.jar $TOMCATDIR/lib/juli.jar
 
 ln -s %{_javadir}/geronimo-spec-jaxrpc.jar $TOMCATDIR/lib/jaxrpc.jar
 ln -s %{_javadir}/jsr109.jar $TOMCATDIR/lib/jsr109.jar
-%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -361,7 +417,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc KEYS RELEASE-NOTES RELEASE-PLAN-6.0.txt RUNNING.txt
+%doc KEYS RELEASE-NOTES TOMCAT-7-RELEASE-PLAN.txt
 %attr(754,root,root) /etc/rc.d/init.d/tomcat
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/tomcat
 %{_sysconfdir}/tomcat
@@ -373,6 +429,7 @@ fi
 %{_tomcatdir}/bin/*.jar
 %dir %{_tomcatdir}/lib
 %{_tomcatdir}/lib/annotations-api.jar
+%{_tomcatdir}/lib/api.jar
 %{_tomcatdir}/lib/catalina-ant.jar
 %{_tomcatdir}/lib/catalina-ha.jar
 %{_tomcatdir}/lib/catalina.jar
@@ -383,6 +440,8 @@ fi
 %{_tomcatdir}/lib/jasper-el.jar
 %{_tomcatdir}/lib/jasper.jar
 %{_tomcatdir}/lib/jsp-api.jar
+%{_tomcatdir}/lib/juli-adapters.jar
+%{_tomcatdir}/lib/juli.jar
 %{_tomcatdir}/lib/mail.jar
 %{_tomcatdir}/lib/mysql-connector-java.jar
 %{_tomcatdir}/lib/org.eclipse.jdt.core.jar
@@ -391,6 +450,7 @@ fi
 %{_tomcatdir}/lib/tomcat-i18n-es.jar
 %{_tomcatdir}/lib/tomcat-i18n-fr.jar
 %{_tomcatdir}/lib/tomcat-i18n-ja.jar
+%{_tomcatdir}/lib/util.jar
 
 %dir %{_tomcatdir}/webapps
 
@@ -417,31 +477,33 @@ fi
 
 %files webapp-docs
 %defattr(644,root,root,755)
-%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/docs.xml
+%config(noreplace,missingok) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/docs.xml
 %{_tomcatdir}/webapps/docs
 
 %files webapp-manager
 %defattr(644,root,root,755)
-%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/manager.xml
+%config(noreplace,missingok) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/manager.xml
 %{_tomcatdir}/webapps/manager
 
 %files webapp-host-manager
 %defattr(644,root,root,755)
-%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/host-manager.xml
+%config(noreplace,missingok) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/host-manager.xml
 %{_tomcatdir}/webapps/host-manager
 
 %files webapp-examples
 %defattr(644,root,root,755)
-%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/examples.xml
+%config(noreplace,missingok) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/examples.xml
 %{_tomcatdir}/webapps/examples
 
-%if %{with webservices}
 %files webservices
 %defattr(644,root,root,755)
 %{_tomcatdir}/lib/catalina-ws.jar
 %{_tomcatdir}/lib/jsr109.jar
 %{_tomcatdir}/lib/jaxrpc.jar
-%endif
+
+%files jmx
+%defattr(644,root,root,755)
+%{_tomcatdir}/lib/catalina-jmx-remote.jar
 
 %files -n java-tomcat-jasper
 %defattr(644,root,root,755)
@@ -450,11 +512,15 @@ fi
 
 %files -n java-tomcat-catalina
 %defattr(644,root,root,755)
-%{_javadir}/tomcat6-catalina.jar
+%{_javadir}/tomcat-api.jar
+%{_javadir}/tomcat-catalina.jar
+%{_javadir}/tomcat-juli-adapters.jar
+%{_javadir}/tomcat-juli.jar
+%{_javadir}/tomcat-util.jar
 
 %files -n java-tomcat-coyote
 %defattr(644,root,root,755)
-%{_javadir}/tomcat6-coyote.jar
+%{_javadir}/tomcat-coyote.jar
 
 %files -n java-servletapi
 %defattr(644,root,root,755)
