@@ -12,12 +12,12 @@
 Summary:	Web server and Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP %{jspapiver} API
 Summary(pl.UTF-8):	Serwer www i silnik Servlet/JSP będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
 Name:		tomcat
-Version:	7.0.12
+Version:	7.0.16
 Release:	1
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
 Source0:	http://www.apache.org/dist/tomcat/tomcat-7/v%{version}/src/apache-%{name}-%{version}-src.tar.gz
-# Source0-md5:	edfd253c21b51ccadce8ec05be5e61fb
+# Source0-md5:	71740312baa57ebe4d9ffef2b5d7b10d
 Source1:	apache-%{name}.init
 Source2:	apache-%{name}.sysconfig
 Source3:	%{name}-build.properties
@@ -417,7 +417,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc KEYS RELEASE-NOTES TOMCAT-7-RELEASE-PLAN.txt
+%doc KEYS RELEASE-NOTES
 %attr(754,root,root) /etc/rc.d/init.d/tomcat
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/tomcat
 %{_sysconfdir}/tomcat
