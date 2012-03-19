@@ -1,30 +1,24 @@
-Setup URIEncoding="UTF-8" to use unversal URI encoding.
-
-http://wiki.hudson-ci.org/display/HUDSON/Tomcat
-
-Some versions of Tomcat (such as 5.0.28) uses iso-8859-1 to decode URLs, which
-is in a clear violation of the relevant RFCs. To fix this problem, add the
-following URIEncoding attribute to the connector definition in
-$TOMCAT_HOME/conf/server.xml.
-
---- a/conf/server.xml.orig	2010-06-13 16:55:18.000000000 +0200
-+++ b/conf/server.xml	2010-07-20 13:51:33.000000000 +0200
-@@ -66,12 +66,14 @@
+--- apache-tomcat-7.0.26-src/conf/server.xml	2012-02-17 15:15:30.000000000 +0100
++++ apache-tomcat-7.0.26-src.new/conf/server.xml	2012-03-19 10:08:10.806085375 +0100
+@@ -68,13 +68,15 @@
+          Define a non-SSL HTTP/1.1 Connector on port 8080
      -->
-     <Connector port="8080" protocol="HTTP/1.1" 
-                connectionTimeout="20000" 
-+               URIEncoding="UTF-8"
+     <Connector port="8080" protocol="HTTP/1.1"
+-               connectionTimeout="20000"
++	       connectionTimeout="20000"
++	       URIEncoding="UTF-8"
                 redirectPort="8443" />
      <!-- A "Connector" using the shared thread pool-->
      <!--
      <Connector executor="tomcatThreadPool"
-                port="8080" protocol="HTTP/1.1" 
-                connectionTimeout="20000" 
-+               URIEncoding="UTF-8"
+                port="8080" protocol="HTTP/1.1"
+-               connectionTimeout="20000"
++	       connectionTimeout="20000"
++	       URIEncoding="UTF-8"
                 redirectPort="8443" />
-     -->           
+     -->
      <!-- Define a SSL HTTP/1.1 Connector on port 8443
-@@ -80,12 +82,12 @@
+@@ -83,12 +85,12 @@
           described in the APR documentation -->
      <!--
      <Connector port="8443" protocol="HTTP/1.1" SSLEnabled="true"
