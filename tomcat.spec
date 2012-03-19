@@ -12,12 +12,12 @@
 Summary:	Web server and Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP %{jspapiver} API
 Summary(pl.UTF-8):	Serwer www i silnik Servlet/JSP będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
 Name:		tomcat
-Version:	7.0.22
+Version:	7.0.26
 Release:	1
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
 Source0:	http://www.apache.org/dist/tomcat/tomcat-7/v%{version}/src/apache-%{name}-%{version}-src.tar.gz
-# Source0-md5:	878bc216d86ce803f3bbc65fd40eb96c
+# Source0-md5:	eb8e7192b02b6031be6fc23afea2431f
 Source1:	apache-%{name}.init
 Source2:	apache-%{name}.sysconfig
 Source3:	%{name}-build.properties
@@ -236,8 +236,8 @@ Group:		Libraries/Java
 Provides:	java(jsp) = %{jspapiver}
 Provides:	java(servlet) = %{servletapiver}
 Obsoletes:	jakarta-servletapi5
-Obsoletes:	java-servletapi5
 Obsoletes:	jakarta-servletapi5
+Obsoletes:	java-servletapi5
 
 %description -n java-servletapi
 Implementation classes of the Java Servlet and JSP APIs (packages
