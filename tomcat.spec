@@ -62,14 +62,14 @@ Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
 Requires:	java(jaxp_parser_impl)
 Requires:	java(jndi) >= 1.2.1
-Requires:	java-%{name}-catalina = %{epoch}:%{version}-%{release}
-Requires:	java-%{name}-coyote = %{epoch}:%{version}-%{release}
-Requires:	java-%{name}-jasper = %{epoch}:%{version}-%{release}
+Requires:	java-%{name}-catalina = %{version}-%{release}
+Requires:	java-%{name}-coyote = %{version}-%{release}
+Requires:	java-%{name}-jasper = %{version}-%{release}
 Requires:	java-commons-dbcp-tomcat5 >= 0:1.1
 Requires:	java-commons-pool-tomcat5
 Requires:	java-jdbc-mysql
 Requires:	java-mail
-Requires:	java-servletapi = %{epoch}:%{version}-%{release}
+Requires:	java-servletapi = %{version}-%{release}
 Requires:	jpackage-utils
 Requires:	jre >= 1.2
 Requires:	jsvc
@@ -123,7 +123,7 @@ Dokumentacja do Tomcata - kontenera Servlet/JSP.
 Summary:	The Apache Tomcat Servlet/JSP application manager
 Summary(pl.UTF-8):	Zarządca aplikacji w Tomcacie
 Group:		Networking/Daemons/Java/Servlets
-Requires:	%{name} = %{epoch}:%{version}-%{release}
+Requires:	%{name} = %{version}-%{release}
 
 %description webapp-manager
 The Apache Tomcat Servlet/JSP application manager.
@@ -135,7 +135,7 @@ Zarządca aplikacji w Tomcacie.
 Summary:	The Apache Tomcat Servlet/JSP virtual hosts manager
 Summary(pl.UTF-8):	Zarządca wirtualnych hostów w Tomcacie
 Group:		Networking/Daemons/Java/Servlets
-Requires:	%{name} = %{epoch}:%{version}-%{release}
+Requires:	%{name} = %{version}-%{release}
 Obsoletes:	tomcat-admin
 
 %description webapp-host-manager
@@ -148,7 +148,7 @@ Zarządca wirtualnych hostów w Tomcacie.
 Summary:	The Apache Tomcat Servlet/JSP example applications
 Summary(pl.UTF-8):	Przykładowe aplikacje dla Tomcata
 Group:		Networking/Daemons/Java/Servlets
-Requires:	%{name} = %{epoch}:%{version}-%{release}
+Requires:	%{name} = %{version}-%{release}
 
 %description webapp-examples
 The Apache Tomcat Servlet/JSP example applications.
@@ -160,7 +160,7 @@ Przykładowe aplikacje dla Tomcata.
 Summary:	Web Services support (JSR 109)
 Summary(pl.UTF-8):	Wsparcie dla Web Services (JSR 109)
 Group:		Libraries/Java
-Requires:	%{name} = %{epoch}:%{version}-%{release}
+Requires:	%{name} = %{version}-%{release}
 Requires:	java(JSR109)
 Requires:	java-geronimo-spec-jaxrpc
 
@@ -175,7 +175,7 @@ Wsparcie dla JSR 109 (Web Services).
 Summary:	JMX remote interface for Tomcat
 Summary(pl.UTF-8):	Zdalny interfejs JMX dla Tomcata
 Group:		Libraries/Java
-Requires:	%{name} = %{epoch}:%{version}-%{release}
+Requires:	%{name} = %{version}-%{release}
 
 %description jmx
 JMX remote interface for Tomcat.
