@@ -1,10 +1,12 @@
---- apache-tomcat-7.0.26-src/build.xml	2012-02-17 15:15:30.000000000 +0100
-+++ apache-tomcat-7.0.26-src.new/build.xml	2012-03-19 10:05:29.185332581 +0100
-@@ -438,53 +438,6 @@
+--- apache-tomcat-7.0.28-src/build.xml	2012-06-15 09:56:41.000000000 +0200
++++ apache-tomcat-7.0.28-src.new/build.xml	2012-06-20 16:14:52.482244047 +0200
+@@ -438,60 +438,6 @@
      
    </target>
  
--  <target name="validate" depends="download-validate" if="${execute.validate}">
+-  <target name="validate" if="${execute.validate}"
+-    depends="build-prepare,compile-prepare,download-validate"
+-    description="Uses Checkstyle tool to perform style check for the source code">
 -    <!-- Required so we can cache checkstyle results -->
 -    <mkdir dir="${tomcat.output}/res/checkstyle"/>
 -
@@ -24,16 +26,21 @@
 -        <exclude name="res/checkstyle/header-al2.txt"/>
 -        <!-- Exclude auto-generated files -->
 -        <exclude name="java/org/apache/el/parser/ELParser*.java" />
--        <exclude name="java/org/apache/el/parser/JJTELParserState.java" />
 -        <exclude name="java/org/apache/el/parser/Node.java" />
--        <exclude name="java/org/apache/el/parser/ParseException.java" />
--        <exclude name="java/org/apache/el/parser/SimpleCharStream.java" />
--        <exclude name="java/org/apache/el/parser/Token*.java" />
+-        <exclude name="java/org/apache/tomcat/util/http/parser/HttpParser*.java" />
+-        <exclude name="java/org/apache/**/parser/JJT*ParserState.java" />
+-        <exclude name="java/org/apache/**/parser/ParseException.java" />
+-        <exclude name="java/org/apache/**/parser/SimpleCharStream.java" />
+-        <exclude name="java/org/apache/**/parser/Token*.java" />
 -        <!-- Exclude these else Gump runs validate on them -->
 -        <exclude name="**/org/apache/tomcat/dbcp/**"/>
 -        <exclude name="**/tomcat-deps/**"/>
+-        <!-- Exclude simple test files -->
+-        <exclude name="test/webapp-3.0/bug53257/*.txt"/>
+-        <exclude name="test/webapp-3.0-fragments/WEB-INF/classes/*.txt"/>
 -      </fileset>
 -      <fileset dir="modules/jdbc-pool" >
+-        <exclude name=".*/**"/>
 -        <patternset refid="text.files" />
 -      </fileset>
 -    </checkstyle>
@@ -51,10 +58,10 @@
 -    </checkstyle>
 -  </target>
 -
-   <target name="validate-eoln" depends="compile"
+   <target name="validate-eoln" depends="build-prepare,compile-prepare"
      description="Validate that the source files have correct line ends">
-     <taskdef name="checkeol"
-@@ -524,7 +477,7 @@
+ 
+@@ -551,7 +497,7 @@
      </copy>
    </target>
  
@@ -63,7 +70,7 @@
      <!-- Compile internal server components -->
      <javac srcdir="java" destdir="${tomcat.classes}"
             debug="${compile.debug}"
-@@ -807,13 +760,6 @@
+@@ -834,13 +780,6 @@
    <target name="deploy" depends="package,build-docs"
            description="Default. Builds a working Tomcat instance">
  
@@ -77,7 +84,7 @@
      <!-- Copy scripts -->
      <copy todir="${tomcat.build}/bin">
        <fileset dir="bin">
-@@ -1078,7 +1024,7 @@
+@@ -1105,7 +1044,7 @@
  
    </target>
  
@@ -86,7 +93,7 @@
      <mkdir dir="${test.classes}"/>
      <!-- Compile -->
      <javac srcdir="test" destdir="${test.classes}"
-@@ -1183,52 +1129,10 @@
+@@ -1210,52 +1149,10 @@
      <mkdir dir="${tomcat.extras}/webservices"/>
    </target>
  
@@ -140,7 +147,7 @@
      <replace dir="${tomcat.extras}/logging/commons-logging-${commons-logging.version}-src/src/java/org/apache/commons"
          encoding="ISO-8859-1">
        <replacefilter token="org.apache.commons"
-@@ -1250,7 +1154,8 @@
+@@ -1277,7 +1174,8 @@
        file="${tomcat.extras}/logging/commons-logging-${commons-logging.version}-src/build.xml" />
  
      <copy todir="${tomcat.extras}/logging/commons-logging-${commons-logging.version}-src">
@@ -150,7 +157,7 @@
        <fileset file="${log4j.jar}" />
        <fileset file="${logkit.jar}" />
        <fileset file="${servletapi.jar}" />
-@@ -1330,18 +1235,6 @@
+@@ -1357,18 +1255,6 @@
            depends="extras-prepare"
            description="Prepare to build web services extras package">
  
@@ -169,7 +176,7 @@
      <copy file="${jaxrpc-lib.jar}"
            tofile="${tomcat.extras}/webservices/jaxrpc.jar" />
      <copy file="${wsdl4j-lib.jar}"
-@@ -1448,7 +1341,7 @@
+@@ -1475,7 +1361,7 @@
  
    </target>
  
@@ -178,10 +185,11 @@
      <mkdir dir="${tomcat.dist}"/>
      <mkdir dir="${tomcat.dist}/bin"/>
      <mkdir dir="${tomcat.dist}/conf"/>
-@@ -2236,304 +2129,6 @@
+@@ -2261,291 +2147,7 @@
+     <!-- remove jdbc-pool documentation -->
      <delete file="webapps/docs/jdbc-pool.xml"/>
    </target>
- 
+-
 -    
 -  <!-- ================ Download and dependency building =================== -->
 -
@@ -268,24 +276,10 @@
 -  <target name="download-dist"
 -          description="Download additional components for a distribution" >
 -
--    <antcall target="downloadfile-2">
--      <param name="sourcefile.1" value="${tomcat-native.dll.1}/win32/tcnative-1.dll"/>
--      <param name="sourcefile.2" value="${tomcat-native.dll.2}/win32/tcnative-1.dll"/>
--      <param name="destfile" value="${tomcat-native.dll.win32}"/>
--      <param name="destdir" value="${tomcat-native.home}"/>
--    </antcall>
--
--    <antcall target="downloadfile-2">
--      <param name="sourcefile.1" value="${tomcat-native.dll.1}/win64/x64/tcnative-1.dll"/>
--      <param name="sourcefile.2" value="${tomcat-native.dll.2}/win64/x64/tcnative-1.dll"/>
--      <param name="destfile" value="${tomcat-native.dll.x64}"/>
--      <param name="destdir" value="${tomcat-native.home}"/>
--    </antcall>
--
--    <antcall target="downloadfile-2">
--      <param name="sourcefile.1" value="${tomcat-native.dll.1}/win64/ia64/tcnative-1.dll"/>
--      <param name="sourcefile.2" value="${tomcat-native.dll.2}/win64/ia64/tcnative-1.dll"/>
--      <param name="destfile" value="${tomcat-native.dll.i64}"/>
+-    <antcall target="downloadzip-2">
+-      <param name="sourcefile.1" value="${tomcat-native.win.1}"/>
+-      <param name="sourcefile.2" value="${tomcat-native.win.2}"/>
+-      <param name="destfile" value="${tomcat-native.home}/LICENSE"/>
 -      <param name="destdir" value="${tomcat-native.home}"/>
 -    </antcall>
 -
@@ -480,6 +474,7 @@
 -Read the Building page on the Apache Tomcat documentation site for details on how to configure your Eclipse workplace.</echo>
 -  </target>
 -
++ 
    <!-- ======================= Macros, Taskdefs etc ======================== -->
  
    <macrodef name="jarIt" description="utility macro for standard JAR packaging">
