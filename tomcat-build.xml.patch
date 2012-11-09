@@ -1,6 +1,6 @@
---- apache-tomcat-7.0.28-src/build.xml	2012-06-15 09:56:41.000000000 +0200
-+++ apache-tomcat-7.0.28-src.new/build.xml	2012-06-20 16:14:52.482244047 +0200
-@@ -438,60 +438,6 @@
+--- apache-tomcat-7.0.32-src/build.xml~	2012-10-03 09:55:49.000000000 +0200
++++ apache-tomcat-7.0.32-src/build.xml	2012-11-09 11:22:30.324804340 +0100
+@@ -439,61 +439,6 @@
      
    </target>
  
@@ -41,6 +41,7 @@
 -      </fileset>
 -      <fileset dir="modules/jdbc-pool" >
 -        <exclude name=".*/**"/>
+-        <exclude name="**/MANIFEST.MF"/>
 -        <patternset refid="text.files" />
 -      </fileset>
 -    </checkstyle>
@@ -61,7 +62,7 @@
    <target name="validate-eoln" depends="build-prepare,compile-prepare"
      description="Validate that the source files have correct line ends">
  
-@@ -551,7 +497,7 @@
+@@ -498,7 +498,7 @@
      </copy>
    </target>
  
@@ -70,7 +71,7 @@
      <!-- Compile internal server components -->
      <javac srcdir="java" destdir="${tomcat.classes}"
             debug="${compile.debug}"
-@@ -834,13 +780,6 @@
+@@ -836,13 +781,6 @@
    <target name="deploy" depends="package,build-docs"
            description="Default. Builds a working Tomcat instance">
  
@@ -84,7 +85,7 @@
      <!-- Copy scripts -->
      <copy todir="${tomcat.build}/bin">
        <fileset dir="bin">
-@@ -1105,7 +1044,7 @@
+@@ -1107,7 +1045,7 @@
  
    </target>
  
@@ -93,7 +94,7 @@
      <mkdir dir="${test.classes}"/>
      <!-- Compile -->
      <javac srcdir="test" destdir="${test.classes}"
-@@ -1210,52 +1149,10 @@
+@@ -1212,52 +1150,10 @@
      <mkdir dir="${tomcat.extras}/webservices"/>
    </target>
  
@@ -147,7 +148,7 @@
      <replace dir="${tomcat.extras}/logging/commons-logging-${commons-logging.version}-src/src/java/org/apache/commons"
          encoding="ISO-8859-1">
        <replacefilter token="org.apache.commons"
-@@ -1277,7 +1174,8 @@
+@@ -1279,7 +1175,8 @@
        file="${tomcat.extras}/logging/commons-logging-${commons-logging.version}-src/build.xml" />
  
      <copy todir="${tomcat.extras}/logging/commons-logging-${commons-logging.version}-src">
@@ -157,7 +158,7 @@
        <fileset file="${log4j.jar}" />
        <fileset file="${logkit.jar}" />
        <fileset file="${servletapi.jar}" />
-@@ -1357,18 +1255,6 @@
+@@ -1359,18 +1256,6 @@
            depends="extras-prepare"
            description="Prepare to build web services extras package">
  
@@ -176,7 +177,7 @@
      <copy file="${jaxrpc-lib.jar}"
            tofile="${tomcat.extras}/webservices/jaxrpc.jar" />
      <copy file="${wsdl4j-lib.jar}"
-@@ -1475,7 +1361,7 @@
+@@ -1477,7 +1362,7 @@
  
    </target>
  
@@ -185,11 +186,10 @@
      <mkdir dir="${tomcat.dist}"/>
      <mkdir dir="${tomcat.dist}/bin"/>
      <mkdir dir="${tomcat.dist}/conf"/>
-@@ -2261,291 +2147,7 @@
-     <!-- remove jdbc-pool documentation -->
+@@ -2268,290 +2153,6 @@
      <delete file="webapps/docs/jdbc-pool.xml"/>
    </target>
--
+ 
 -    
 -  <!-- ================ Download and dependency building =================== -->
 -
@@ -474,7 +474,6 @@
 -Read the Building page on the Apache Tomcat documentation site for details on how to configure your Eclipse workplace.</echo>
 -  </target>
 -
-+ 
    <!-- ======================= Macros, Taskdefs etc ======================== -->
  
    <macrodef name="jarIt" description="utility macro for standard JAR packaging">
