@@ -10,12 +10,12 @@
 Summary:	Web server and Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP %{jspapiver} API
 Summary(pl.UTF-8):	Serwer www i silnik Servlet/JSP będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
 Name:		tomcat
-Version:	6.0.32
+Version:	6.0.36
 Release:	1
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
 Source0:	http://www.apache.org/dist/tomcat/tomcat-6/v%{version}/src/apache-%{name}-%{version}-src.tar.gz
-# Source0-md5:	19a1eaa9c9938b520d3c360d8cf4af22
+# Source0-md5:	654318c1e88fdc8b7b5182c4479612b1
 Source1:	apache-%{name}.init
 Source2:	apache-%{name}.sysconfig
 Source3:	%{name}-build.properties
@@ -32,7 +32,6 @@ Patch4:		%{name}-catalina.policy-javadir.patch
 Patch5:		%{name}-userdir.patch
 URL:		http://tomcat.apache.org/
 BuildRequires:	ant >= 1.5.3
-BuildRequires:	ant-trax
 BuildRequires:	java-commons-daemon >= 1.0
 BuildRequires:	java-commons-dbcp-tomcat5 >= 0:1.1
 BuildRequires:	java-commons-pool-tomcat5
@@ -221,7 +220,7 @@ javax.servlet.http, javax.servlet.jsp i java.servlet.jsp.tagext).
 %prep
 %setup -q -n apache-%{name}-%{version}-src
 %patch0 -p0
-%patch1 -p0
+%patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
@@ -232,6 +231,11 @@ rm bin/*.bat
 rm bin/{startup,shutdown}.sh
 
 cp -a %{SOURCE3} build.properties
+
+cat >>build.properties <<EOF
+jaxrpc-lib.jar=%(find-jar geronimo-spec-jaxrpc)
+wsdl4j-lib.jar=%(find-jar wsdl4j.jar)
+EOF
 
 %build
 TOPDIR=$(pwd)
