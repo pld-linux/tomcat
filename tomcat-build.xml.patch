@@ -1,6 +1,6 @@
---- apache-tomcat-7.0.32-src/build.xml~	2012-10-03 09:55:49.000000000 +0200
-+++ apache-tomcat-7.0.32-src/build.xml	2012-11-09 11:22:30.324804340 +0100
-@@ -439,61 +439,6 @@
+--- apache-tomcat-7.0.35-src/build.xml~	2013-01-10 23:59:20.000000000 +0100
++++ apache-tomcat-7.0.35-src/build.xml	2013-02-02 10:03:33.530400312 +0100
+@@ -439,60 +439,6 @@
      
    </target>
  
@@ -27,7 +27,6 @@
 -        <!-- Exclude auto-generated files -->
 -        <exclude name="java/org/apache/el/parser/ELParser*.java" />
 -        <exclude name="java/org/apache/el/parser/Node.java" />
--        <exclude name="java/org/apache/tomcat/util/http/parser/HttpParser*.java" />
 -        <exclude name="java/org/apache/**/parser/JJT*ParserState.java" />
 -        <exclude name="java/org/apache/**/parser/ParseException.java" />
 -        <exclude name="java/org/apache/**/parser/SimpleCharStream.java" />
@@ -36,7 +35,7 @@
 -        <exclude name="**/org/apache/tomcat/dbcp/**"/>
 -        <exclude name="**/tomcat-deps/**"/>
 -        <!-- Exclude simple test files -->
--        <exclude name="test/webapp-3.0/bug53257/*.txt"/>
+-        <exclude name="test/webapp-3.0/bug53257/**/*.txt"/>
 -        <exclude name="test/webapp-3.0-fragments/WEB-INF/classes/*.txt"/>
 -      </fileset>
 -      <fileset dir="modules/jdbc-pool" >
@@ -62,7 +61,7 @@
    <target name="validate-eoln" depends="build-prepare,compile-prepare"
      description="Validate that the source files have correct line ends">
  
-@@ -498,7 +498,7 @@
+@@ -552,7 +498,7 @@
      </copy>
    </target>
  
@@ -71,7 +70,7 @@
      <!-- Compile internal server components -->
      <javac srcdir="java" destdir="${tomcat.classes}"
             debug="${compile.debug}"
-@@ -836,13 +781,6 @@
+@@ -853,13 +799,6 @@
    <target name="deploy" depends="package,build-docs"
            description="Default. Builds a working Tomcat instance">
  
@@ -85,7 +84,7 @@
      <!-- Copy scripts -->
      <copy todir="${tomcat.build}/bin">
        <fileset dir="bin">
-@@ -1107,7 +1045,7 @@
+@@ -1135,7 +1074,7 @@
  
    </target>
  
@@ -94,7 +93,7 @@
      <mkdir dir="${test.classes}"/>
      <!-- Compile -->
      <javac srcdir="test" destdir="${test.classes}"
-@@ -1212,52 +1150,10 @@
+@@ -1240,52 +1179,10 @@
      <mkdir dir="${tomcat.extras}/webservices"/>
    </target>
  
@@ -148,7 +147,7 @@
      <replace dir="${tomcat.extras}/logging/commons-logging-${commons-logging.version}-src/src/java/org/apache/commons"
          encoding="ISO-8859-1">
        <replacefilter token="org.apache.commons"
-@@ -1279,7 +1175,8 @@
+@@ -1307,7 +1204,8 @@
        file="${tomcat.extras}/logging/commons-logging-${commons-logging.version}-src/build.xml" />
  
      <copy todir="${tomcat.extras}/logging/commons-logging-${commons-logging.version}-src">
@@ -158,7 +157,7 @@
        <fileset file="${log4j.jar}" />
        <fileset file="${logkit.jar}" />
        <fileset file="${servletapi.jar}" />
-@@ -1359,18 +1256,6 @@
+@@ -1387,18 +1285,6 @@
            depends="extras-prepare"
            description="Prepare to build web services extras package">
  
@@ -177,7 +176,7 @@
      <copy file="${jaxrpc-lib.jar}"
            tofile="${tomcat.extras}/webservices/jaxrpc.jar" />
      <copy file="${wsdl4j-lib.jar}"
-@@ -1477,7 +1362,7 @@
+@@ -1505,7 +1391,7 @@
  
    </target>
  
@@ -186,7 +185,7 @@
      <mkdir dir="${tomcat.dist}"/>
      <mkdir dir="${tomcat.dist}/bin"/>
      <mkdir dir="${tomcat.dist}/conf"/>
-@@ -2268,290 +2153,6 @@
+@@ -2297,290 +2183,6 @@
      <delete file="webapps/docs/jdbc-pool.xml"/>
    </target>
  
