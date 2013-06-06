@@ -1,14 +1,5 @@
 --- commons-logging-1.1.1-src/build.xml~	2010-06-09 20:47:36.000000000 +0200
 +++ commons-logging-1.1.1-src/build.xml	2010-06-09 20:48:11.000000000 +0200
-@@ -94,7 +94,7 @@
-   <property name="component.title"         value="Logging Wrapper Library"/>
- 
-   <!-- The current version number of this component -->
--  <property name="component.version"       value="1.1.1-SNAPSHOT"/>
-+  <property name="component.version"       value="1.1.1"/>
- 
-   <!-- The base directory for compilation targets -->
-   <property name="build.home"              value="${basedir}/target"/>
 --- commons-logging-1.1.1-src/build.xml~	2007-11-22 00:27:52.000000000 +0100
 +++ commons-logging-1.1.1-src/build.xml	2010-06-09 20:27:15.000000000 +0200
 @@ -146,7 +146,8 @@
