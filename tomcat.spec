@@ -6,7 +6,7 @@
 %define		servletapiver	3.0
 
 # Java Commons Logging version. Must be >= 1.1.
-%define		jclver	1.1.3
+%define		jclver	1.1.1
 
 %include	/usr/lib/rpm/macros.java
 Summary:	Web server and Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP %{jspapiver} API
@@ -27,7 +27,7 @@ Source12:	%{name}-context-manager.xml
 Source13:	%{name}-context-host-manager.xml
 Source14:	%{name}-context-examples.xml
 Source100:	http://www.apache.org/dist/commons/logging/source/commons-logging-%{jclver}-src.tar.gz
-# Source100-md5:	e8e197d628436490886d17cffa108fe3
+# Source100-md5:	e5cfa8cca13152d7545fde6b1783c60a
 Patch0:		%{name}-build.xml.patch
 Patch1:		server.xml-URIEncoding-utf8.patch
 Patch2:		%{name}-LDAPUserDatabase.patch
@@ -36,7 +36,7 @@ Patch4:		%{name}-userdir.patch
 Patch100:	jcl-build.xml.patch
 URL:		http://tomcat.apache.org/
 BuildRequires:	ant >= 1.5.3
-BuildRequires:	eclipse-jdt >= 3.2
+BuildRequires:	eclipse-jdt >= 4.2.2
 BuildRequires:	java(JSR109)
 BuildRequires:	java-avalon-logkit
 BuildRequires:	java-commons-daemon >= 1.0
@@ -215,7 +215,7 @@ Biblioteki Javy zawierające serwer HTTP 1.1 dla Tomcata.
 Summary:	JSP compiler
 Summary(pl.UTF-8):	Kompilator JSP
 Group:		Libraries/Java
-Requires:	java-eclipse-jdt >= 3.2
+Requires:	java-eclipse-jdt >= 4.2.2
 Requires:	jpackage-utils
 Obsoletes:	apache-tomcat-jasper
 Obsoletes:	tomcat-jasper
@@ -277,6 +277,7 @@ logkit.jar=%(find-jar avalon-logkit)
 avalon-framework-impl.jar=%(find-jar avalon-framework-impl.jar)
 avalon-framework-api.jar=%(find-jar avalon-framework-api.jar)
 servletapi.jar=$(pwd)/output/build/lib/servlet-api.jar
+commons-logging.version=%{jclver}
 EOF
 
 %build
