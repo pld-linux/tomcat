@@ -65,7 +65,7 @@ start() {
 		msg_starting tomcat
 		busy
 		cd $CATALINA_BASE
-		jsvc -user tomcat -procname tomcat \
+		/usr/bin/jsvc -user tomcat -procname tomcat \
 			$JSVC_OPTS \
 			-Dcatalina.base=${CATALINA_BASE} \
 			-Dcatalina.home=${CATALINA_HOME} \
