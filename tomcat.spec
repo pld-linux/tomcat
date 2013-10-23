@@ -73,7 +73,7 @@ Requires:	jpackage-utils
 Requires:	jre >= 1.2
 Requires:	jsvc
 Requires:	rc-scripts
-Suggests:	tomcat-native
+Suggests:	tomcat-native >= 1.1.27
 Provides:	group(servlet)
 Provides:	group(tomcat)
 Provides:	user(tomcat)
