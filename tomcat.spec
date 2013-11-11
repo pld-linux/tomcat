@@ -13,7 +13,7 @@ Summary:	Web server and Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP 
 Summary(pl.UTF-8):	Serwer www i silnik Servlet/JSP będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
 Name:		tomcat
 Version:	7.0.41
-Release:	2
+Release:	2.1
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
 Source0:	http://www.apache.org/dist/tomcat/tomcat-7/v%{version}/src/apache-%{name}-%{version}-src.tar.gz
@@ -26,6 +26,7 @@ Source11:	%{name}-context-docs.xml
 Source12:	%{name}-context-manager.xml
 Source13:	%{name}-context-host-manager.xml
 Source14:	%{name}-context-examples.xml
+Source15:	%{name}.logrotate
 Source100:	http://www.apache.org/dist/commons/logging/source/commons-logging-%{jclver}-src.tar.gz
 # Source100-md5:	e5cfa8cca13152d7545fde6b1783c60a
 Patch0:		%{name}-build.xml.patch
@@ -74,6 +75,7 @@ Requires:	jpackage-utils
 Requires:	jre >= 1.2
 Requires:	jsvc
 Requires:	rc-scripts
+Suggests:	logrotate
 Suggests:	tomcat-native >= 1.1.27
 Provides:	group(servlet)
 Provides:	group(tomcat)
@@ -321,8 +323,7 @@ install -d $TOMCATDIR \
 	    $RPM_BUILD_ROOT%{_vardir}/work \
 	    $RPM_BUILD_ROOT%{_vardir}/conf \
 	    $RPM_BUILD_ROOT%{_logdir}/tomcat \
-	    $RPM_BUILD_ROOT/etc/sysconfig \
-	    $RPM_BUILD_ROOT/etc/rc.d/init.d
+	    $RPM_BUILD_ROOT/etc/{sysconfig,rc.d/init.d,logrotate.d}
 
 install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/tomcat
 cp -a %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/tomcat
@@ -334,6 +335,7 @@ cp -a %{SOURCE11} $CATALINADIR/conf/Catalina/localhost/docs.xml
 cp -a %{SOURCE12} $CATALINADIR/conf/Catalina/localhost/manager.xml
 cp -a %{SOURCE13} $CATALINADIR/conf/Catalina/localhost/host-manager.xml
 cp -a %{SOURCE14} $CATALINADIR/conf/Catalina/localhost/examples.xml
+cp -p %{SOURCE15} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
 
 cp -a bin lib webapps $TOMCATDIR
 cp -a temp $CATALINADIR
@@ -422,6 +424,7 @@ fi
 %doc KEYS RELEASE-NOTES
 %attr(754,root,root) /etc/rc.d/init.d/tomcat
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/tomcat
+%config(noreplace) %verify(not md5 mtime size) /etc/logrotate.d/%{name}
 %{_sysconfdir}/tomcat
 %dir %{_tomcatdir}
 %dir %{_tomcatdir}/conf
