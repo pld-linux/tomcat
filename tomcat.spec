@@ -33,6 +33,7 @@ Patch1:		server.xml-URIEncoding-utf8.patch
 Patch2:		%{name}-LDAPUserDatabase.patch
 Patch3:		%{name}-catalina.policy-javadir.patch
 Patch4:		%{name}-userdir.patch
+Patch5:		logging.patch
 Patch100:	jcl-build.xml.patch
 URL:		http://tomcat.apache.org/
 BuildRequires:	ant >= 1.5.3
@@ -254,6 +255,7 @@ javax.servlet.http, javax.servlet.jsp i java.servlet.jsp.tagext).
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 # Prepare java-commmons-logging sources
 mkdir -p output/extras/logging
