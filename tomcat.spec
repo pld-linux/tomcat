@@ -14,7 +14,7 @@ Version:	6.0.37
 Release:	1
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
-Source0:	http://apache.claz.org/tomcat/tomcat-6/v%{version}/src/apache-%{name}-%{version}-src.tar.gz
+Source0:	http://www.apache.org/dist/tomcat/tomcat-6/v%{version}/src/apache-%{name}-%{version}-src.tar.gz
 # Source0-md5:	ae6a399b1d871f18cd19aee32be085e0
 Source1:	apache-%{name}.init
 Source2:	apache-%{name}.sysconfig
