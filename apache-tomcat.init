@@ -3,11 +3,8 @@
 # tomcat	Tomcat Servlet/JSP container
 #
 # chkconfig:    345  84 16
-#
 # description:	Tomcat Servlet/JSP container
 #
-# $Id$
-
 
 # Source function libraries
 . /etc/rc.d/init.d/functions
@@ -19,7 +16,7 @@
 # Check that networking is up.
 if is_yes "${NETWORKING}"; then
 	if [ ! -f /var/lock/subsys/network -a "$1" != stop -a "$1" != status ]; then
-		msg_network_down tomcat
+		msg_network_down "Tomcat"
 		exit 1
 	fi
 else
@@ -61,65 +58,68 @@ fi
 
 start() {
 	# Check if the service is already running?
-	if [ ! -f /var/lock/subsys/tomcat ]; then
-		msg_starting tomcat
-		busy
-		cd $CATALINA_BASE
-		/usr/bin/jsvc -user tomcat -procname tomcat \
-			$JSVC_OPTS \
-			-Dcatalina.base=${CATALINA_BASE} \
-			-Dcatalina.home=${CATALINA_HOME} \
-			-Djava.io.tmpdir=${CATALINA_TMPDIR} \
-			-Djava.library.path=/usr/lib64:/usr/lib \
-			-Djava.util.logging.config.file="${CATALINA_BASE}/conf/logging.properties" \
-			-Djava.util.logging.manager="org.apache.juli.ClassLoaderLogManager" \
-			$CATALINA_OPTS \
-			org.apache.catalina.startup.Bootstrap >> /var/log/tomcat/catalina.out 2>&1
-		[ $? -ne 0 ] && RETVAL=1
-		if [ $RETVAL -eq 0 ]; then
-		   	ok
-			touch /var/lock/subsys/tomcat
-		else
-			fail
-		fi
+	if [ -f /var/lock/subsys/tomcat ]; then
+		msg_already_running "Tomcat"
+		return
+	fi
+
+	msg_starting "Tomcat"
+	busy
+	cd $CATALINA_BASE
+	/usr/bin/jsvc -user tomcat -procname tomcat \
+		$JSVC_OPTS \
+		-Dcatalina.base=${CATALINA_BASE} \
+		-Dcatalina.home=${CATALINA_HOME} \
+		-Djava.io.tmpdir=${CATALINA_TMPDIR} \
+		-Djava.library.path=/usr/lib64:/usr/lib \
+		-Djava.util.logging.config.file="${CATALINA_BASE}/conf/logging.properties" \
+		-Djava.util.logging.manager="org.apache.juli.ClassLoaderLogManager" \
+		$CATALINA_OPTS \
+		org.apache.catalina.startup.Bootstrap >> /var/log/tomcat/catalina.out 2>&1
+	[ $? -ne 0 ] && RETVAL=1
+	if [ $RETVAL -eq 0 ]; then
+		ok
+		touch /var/lock/subsys/tomcat
 	else
-		msg_already_running tomcat
+		fail
 	fi
 }
 
 stop() {
-	if [ -f /var/lock/subsys/tomcat ]; then
-		# Stop daemons.
-		msg_stopping tomcat
-		busy
-		jsvc -user tomcat -stop \
-			$JSVC_OPTS \
-			org.apache.catalina.startup.Bootstrap
-		[ $? -eq 0 ] && ok || fail
-		rm -f /var/lock/subsys/tomcat
-	else
-		msg_not_running tomcat
+	if [ ! -f /var/lock/subsys/tomcat ]; then
+		msg_not_running "Tomcat"
+		return
 	fi
+
+	# Stop daemons.
+	msg_stopping "Tomcat"
+	busy
+	jsvc -user tomcat -stop \
+		$JSVC_OPTS \
+		org.apache.catalina.startup.Bootstrap
+	[ $? -eq 0 ] && ok || fail
+	rm -f /var/lock/subsys/tomcat
 }
 
 condrestart() {
-	if [ -f /var/lock/subsys/tomcat ]; then
-		stop
-		start
-	else
-		msg_not_running tomcat
+	if [ ! -f /var/lock/subsys/tomcat ]; then
+		msg_not_running "Tomcat"
 		RETVAL=$1
+		return
 	fi
+
+	stop
+	start
 }
 
 RETVAL=0
 # See how we were called.
 case "$1" in
   start)
-  	start
+	start
 	;;
   stop)
-  	stop
+	stop
 	;;
   restart)
 	stop
