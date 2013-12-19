@@ -1,0 +1,6 @@
+/var/log/tomcat/*.log
+{
+	create 0644 tomcat tomcat
+	olddir /var/log/archive/tomcat
+	copytruncate
+}
