@@ -90,8 +90,6 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define 	_logdir		%{_var}/log
 %define		_vardir		%{_var}/lib/tomcat
 
-%define find_jar() %{expand:%%define jarfile {%(jar=$(find-jar %1); echo ${jar:-%%nil})}}%{?jarfile}%{!?jarfile:%{error:find-jar %1 failed}}%{nil}
-
 %description
 Tomcat is the servlet container that is used in the official Reference
 Implementation for the Java Servlet and JavaServer Pages technologies.
@@ -273,20 +271,22 @@ cd -
 rm bin/*.bat
 rm bin/{startup,shutdown}.sh
 
-cp -a %{SOURCE3} build.properties
-cat >>build.properties <<EOF
-
-log4j.jar=%(find-jar log4j)
-log4j12.jar=%(find-jar log4j)
-junit.jar=%(find-jar junit)
-logkit.jar=%(find-jar avalon-logkit)
-avalon-framework-impl.jar=%(find-jar avalon-framework-impl.jar)
-avalon-framework-api.jar=%(find-jar avalon-framework-api.jar)
-servletapi.jar=$(pwd)/output/build/lib/servlet-api.jar
-commons-logging.version=%{jclver}
-EOF
+cp -p %{SOURCE3} build.properties
 
 %build
+if test ! -e build.properties.local; then
+	cat > build.properties.local <<-EOF
+	log4j.jar=$(find-jar log4j)
+	log4j12.jar=$(find-jar log4j)
+	junit.jar=$(find-jar junit)
+	logkit.jar=$(find-jar avalon-logkit)
+	avalon-framework-impl.jar=$(find-jar avalon-framework-impl.jar)
+	avalon-framework-api.jar=$(find-jar avalon-framework-api.jar)
+	servletapi.jar=$(pwd)/output/build/lib/servlet-api.jar
+	commons-logging.version=%{jclver}
+	EOF
+	cat build.properties.local >> build.properties
+fi
 if grep '=$' build.properties; then
 	: Some .jar could not be found
 	exit 1
