@@ -260,7 +260,7 @@ javax.servlet.http, javax.servlet.jsp i java.servlet.jsp.tagext).
 %patch5 -p1
 
 # Prepare java-commmons-logging sources
-mkdir -p output/extras/logging
+install -d output/extras/logging
 mv commons-logging-%{jclver}-src output/extras/logging
 cd output/extras/logging/commons-logging-%{jclver}-src
 %undos build.xml
@@ -295,17 +295,15 @@ fi
 export LC_ALL=en_US
 
 # Base package
-%ant \
-	-Drpm.javadir=%{_javadir} \
-	-Drpm.libdir=%{_libdir}
+%ant
 
 # Extras
-mkdir -p output/extras/webservices
+install -d output/extras/webservices
 
 ln -sf %{_javadir}/geronimo-spec-jaxrpc.jar output/extras/webservices/jaxrpc.jar
 ln -sf %{_javadir}/jsr109.jar output/extras/webservices/wsdl4j.jar
 
-%ant -Dcommons-logging-version=%{jclver} extras
+%ant extras
 
 # Javadoc
 %if %{with javadoc}
