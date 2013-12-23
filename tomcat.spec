@@ -287,6 +287,11 @@ commons-logging.version=%{jclver}
 EOF
 
 %build
+if grep '=$' build.properties; then
+	: Some .jar could not be found
+	exit 1
+fi
+
 export LC_ALL=en_US
 
 # Base package
