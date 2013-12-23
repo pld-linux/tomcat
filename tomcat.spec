@@ -13,7 +13,7 @@ Summary:	Web server and Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP 
 Summary(pl.UTF-8):	Serwer www i silnik Servlet/JSP będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
 Name:		tomcat
 Version:	7.0.41
-Release:	4
+Release:	5
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
 Source0:	http://www.apache.org/dist/tomcat/tomcat-7/v%{version}/src/apache-%{name}-%{version}-src.tar.gz
@@ -112,6 +112,7 @@ Community Process.
 Summary:	The Apache Tomcat Servlet/JSP Container documentation
 Summary(pl.UTF-8):	Dokumentacja do Tomcata - kontenera Servlet/JSP
 Group:		Documentation
+Requires:	%{name} = %{version}-%{release}
 Obsoletes:	apache-tomcat-doc
 Obsoletes:	jakarta-tomcat-doc
 Obsoletes:	tomcat-doc
@@ -316,26 +317,25 @@ CATALINADIR=$RPM_BUILD_ROOT/var/lib/tomcat
 # useful for constructing relative symlinks. Is there a better way?
 TOMCATDIRREV=$(echo %{_tomcatdir} | sed 's#[^/]\+#..#g;s#^/##')
 CATALINADIRREV=$(echo /var/lib/tomcat | sed 's#[^/]\+#..#g;s#^/##')
-SYSCONFDIRREV=$(echo %{_sysconfdir} | sed 's#[^/]\+#..#g;s#^/##')
 
 install -d $TOMCATDIR \
 	    $CATALINADIR/temp \
 	    $RPM_BUILD_ROOT%{_vardir}/webapps \
 	    $RPM_BUILD_ROOT%{_vardir}/work \
-	    $RPM_BUILD_ROOT%{_vardir}/conf \
 	    $RPM_BUILD_ROOT%{_logdir}/tomcat \
+		$RPM_BUILD_ROOT%{_sysconfdir}/%{name}/Catalina/localhost \
 	    $RPM_BUILD_ROOT/etc/{sysconfig,rc.d/init.d,logrotate.d}
 
 install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/tomcat
-cp -a %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/tomcat
+cp -p %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/tomcat
 
-cp -a conf/* $CATALINADIR/conf
-install -d $CATALINADIR/conf/Catalina/localhost
-cp -a %{SOURCE10} $CATALINADIR/conf/Catalina/localhost/ROOT.xml
-cp -a %{SOURCE11} $CATALINADIR/conf/Catalina/localhost/docs.xml
-cp -a %{SOURCE12} $CATALINADIR/conf/Catalina/localhost/manager.xml
-cp -a %{SOURCE13} $CATALINADIR/conf/Catalina/localhost/host-manager.xml
-cp -a %{SOURCE14} $CATALINADIR/conf/Catalina/localhost/examples.xml
+cp -a conf/* $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
+ln -sf $CATALINADIRREV%{_sysconfdir}/%{name} $RPM_BUILD_ROOT%{_vardir}/conf
+cp -p %{SOURCE10} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/Catalina/localhost/ROOT.xml
+cp -p %{SOURCE11} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/Catalina/localhost/docs.xml
+cp -p %{SOURCE12} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/Catalina/localhost/manager.xml
+cp -p %{SOURCE13} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/Catalina/localhost/host-manager.xml
+cp -p %{SOURCE14} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/Catalina/localhost/examples.xml
 cp -p %{SOURCE15} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
 
 cp -a bin lib webapps $TOMCATDIR
@@ -345,7 +345,6 @@ ln -sf $CATALINADIRREV%{_logdir}/tomcat $CATALINADIR/logs
 ln -sf $TOMCATDIRREV%{_logdir}/tomcat $TOMCATDIR/logs
 ln -sf $TOMCATDIRREV%{_vardir}/work $TOMCATDIR/work
 ln -sf $TOMCATDIRREV%{_vardir}/conf $TOMCATDIR/conf
-ln -sf $SYSCONFDIRREV%{_vardir}/conf $RPM_BUILD_ROOT%{_sysconfdir}/tomcat
 
 # symlinks instead of copies
 jars="commons-daemon commons-logging-api"
@@ -398,6 +397,24 @@ ln -s %{_javadir}/jsr109.jar $TOMCATDIR/lib/jsr109.jar
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%pretrans
+# migrate /var/lib/tomcat/conf to /etc/tomcat
+if [ -d %{_vardir}/conf ] && [ ! -L %{_vardir}/conf ]; then
+	if [ -d %{_sysconfdir}/%{name} ]; then
+		   if [ ! -L %{_sysconfdir}/%{name} ]; then
+				   mv %{_vardir}/conf/* %{_sysconfdir}/%{name}
+				   rmdir %{_vardir}/conf 2>/dev/null || mv -v %{_vardir}/conf{,.rpmsave}
+		   else
+				   mv -v %{_sysconfdir}/%{name}{,.rpmsave}
+				   mv %{_vardir}/conf %{_sysconfdir}/%{name}
+		   fi
+	else
+		   mv %{_vardir}/conf %{_sysconfdir}/%{name}
+	fi
+	ln -s %{_sysconfdir}/%{name} %{_vardir}/conf
+fi
+exit 0
+
 %pre
 %groupadd -g 234 -r -f tomcat
 %groupadd -g 237 -r -f servlet
@@ -426,7 +443,19 @@ fi
 %attr(754,root,root) /etc/rc.d/init.d/tomcat
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/tomcat
 %config(noreplace) %verify(not md5 mtime size) /etc/logrotate.d/%{name}
-%{_sysconfdir}/tomcat
+
+# these directory has to be writeable because /admin need to modify config
+# files and create temporary files
+%dir %attr(770,root,tomcat) %{_sysconfdir}/%{name}
+%dir %attr(770,root,tomcat) %{_sysconfdir}/%{name}/Catalina
+%dir %{_sysconfdir}/%{name}/Catalina/localhost
+# tomcat config has to be writeable because of tomcat-users.xml file and Catalina dir
+%config(noreplace) %attr(660,root,tomcat) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/catalina.policy
+%config(noreplace) %attr(660,root,tomcat) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/*.properties*
+%config(noreplace) %attr(660,root,tomcat) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/*.xml
+
+%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/Catalina/localhost/ROOT.xml
+
 %dir %{_tomcatdir}
 %dir %{_tomcatdir}/conf
 %dir %{_tomcatdir}/bin
@@ -461,45 +490,36 @@ fi
 
 %dir %{_tomcatdir}/webapps
 
-%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/ROOT.xml
 %{_tomcatdir}/webapps/ROOT
 
 %{_tomcatdir}/logs
 %{_tomcatdir}/work
 %dir %attr(770,root,tomcat) %{_vardir}
-# these directory has to be writeable because /admin need to modify config
-# files and create temporary files
-%dir %attr(770,root,tomcat) %{_vardir}/conf
-%dir %attr(770,root,tomcat) %{_vardir}/conf/Catalina
-%dir %{_vardir}/conf/Catalina/localhost
-# tomcat config has to be writeable because of tomcat-users.xml file and Catalina dir
-%config(noreplace) %attr(660,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/catalina.policy
-%config(noreplace) %attr(660,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/*.properties*
-%config(noreplace) %attr(660,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/*.xml
 %dir %attr(770,root,tomcat) %{_vardir}/work
 %dir %attr(770,root,tomcat) %{_vardir}/webapps
 %dir %attr(770,root,tomcat) %{_vardir}/temp
 %dir %attr(770,root,tomcat) %{_logdir}/tomcat
+%{_vardir}/conf
 %{_vardir}/logs
 
 %files webapp-docs
 %defattr(644,root,root,755)
-%config(noreplace,missingok) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/docs.xml
+%config(noreplace,missingok) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/Catalina/localhost/docs.xml
 %{_tomcatdir}/webapps/docs
 
 %files webapp-manager
 %defattr(644,root,root,755)
-%config(noreplace,missingok) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/manager.xml
+%config(noreplace,missingok) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/Catalina/localhost/manager.xml
 %{_tomcatdir}/webapps/manager
 
 %files webapp-host-manager
 %defattr(644,root,root,755)
-%config(noreplace,missingok) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/host-manager.xml
+%config(noreplace,missingok) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/Catalina/localhost/host-manager.xml
 %{_tomcatdir}/webapps/host-manager
 
 %files webapp-examples
 %defattr(644,root,root,755)
-%config(noreplace,missingok) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_vardir}/conf/Catalina/localhost/examples.xml
+%config(noreplace,missingok) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/Catalina/localhost/examples.xml
 %{_tomcatdir}/webapps/examples
 
 %files webservices
