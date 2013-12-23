@@ -40,6 +40,7 @@ URL:		http://tomcat.apache.org/
 BuildRequires:	ant >= 1.5.3
 BuildRequires:	eclipse-jdt >= 4.2.2
 BuildRequires:	java(JSR109)
+BuildRequires:	java-avalon-framework
 BuildRequires:	java-avalon-logkit
 BuildRequires:	java-commons-daemon >= 1.0
 BuildRequires:	java-commons-dbcp-tomcat5 >= 0:1.1
