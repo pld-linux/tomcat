@@ -322,12 +322,12 @@ TOMCATDIRREV=$(echo %{_tomcatdir} | sed 's#[^/]\+#..#g;s#^/##')
 CATALINADIRREV=$(echo /var/lib/tomcat | sed 's#[^/]\+#..#g;s#^/##')
 
 install -d $TOMCATDIR \
-	    $CATALINADIR/temp \
-	    $RPM_BUILD_ROOT%{_vardir}/webapps \
-	    $RPM_BUILD_ROOT%{_vardir}/work \
-	    $RPM_BUILD_ROOT%{_logdir}/tomcat \
-		$RPM_BUILD_ROOT%{_sysconfdir}/%{name}/Catalina/localhost \
-	    $RPM_BUILD_ROOT/etc/{sysconfig,rc.d/init.d,logrotate.d}
+	$CATALINADIR/temp \
+	$RPM_BUILD_ROOT%{_vardir}/webapps \
+	$RPM_BUILD_ROOT%{_vardir}/work \
+	$RPM_BUILD_ROOT%{_logdir}/tomcat \
+	$RPM_BUILD_ROOT%{_sysconfdir}/%{name}/Catalina/localhost \
+	$RPM_BUILD_ROOT/etc/{sysconfig,rc.d/init.d,logrotate.d}
 
 install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/tomcat
 cp -p %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/tomcat
@@ -404,15 +404,15 @@ rm -rf $RPM_BUILD_ROOT
 # migrate /var/lib/tomcat/conf to /etc/tomcat
 if [ -d %{_vardir}/conf ] && [ ! -L %{_vardir}/conf ]; then
 	if [ -d %{_sysconfdir}/%{name} ]; then
-		   if [ ! -L %{_sysconfdir}/%{name} ]; then
-				   mv %{_vardir}/conf/* %{_sysconfdir}/%{name}
-				   rmdir %{_vardir}/conf 2>/dev/null || mv -v %{_vardir}/conf{,.rpmsave}
-		   else
-				   mv -v %{_sysconfdir}/%{name}{,.rpmsave}
-				   mv %{_vardir}/conf %{_sysconfdir}/%{name}
-		   fi
+		if [ ! -L %{_sysconfdir}/%{name} ]; then
+			mv %{_vardir}/conf/* %{_sysconfdir}/%{name}
+			rmdir %{_vardir}/conf 2>/dev/null || mv -v %{_vardir}/conf{,.rpmsave}
+		else
+			mv -v %{_sysconfdir}/%{name}{,.rpmsave}
+			mv %{_vardir}/conf %{_sysconfdir}/%{name}
+		fi
 	else
-		   mv %{_vardir}/conf %{_sysconfdir}/%{name}
+		mv %{_vardir}/conf %{_sysconfdir}/%{name}
 	fi
 	ln -s %{_sysconfdir}/%{name} %{_vardir}/conf
 fi
