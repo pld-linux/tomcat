@@ -13,7 +13,7 @@ Summary:	Web server and Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP 
 Summary(pl.UTF-8):	Serwer www i silnik Servlet/JSP będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
 Name:		tomcat
 Version:	7.0.41
-Release:	5
+Release:	6
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
 Source0:	http://www.apache.org/dist/tomcat/tomcat-7/v%{version}/src/apache-%{name}-%{version}-src.tar.gz
@@ -401,6 +401,11 @@ ln -s %{_javadir}/jsr109.jar $TOMCATDIR/lib/jsr109.jar
 rm -rf $RPM_BUILD_ROOT
 
 %pretrans
+# handle /var/lib/tomcat/logs -> /var/log/tomcat migration
+if [ -d %{_vardir}/logs ] && [ ! -L %{_vardir}/logs ]; then
+	mv -v %{_vardir}/logs{,.rpmsave}
+fi
+
 # migrate /var/lib/tomcat/conf to /etc/tomcat
 if [ -d %{_vardir}/conf ] && [ ! -L %{_vardir}/conf ]; then
 	if [ -d %{_sysconfdir}/%{name} ]; then
