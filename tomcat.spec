@@ -13,7 +13,7 @@ Summary:	Web server and Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP 
 Summary(pl.UTF-8):	Serwer www i silnik Servlet/JSP będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
 Name:		tomcat
 Version:	7.0.41
-Release:	6
+Release:	7
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
 Source0:	http://www.apache.org/dist/tomcat/tomcat-7/v%{version}/src/apache-%{name}-%{version}-src.tar.gz
@@ -325,7 +325,7 @@ install -d $TOMCATDIR \
 	$CATALINADIR/temp \
 	$RPM_BUILD_ROOT%{_vardir}/webapps \
 	$RPM_BUILD_ROOT%{_vardir}/work \
-	$RPM_BUILD_ROOT%{_logdir}/tomcat \
+	$RPM_BUILD_ROOT%{_logdir}/{archive/,}tomcat \
 	$RPM_BUILD_ROOT%{_sysconfdir}/%{name}/Catalina/localhost \
 	$RPM_BUILD_ROOT/etc/{sysconfig,rc.d/init.d,logrotate.d}
 
@@ -507,6 +507,7 @@ fi
 %dir %attr(770,root,tomcat) %{_vardir}/webapps
 %dir %attr(770,root,tomcat) %{_vardir}/temp
 %dir %attr(770,root,tomcat) %{_logdir}/tomcat
+%dir %attr(770,root,root) %{_logdir}/archive/tomcat
 %{_vardir}/conf
 %{_vardir}/logs
 
