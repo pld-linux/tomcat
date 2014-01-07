@@ -27,3 +27,15 @@
  
  java.util.logging.ConsoleHandler.level = FINE
  java.util.logging.ConsoleHandler.formatter = java.util.logging.SimpleFormatter
+--- apache-tomcat-7.0.41-src/conf/server.xml~	2014-01-07 13:53:41.000000000 +0200
++++ apache-tomcat-7.0.41-src/conf/server.xml	2014-01-07 13:55:47.637678314 +0200
+@@ -175,8 +175,7 @@
+              Documentation at: /docs/config/valve.html
+              Note: The pattern used is equivalent to using pattern="common" -->
+         <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
+-               prefix="localhost_access_log." suffix=".txt"
+-               pattern="%h %l %u %t &quot;%r&quot; %s %b" />
++               pattern="combined" prefix="access_log" rotatable="false"/>
+ 
+       </Host>
+     </Engine>
