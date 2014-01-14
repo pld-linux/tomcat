@@ -1,6 +1,7 @@
 /var/log/tomcat/*.log
 {
 	create 0644 tomcat tomcat
+	su root http
 	olddir /var/log/archive/tomcat
 	copytruncate
 }
