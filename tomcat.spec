@@ -5,6 +5,8 @@
 %define		jspapiver	2.2
 %define		servletapiver	3.0
 
+%define		tomcatnatver	1.1.27
+
 # Java Commons Logging version. Must be >= 1.1.
 %define		jclver	1.1.1
 
@@ -77,13 +79,14 @@ Requires:	jre >= 1.2
 Requires:	jsvc
 Requires:	rc-scripts
 Suggests:	logrotate
-Suggests:	tomcat-native >= 1.1.27
+Suggests:	tomcat-native >= %{tomcatnatver}
 Provides:	group(servlet)
 Provides:	group(tomcat)
 Provides:	user(tomcat)
 Obsoletes:	apache-tomcat
 Obsoletes:	jakarta-tomcat
 Conflicts:	logrotate < 3.8.0
+Conflicts:	tomcat-native < %{tomcatnatver}
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
