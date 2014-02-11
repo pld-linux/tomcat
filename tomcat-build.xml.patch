@@ -61,12 +61,12 @@
    <target name="validate-eoln" depends="build-prepare,compile-prepare"
      description="Validate that the source files have correct line ends">
  
-@@ -552,7 +498,7 @@
-     </copy>
-   </target>
+@@ -531,7 +531,7 @@
+   <target name="compile" depends="compile-java6,compile-java7" />
  
--  <target name="compile" depends="build-prepare,download-compile,compile-prepare,validate">
-+  <target name="compile" depends="build-prepare">
+   <target name="compile-java6"
+-          depends="build-prepare,download-compile,compile-prepare,validate">
++          depends="build-prepare">
      <!-- Compile internal server components -->
      <javac srcdir="java" destdir="${tomcat.classes}"
             debug="${compile.debug}"
@@ -93,7 +93,16 @@
      <mkdir dir="${test.classes}"/>
      <!-- Compile -->
      <javac srcdir="test" destdir="${test.classes}"
-@@ -1240,52 +1179,10 @@
+@@ -1280,7 +1280,7 @@
+     </path>
+   </target>
+ 
+-  <target name="cobertura-instrument" depends="compile,download-cobertura,cobertura-disabled"
++  <target name="cobertura-instrument" depends="compile,cobertura-disabled"
+           if="${test.cobertura}"
+           description="Adds Cobertura instrumentation to the compiled bytecode">
+ 
+@@ -1339,52 +1339,10 @@
      <mkdir dir="${tomcat.extras}/webservices"/>
    </target>
  
@@ -136,7 +145,7 @@
 -
    <target name="extras-commons-logging"
 -          depends="extras-commons-logging-prepare,compile,build-manifests"
-+          depends="extras-prepare,compile,build-manifests"
++          depends="compile,build-manifests"
            description="Build JULI for log4j extras package">
  
 -    <gunzip src="${commons-logging-src.tar.gz}"
@@ -144,7 +153,7 @@
 -    <untar src="${tomcat.extras}/logging/commons-logging-src.tar"
 -      dest="${tomcat.extras}/logging/"/>
 -
-     <replace dir="${tomcat.extras}/logging/commons-logging-${commons-logging.version}-src/src/java/org/apache/commons"
+     <replace dir="${tomcat.extras}/logging/commons-logging-${commons-logging.version}-src/src/main/java/org/apache/commons"
          encoding="ISO-8859-1">
        <replacefilter token="org.apache.commons"
 @@ -1307,7 +1204,8 @@
@@ -185,7 +194,7 @@
      <mkdir dir="${tomcat.dist}"/>
      <mkdir dir="${tomcat.dist}/bin"/>
      <mkdir dir="${tomcat.dist}/conf"/>
-@@ -2297,290 +2183,6 @@
+@@ -2458,307 +2458,6 @@ Apache Tomcat ${version} native binaries
      <delete file="webapps/docs/jdbc-pool.xml"/>
    </target>
  
@@ -264,10 +273,27 @@
 -  <target name="download-test-compile"
 -          description="Download additional components for the tests" >
 -
--    <antcall target="downloadzip">
+-    <antcall target="downloadfile">
 -      <param name="sourcefile" value="${junit.loc}"/>
 -      <param name="destfile" value="${junit.jar}"/>
--      <param name="destdir" value="${base.path}"/>
+-      <param name="destdir" value="${junit.home}"/>
+-    </antcall>
+-
+-    <antcall target="downloadfile">
+-      <param name="sourcefile" value="${hamcrest.loc}"/>
+-      <param name="destfile" value="${hamcrest.jar}"/>
+-      <param name="destdir" value="${hamcrest.home}"/>
+-    </antcall>
+-
+-  </target>
+-
+-  <target name="download-cobertura"
+-          if="${test.cobertura}"
+-          description="Download the Cobertura code coverage tool" >
+-
+-    <antcall target="downloadgz">
+-      <param name="sourcefile" value="${cobertura.loc}"/>
+-      <param name="destfile" value="${cobertura.jar}"/>
 -    </antcall>
 -
 -  </target>
