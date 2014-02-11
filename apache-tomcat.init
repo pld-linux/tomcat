@@ -66,7 +66,12 @@ start() {
 	msg_starting "Tomcat"
 	busy
 	cd $CATALINA_BASE
-	/usr/bin/jsvc -user tomcat -procname tomcat \
+	/usr/bin/jsvc \
+		-user tomcat \
+		-procname tomcat \
+		-wait 360 \
+		-outfile /var/log/tomcat/catalina.out \
+		-errfile /var/log/tomcat/catalina.out \
 		$JSVC_OPTS \
 		-Dcatalina.base=${CATALINA_BASE} \
 		-Dcatalina.home=${CATALINA_HOME} \
@@ -75,7 +80,7 @@ start() {
 		-Djava.util.logging.config.file="${CATALINA_BASE}/conf/logging.properties" \
 		-Djava.util.logging.manager="org.apache.juli.ClassLoaderLogManager" \
 		$CATALINA_OPTS \
-		org.apache.catalina.startup.Bootstrap >> /var/log/tomcat/catalina.out 2>&1
+		org.apache.catalina.startup.Bootstrap
 	[ $? -ne 0 ] && RETVAL=1
 	if [ $RETVAL -eq 0 ]; then
 		ok
@@ -94,7 +99,7 @@ stop() {
 	# Stop daemons.
 	msg_stopping "Tomcat"
 	busy
-	jsvc -user tomcat -stop \
+	jsvc -user tomcat -stop -wait 360 \
 		$JSVC_OPTS \
 		org.apache.catalina.startup.Bootstrap
 	[ $? -eq 0 ] && ok || fail
