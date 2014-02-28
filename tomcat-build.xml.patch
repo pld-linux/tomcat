@@ -1,6 +1,6 @@
---- apache-tomcat-7.0.35-src/build.xml~	2013-01-10 23:59:20.000000000 +0100
-+++ apache-tomcat-7.0.35-src/build.xml	2013-02-02 10:03:33.530400312 +0100
-@@ -439,60 +439,6 @@
+--- apache-tomcat-7.0.52-src/build.xml.orig	2014-02-13 08:40:56.000000000 +0100
++++ apache-tomcat-7.0.52-src/build.xml	2014-02-28 11:21:53.676705236 +0100
+@@ -482,60 +482,6 @@
      
    </target>
  
@@ -61,7 +61,7 @@
    <target name="validate-eoln" depends="build-prepare,compile-prepare"
      description="Validate that the source files have correct line ends">
  
-@@ -531,7 +531,7 @@
+@@ -595,7 +541,7 @@
    <target name="compile" depends="compile-java6,compile-java7" />
  
    <target name="compile-java6"
@@ -70,7 +70,7 @@
      <!-- Compile internal server components -->
      <javac srcdir="java" destdir="${tomcat.classes}"
             debug="${compile.debug}"
-@@ -853,13 +799,6 @@
+@@ -937,13 +883,6 @@
    <target name="deploy" depends="package,build-docs"
            description="Default. Builds a working Tomcat instance">
  
@@ -84,7 +84,7 @@
      <!-- Copy scripts -->
      <copy todir="${tomcat.build}/bin">
        <fileset dir="bin">
-@@ -1135,7 +1074,7 @@
+@@ -1239,7 +1178,7 @@
  
    </target>
  
@@ -93,7 +93,7 @@
      <mkdir dir="${test.classes}"/>
      <!-- Compile -->
      <javac srcdir="test" destdir="${test.classes}"
-@@ -1280,7 +1280,7 @@
+@@ -1371,7 +1310,7 @@
      </path>
    </target>
  
@@ -102,7 +102,7 @@
            if="${test.cobertura}"
            description="Adds Cobertura instrumentation to the compiled bytecode">
  
-@@ -1339,52 +1339,10 @@
+@@ -1430,52 +1369,10 @@
      <mkdir dir="${tomcat.extras}/webservices"/>
    </target>
  
@@ -156,7 +156,7 @@
      <replace dir="${tomcat.extras}/logging/commons-logging-${commons-logging.version}-src/src/main/java/org/apache/commons"
          encoding="ISO-8859-1">
        <replacefilter token="org.apache.commons"
-@@ -1307,7 +1204,8 @@
+@@ -1497,7 +1394,8 @@
        file="${tomcat.extras}/logging/commons-logging-${commons-logging.version}-src/build.xml" />
  
      <copy todir="${tomcat.extras}/logging/commons-logging-${commons-logging.version}-src">
@@ -166,7 +166,7 @@
        <fileset file="${log4j.jar}" />
        <fileset file="${logkit.jar}" />
        <fileset file="${servletapi.jar}" />
-@@ -1387,18 +1285,6 @@
+@@ -1577,18 +1475,6 @@
            depends="extras-prepare"
            description="Prepare to build web services extras package">
  
@@ -185,7 +185,7 @@
      <copy file="${jaxrpc-lib.jar}"
            tofile="${tomcat.extras}/webservices/jaxrpc.jar" />
      <copy file="${wsdl4j-lib.jar}"
-@@ -1505,7 +1391,7 @@
+@@ -1694,7 +1580,7 @@
  
    </target>
  
@@ -194,11 +194,10 @@
      <mkdir dir="${tomcat.dist}"/>
      <mkdir dir="${tomcat.dist}/bin"/>
      <mkdir dir="${tomcat.dist}/conf"/>
-@@ -2458,307 +2458,6 @@ Apache Tomcat ${version} native binaries
-     <delete file="webapps/docs/jdbc-pool.xml"/>
+@@ -2602,292 +2488,6 @@
    </target>
  
--    
+     
 -  <!-- ================ Download and dependency building =================== -->
 -
 -  <target name="download-validate"
@@ -356,7 +355,6 @@
 -    </move>
 -    <mkdir dir="${tomcat-dbcp.home}/classes"/>
 -    <javac destdir="${tomcat-dbcp.home}/classes"
--           optimize="off"
 -           debug="${compile.debug}"
 -           deprecation="${compile.deprecation}"
 -           source="${compile.source}"
@@ -399,7 +397,7 @@
 -
 -  <target name="downloadgz" unless="exist" depends="setproxy,testexist">
 -    <!-- Download and extract the package -->
--    <get src="${sourcefile}" dest="${base.path}/file.tar.gz" />
+-    <get src="${sourcefile}" httpusecaches="${trydownload.httpusecaches}" dest="${base.path}/file.tar.gz" />
 -    <gunzip src="${base.path}/file.tar.gz" dest="${base.path}/file.tar"/>
 -    <untar src="${base.path}/file.tar" dest="${base.path}"/>
 -    <delete file="${base.path}/file.tar"/>
@@ -426,7 +424,7 @@
 -
 -  <target name="downloadzip" unless="exist" depends="setproxy,testexist">
 -    <!-- Download and extract the package -->
--    <get src="${sourcefile}" dest="${base.path}/file.zip" />
+-    <get src="${sourcefile}" httpusecaches="${trydownload.httpusecaches}" dest="${base.path}/file.zip" />
 -    <mkdir dir="${destdir}" />
 -    <unzip src="${base.path}/file.zip" dest="${destdir}"/>
 -    <delete file="${base.path}/file.zip"/>
@@ -451,7 +449,7 @@
 -  <target name="downloadfile" unless="exist" depends="setproxy,testexist">
 -    <!-- Download extract the file -->
 -    <mkdir dir="${destdir}" />
--    <get src="${sourcefile}" dest="${destfile}" />
+-    <get src="${sourcefile}" httpusecaches="${trydownload.httpusecaches}" dest="${destfile}" />
 -  </target>
 -
 -  <target name="downloadfile-2" unless="exist" depends="testexist">
@@ -483,22 +481,9 @@
 -
 -  <target name="trydownload" if="trydownload.run" depends="trydownload.check">
 -    <!-- Downloads a file if not yet downloaded and the source URL is available -->
--    <get src="${sourcefile}" dest="${destfile}" />
+-    <get src="${sourcefile}" httpusecaches="${trydownload.httpusecaches}" dest="${destfile}" />
 -  </target>
 -
--  <!-- ============================ IDE Support ============================ -->
--
--  <target name="ide-eclipse" depends="deploy, extras-webservices-prepare"
--          description="Prepares the source tree to be built in Eclipse">
--
--    <!-- Copy the sample project files into the root directory -->
--    <copy file="${tomcat.home}/res/ide-support/eclipse/eclipse.project" tofile="${tomcat.home}/.project"/>
--    <copy file="${tomcat.home}/res/ide-support/eclipse/eclipse.classpath" tofile="${tomcat.home}/.classpath"/>
--
--    <echo>Eclipse project files created.
--Read the Building page on the Apache Tomcat documentation site for details on how to configure your Eclipse workplace.</echo>
--  </target>
--
-   <!-- ======================= Macros, Taskdefs etc ======================== -->
+   <!-- ============================ IDE Support ============================ -->
  
-   <macrodef name="jarIt" description="utility macro for standard JAR packaging">
+   <target name="ide-eclipse" depends="deploy, extras-webservices-prepare"
