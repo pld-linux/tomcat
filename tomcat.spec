@@ -15,7 +15,7 @@ Summary:	Web server and Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP 
 Summary(pl.UTF-8):	Serwer www i silnik Servlet/JSP będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
 Name:		tomcat
 Version:	7.0.52
-Release:	1
+Release:	2
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
 Source0:	http://www.apache.org/dist/tomcat/tomcat-7/v%{version}/src/apache-%{name}-%{version}-src.tar.gz
@@ -29,6 +29,7 @@ Source12:	%{name}-context-manager.xml
 Source13:	%{name}-context-host-manager.xml
 Source14:	%{name}-context-examples.xml
 Source15:	%{name}.logrotate
+Source16:	log4j.properties
 Source100:	http://www.apache.org/dist/commons/logging/source/commons-logging-%{jclver}-src.tar.gz
 # Source100-md5:	e8e197d628436490886d17cffa108fe3
 Patch0:		%{name}-build.xml.patch
@@ -345,6 +346,7 @@ cp -p %{SOURCE12} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/Catalina/localhost/manag
 cp -p %{SOURCE13} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/Catalina/localhost/host-manager.xml
 cp -p %{SOURCE14} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/Catalina/localhost/examples.xml
 cp -p %{SOURCE15} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
+cp -p %{SOURCE16} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
 
 cp -a bin lib webapps $TOMCATDIR
 cp -a temp $CATALINADIR
@@ -464,7 +466,7 @@ fi
 %dir %{_sysconfdir}/%{name}/Catalina/localhost
 # tomcat config has to be writeable because of tomcat-users.xml file and Catalina dir
 %config(noreplace) %attr(660,root,tomcat) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/catalina.policy
-%config(noreplace) %attr(660,root,tomcat) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/*.properties*
+%config(noreplace) %attr(660,root,tomcat) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/*.properties
 %config(noreplace) %attr(660,root,tomcat) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/*.xml
 
 %config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/Catalina/localhost/ROOT.xml

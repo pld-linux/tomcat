@@ -1,6 +1,13 @@
 # Java runtime options used when starting Tomcat
 #CATALINA_OPTS="-Xmx384M -XX:MaxPermSize=192m -XX:PermSize=128m"
 
+# Enable log4j configuration
+#CATALINA_OPTS="$CATALINA_OPTS -Dlog4j.configuration=file:///etc/tomcat/log4j.properties"
+
+# Disable slow urandom. Not recommended!
+# http://stackoverflow.com/questions/137212/how-to-solve-performance-problem-with-java-securerandom
+#CATALINA_OPTS="$CATALINA_OPTS -Djava.security.egd=file:/dev/./urandom"
+
 # Start Tomcat with SecurityManager 
 #SECURITY_MANAGER="yes"
 
