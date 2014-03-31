@@ -54,8 +54,9 @@ BuildRequires:	java-log4j
 BuildRequires:	java-mail
 BuildRequires:	jdk
 BuildRequires:	jpackage-utils
+BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpm-javaprov
-BuildRequires:	rpmbuild(macros) >= 1.553
+BuildRequires:	rpmbuild(macros) >= 1.657
 BuildRequires:	sed >= 4.0
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
@@ -85,7 +86,9 @@ Provides:	group(tomcat)
 Provides:	user(tomcat)
 Obsoletes:	apache-tomcat
 Obsoletes:	jakarta-tomcat
+%if "%{pld_release}" != "ac"
 Conflicts:	logrotate < 3.8.0
+%endif
 Conflicts:	tomcat-native < %{tomcatnatver}
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -344,6 +347,9 @@ cp -p %{SOURCE12} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/Catalina/localhost/manag
 cp -p %{SOURCE13} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/Catalina/localhost/host-manager.xml
 cp -p %{SOURCE14} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/Catalina/localhost/examples.xml
 cp -p %{SOURCE15} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
+%if "%{pld_release}" == "ac"
+%{__sed} -i -e '/su/d' $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
+%endif
 
 cp -a bin lib webapps $TOMCATDIR
 cp -a temp $CATALINADIR
