@@ -15,7 +15,7 @@ Summary:	Web server and Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP 
 Summary(pl.UTF-8):	Serwer www i silnik Servlet/JSP będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
 Name:		tomcat
 Version:	7.0.52
-Release:	2
+Release:	3
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
 Source0:	http://www.apache.org/dist/tomcat/tomcat-7/v%{version}/src/apache-%{name}-%{version}-src.tar.gz
@@ -55,8 +55,9 @@ BuildRequires:	java-log4j
 BuildRequires:	java-mail
 BuildRequires:	jdk
 BuildRequires:	jpackage-utils
+BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpm-javaprov
-BuildRequires:	rpmbuild(macros) >= 1.553
+BuildRequires:	rpmbuild(macros) >= 1.657
 BuildRequires:	sed >= 4.0
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
@@ -86,7 +87,9 @@ Provides:	group(tomcat)
 Provides:	user(tomcat)
 Obsoletes:	apache-tomcat
 Obsoletes:	jakarta-tomcat
+%if "%{pld_release}" != "ac"
 Conflicts:	logrotate < 3.8.0
+%endif
 Conflicts:	tomcat-native < %{tomcatnatver}
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -346,6 +349,9 @@ cp -p %{SOURCE12} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/Catalina/localhost/manag
 cp -p %{SOURCE13} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/Catalina/localhost/host-manager.xml
 cp -p %{SOURCE14} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/Catalina/localhost/examples.xml
 cp -p %{SOURCE15} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
+%if "%{pld_release}" == "ac"
+%{__sed} -i -e '/su/d' $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
+%endif
 cp -p %{SOURCE16} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
 
 cp -a bin lib webapps $TOMCATDIR
