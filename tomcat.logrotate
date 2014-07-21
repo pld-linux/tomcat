@@ -1,4 +1,5 @@
 /var/log/tomcat/*.log
+/var/log/tomcat/access_log
 {
 	create 0644 tomcat tomcat
 	su root http
