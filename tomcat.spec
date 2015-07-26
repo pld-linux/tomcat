@@ -1,6 +1,7 @@
 
 # Conditional build:
 %bcond_without	javadoc		# skip building javadocs
+%bcond_without	extras		# skip building extras
 
 %define		jspapiver	2.2
 %define		servletapiver	3.0
@@ -48,7 +49,7 @@ BuildRequires:	java-avalon-logkit
 BuildRequires:	java-commons-daemon >= 1.0
 BuildRequires:	java-commons-dbcp-tomcat5 >= 0:1.1
 BuildRequires:	java-commons-pool-tomcat5
-BuildRequires:	java-eclipse-jdt >= 4.3.2
+BuildRequires:	java-eclipse-jdt >= 4.3.1
 BuildRequires:	java-geronimo-spec-jaxrpc
 BuildRequires:	java-jdbc-mysql
 BuildRequires:	java-junit
@@ -308,13 +309,12 @@ export LC_ALL=en_US
 # Base package
 %ant
 
-# Extras
+%if %{with extras}
 install -d output/extras/webservices
-
 ln -sf %{_javadir}/geronimo-spec-jaxrpc.jar output/extras/webservices/jaxrpc.jar
 ln -sf %{_javadir}/jsr109.jar output/extras/webservices/wsdl4j.jar
-
 %ant extras
+%endif
 
 # Javadoc
 %if %{with javadoc}
@@ -402,12 +402,14 @@ ln -sf %{_javadir}/tomcat-api.jar $TOMCATDIR/lib/api.jar
 
 ln -sf %{_javadir}/tomcat-coyote.jar $TOMCATDIR/lib/tomcat-coyote.jar
 
+%if %{with extras}
 cp -a ../extras/catalina-ws.jar $TOMCATDIR/lib/catalina-ws.jar
 cp -a ../extras/catalina-jmx-remote.jar $TOMCATDIR/lib/catalina-jmx-remote.jar
 cp -a ../extras/tomcat-juli-adapters.jar $RPM_BUILD_ROOT%{_javadir}/tomcat-juli-adapters.jar
 cp -a ../extras/tomcat-juli.jar $RPM_BUILD_ROOT%{_javadir}/tomcat-juli.jar
 ln -sf %{_javadir}/tomcat-juli-adapters.jar $TOMCATDIR/lib/juli-adapters.jar
 ln -sf %{_javadir}/tomcat-juli.jar $TOMCATDIR/lib/juli.jar
+%endif
 
 ln -s %{_javadir}/geronimo-spec-jaxrpc.jar $TOMCATDIR/lib/jaxrpc.jar
 ln -s %{_javadir}/jsr109.jar $TOMCATDIR/lib/jsr109.jar
@@ -498,8 +500,6 @@ fi
 %{_tomcatdir}/lib/jasper-el.jar
 %{_tomcatdir}/lib/jasper.jar
 %{_tomcatdir}/lib/jsp-api.jar
-%{_tomcatdir}/lib/juli-adapters.jar
-%{_tomcatdir}/lib/juli.jar
 %{_tomcatdir}/lib/mail.jar
 %{_tomcatdir}/lib/mysql-connector-java.jar
 %{_tomcatdir}/lib/org.eclipse.jdt.core.jar
@@ -512,6 +512,10 @@ fi
 %{_tomcatdir}/lib/tomcat7-websocket.jar
 %{_tomcatdir}/lib/websocket-api.jar
 %{_tomcatdir}/lib/util.jar
+%if %{with extras}
+%{_tomcatdir}/lib/juli-adapters.jar
+%{_tomcatdir}/lib/juli.jar
+%endif
 
 %dir %{_tomcatdir}/webapps
 
@@ -550,13 +554,17 @@ fi
 
 %files webservices
 %defattr(644,root,root,755)
-%{_tomcatdir}/lib/catalina-ws.jar
 %{_tomcatdir}/lib/jsr109.jar
 %{_tomcatdir}/lib/jaxrpc.jar
+%if %{with extras}
+%{_tomcatdir}/lib/catalina-ws.jar
+%endif
 
+%if %{with extras}
 %files jmx
 %defattr(644,root,root,755)
 %{_tomcatdir}/lib/catalina-jmx-remote.jar
+%endif
 
 %files -n java-tomcat-jasper
 %defattr(644,root,root,755)
@@ -567,9 +575,11 @@ fi
 %defattr(644,root,root,755)
 %{_javadir}/tomcat-api.jar
 %{_javadir}/tomcat-catalina.jar
+%{_javadir}/tomcat-util.jar
+%if %{with extras}
 %{_javadir}/tomcat-juli-adapters.jar
 %{_javadir}/tomcat-juli.jar
-%{_javadir}/tomcat-util.jar
+%endif
 
 %files -n java-tomcat-coyote
 %defattr(644,root,root,755)
