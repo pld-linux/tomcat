@@ -1,0 +1,16 @@
+revert part of inheritAll=false
+https://bz.apache.org/bugzilla/show_bug.cgi?id=56988
+
+otherwise deps for jcl build don't get set
+
+--- tc7.0.x/build.xml~	2015-07-26 22:42:44.873164872 +0300
++++ tc7.0.x/build.xml	2015-07-26 22:53:44.930780044 +0300
+@@ -1613,7 +1613,7 @@
+ 
+     <ant antfile="${tomcat.extras}/logging/commons-logging-${commons-logging.version}-src/build2.xml"
+          dir="${tomcat.extras}/logging/commons-logging-${commons-logging.version}-src"
+-         inheritAll="false" target="compile" />
++         inheritAll="true" target="compile" />
+ 
+     <jar jarfile="${tomcat-juli-extras.jar}"
+          manifest="${tomcat.manifests}/default.manifest"
