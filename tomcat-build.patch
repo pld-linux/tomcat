@@ -1,0 +1,33 @@
+--- apache-tomcat-7.0.70-src/build.xml~	2016-07-19 15:43:44.000000000 +0200
++++ apache-tomcat-7.0.70-src/build.xml	2016-07-19 15:48:19.615551746 +0200
+@@ -1836,7 +1836,7 @@ Apache Tomcat ${version} native binaries
+       encoding="ISO-8859-1"
+       docencoding="ISO-8859-1"
+       charset="ISO-8859-1"
+-      additionalparam="-breakiterator -notimestamp"
++      additionalparam="-Xdoclint:none -breakiterator -notimestamp"
+       maxmemory="512m"
+       failonerror="true"
+       executable="${java.7.home}/bin/javadoc">
+--- apache-tomcat-7.0.70-src/build.xml~	2016-07-19 15:48:55.000000000 +0200
++++ apache-tomcat-7.0.70-src/build.xml	2016-07-19 15:52:07.842156930 +0200
+@@ -1857,7 +1857,7 @@ Apache Tomcat ${version} native binaries
+       encoding="ISO-8859-1"
+       docencoding="ISO-8859-1"
+       charset="ISO-8859-1"
+-      additionalparam="-breakiterator -notimestamp"
++      additionalparam="-Xdoclint:none -breakiterator -notimestamp"
+       maxmemory="512m"
+       failonerror="true"
+       executable="${java.7.home}/bin/javadoc">
+--- apache-tomcat-7.0.70-src/build.xml~	2016-07-19 15:52:27.000000000 +0200
++++ apache-tomcat-7.0.70-src/build.xml	2016-07-19 15:53:28.337957151 +0200
+@@ -1919,7 +1919,7 @@ Apache Tomcat ${version} native binaries
+       encoding="ISO-8859-1"
+       docencoding="ISO-8859-1"
+       charset="ISO-8859-1"
+-      additionalparam="-breakiterator -notimestamp"
++      additionalparam="-Xdoclint:none -breakiterator -notimestamp"
+       maxmemory="512m"
+       failonerror="true"
+       executable="${java.7.home}/bin/javadoc">
