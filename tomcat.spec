@@ -15,12 +15,12 @@
 Summary:	Web server and Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP %{jspapiver} API
 Summary(pl.UTF-8):	Serwer www i silnik Servlet/JSP będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
 Name:		tomcat
-Version:	7.0.70
+Version:	7.0.72
 Release:	1
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
 Source0:	http://www.apache.org/dist/tomcat/tomcat-7/v%{version}/src/apache-%{name}-%{version}-src.tar.gz
-# Source0-md5:	0f56c888df5002cce25fce91634a65c9
+# Source0-md5:	e176d014e49685e2642f7abd8eb7b53b
 Source1:	apache-%{name}.init
 Source2:	apache-%{name}.sysconfig
 Source3:	%{name}-build.properties
@@ -41,7 +41,6 @@ Patch4:		%{name}-userdir.patch
 Patch5:		logging.patch
 Patch6:		jcl.patch
 Patch7:		%{name}-build.patch
-Patch8:		tomcat-CVE-2016-5388.patch
 Patch100:	jcl-build.xml.patch
 URL:		http://tomcat.apache.org/
 BuildRequires:	ant >= 1.5.3
@@ -272,7 +271,6 @@ javax.servlet.http, javax.servlet.jsp i java.servlet.jsp.tagext).
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
-%patch8 -p1
 
 # Prepare java-commmons-logging sources
 install -d output/extras/logging
