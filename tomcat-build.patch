@@ -31,3 +31,14 @@
        maxmemory="512m"
        failonerror="true"
        executable="${java.7.home}/bin/javadoc">
+--- apache-tomcat-7.0.81-src/build.xml~	2017-10-04 11:16:30.000000000 +0200
++++ apache-tomcat-7.0.81-src/build.xml	2017-10-04 11:48:42.218524719 +0200
+@@ -1932,7 +1932,7 @@ Apache Tomcat ${version} native binaries
+       encoding="ISO-8859-1"
+       docencoding="ISO-8859-1"
+       charset="ISO-8859-1"
+-      additionalparam="-breakiterator -notimestamp"
++      additionalparam="-Xdoclint:none -breakiterator -notimestamp"
+       maxmemory="512m"
+       failonerror="true"
+       executable="${java.7.home}/bin/javadoc">
