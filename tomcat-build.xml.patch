@@ -9,20 +9,6 @@
      <!-- Compile internal server components -->
      <javac srcdir="java" destdir="${tomcat.classes}"
             debug="${compile.debug}"
-@@ -937,13 +883,6 @@
-   <target name="deploy" depends="package,build-docs"
-           description="Default. Builds a working Tomcat instance">
- 
--    <copy tofile="${tomcat.build}/bin/tomcat-native.tar.gz"
--            file="${tomcat-native.tar.gz}" />
--    <copy tofile="${tomcat.build}/bin/commons-daemon-native.tar.gz"
--            file="${commons-daemon.native.src.tgz}" />
--
--    <copy tofile="${tomcat.build}/bin/commons-daemon.jar" file="${commons-daemon.jar}" />
--
-     <!-- Copy scripts -->
-     <copy todir="${tomcat.build}/bin">
-       <fileset dir="bin">
 @@ -1198,7 +1198,7 @@
  
    </target>
@@ -133,3 +119,18 @@
      <mkdir dir="${tomcat.dist}"/>
      <mkdir dir="${tomcat.dist}/bin"/>
      <mkdir dir="${tomcat.dist}/conf"/>
+@@ -1832,13 +1832,6 @@
+       </fileset>
+     </copy>
+ 
+-    <!-- Source bundles for native components -->
+-    <copy tofile="${tomcat.dist}/bin/tomcat-native.tar.gz"
+-            file="${tomcat-native.tar.gz}" />
+-    <copy tofile="${tomcat.dist}/bin/commons-daemon-native.tar.gz"
+-            file="${commons-daemon.native.src.tgz}" />
+-
+-    <!-- platform README files -->
+     <echo append="false" file="${tomcat.dist}/bin/x64/README">
+ Apache Tomcat ${version} native binaries for Win64 AMD64/EMT64 platform.
+     </echo>
+
