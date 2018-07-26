@@ -9,18 +9,18 @@
 %define		tomcatnatver	1.1.27
 
 # Java Commons Logging version. Must be >= 1.1.
-%define		jclver	1.1.3
+%define		jclver	1.2
 
 %include	/usr/lib/rpm/macros.java
 Summary:	Web server and Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP %{jspapiver} API
 Summary(pl.UTF-8):	Serwer www i silnik Servlet/JSP będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
 Name:		tomcat
-Version:	7.0.88
+Version:	7.0.90
 Release:	1
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
 Source0:	http://www.apache.org/dist/tomcat/tomcat-7/v%{version}/src/apache-%{name}-%{version}-src.tar.gz
-# Source0-md5:	839796dfd31ac436c009006f1f815b10
+# Source0-md5:	d5b2197a0a5fcc2101aa54648acab2b2
 Source1:	apache-%{name}.init
 Source2:	apache-%{name}.sysconfig
 Source3:	%{name}-build.properties
@@ -32,7 +32,7 @@ Source14:	%{name}-context-examples.xml
 Source15:	%{name}.logrotate
 Source16:	log4j.properties
 Source100:	http://www.apache.org/dist/commons/logging/source/commons-logging-%{jclver}-src.tar.gz
-# Source100-md5:	e8e197d628436490886d17cffa108fe3
+# Source100-md5:	ce977548f1cbf46918e93cd38ac35163
 Patch0:		%{name}-build.xml.patch
 Patch1:		server.xml-URIEncoding-utf8.patch
 Patch2:		%{name}-LDAPUserDatabase.patch
