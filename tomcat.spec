@@ -15,12 +15,12 @@
 Summary:	Web server and Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP %{jspapiver} API
 Summary(pl.UTF-8):	Serwer www i silnik Servlet/JSP będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
 Name:		tomcat
-Version:	7.0.91
+Version:	7.0.94
 Release:	1
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
 Source0:	http://www.apache.org/dist/tomcat/tomcat-7/v%{version}/src/apache-%{name}-%{version}-src.tar.gz
-# Source0-md5:	4e0b79a0a06a0dae07ca12e173f16920
+# Source0-md5:	ab9ce1e8190fbfed2b4843c2ca69106c
 Source1:	apache-%{name}.init
 Source2:	apache-%{name}.sysconfig
 Source3:	%{name}-build.properties
@@ -508,9 +508,11 @@ fi
 %{_tomcatdir}/lib/servlet-api.jar
 %{_tomcatdir}/lib/tomcat-jdbc.jar
 %{_tomcatdir}/lib/tomcat-coyote.jar
+%{_tomcatdir}/lib/tomcat-dbcp.jar
 %{_tomcatdir}/lib/tomcat-i18n-es.jar
 %{_tomcatdir}/lib/tomcat-i18n-fr.jar
 %{_tomcatdir}/lib/tomcat-i18n-ja.jar
+%{_tomcatdir}/lib/tomcat-i18n-ru.jar
 %{_tomcatdir}/lib/tomcat7-websocket.jar
 %{_tomcatdir}/lib/websocket-api.jar
 %{_tomcatdir}/lib/util.jar

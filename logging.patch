@@ -1,27 +1,30 @@
 --- apache-tomcat-7.0.41-src/conf/logging.properties~	2013-11-11 15:11:20.000000000 +0200
 +++ apache-tomcat-7.0.41-src/conf/logging.properties	2013-11-11 15:11:24.361648531 +0200
-@@ -25,18 +25,26 @@
- 1catalina.org.apache.juli.FileHandler.level = FINE
+@@ -26,21 +26,29 @@ handlers = 1catalina.org.apache.juli.Fil
  1catalina.org.apache.juli.FileHandler.directory = ${catalina.base}/logs
  1catalina.org.apache.juli.FileHandler.prefix = catalina.
+ 1catalina.org.apache.juli.FileHandler.encoding = UTF-8
 +1catalina.org.apache.juli.FileHandler.rotatable = false
-+1catalina.org.apache.juli.FileHandler.suffix = log
++1catalina.org.apache.juli.FileHandlers.suffix = log
  
  2localhost.org.apache.juli.FileHandler.level = FINE
  2localhost.org.apache.juli.FileHandler.directory = ${catalina.base}/logs
  2localhost.org.apache.juli.FileHandler.prefix = localhost.
+ 2localhost.org.apache.juli.FileHandler.encoding = UTF-8
 +2localhost.org.apache.juli.FileHandler.rotatable = false
 +2localhost.org.apache.juli.FileHandler.suffix = log
  
  3manager.org.apache.juli.FileHandler.level = FINE
  3manager.org.apache.juli.FileHandler.directory = ${catalina.base}/logs
  3manager.org.apache.juli.FileHandler.prefix = manager.
+ 3manager.org.apache.juli.FileHandler.encoding = UTF-8
 +3manager.org.apache.juli.FileHandler.rotatable = false
 +3manager.org.apache.juli.FileHandler.suffix = log
  
  4host-manager.org.apache.juli.FileHandler.level = FINE
  4host-manager.org.apache.juli.FileHandler.directory = ${catalina.base}/logs
  4host-manager.org.apache.juli.FileHandler.prefix = host-manager.
+ 4host-manager.org.apache.juli.FileHandler.encoding = UTF-8
 +4host-manager.org.apache.juli.FileHandler.rotatable = false
 +4host-manager.org.apache.juli.FileHandler.suffix = log
  

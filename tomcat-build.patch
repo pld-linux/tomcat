@@ -42,3 +42,25 @@
        maxmemory="512m"
        failonerror="true"
        executable="${java.7.home}/bin/javadoc">
+--- apache-tomcat-7.0.94-src/build.xml~	2019-05-08 09:40:51.000000000 +0200
++++ apache-tomcat-7.0.94-src/build.xml	2019-05-08 09:42:01.675738032 +0200
+@@ -2559,7 +2559,7 @@ Apache Tomcat ${version} native binaries
+ 
+   <target name="download-deps"
+           description="Download the dependencies required to build and test"
+-          depends="download-compile, download-dist, download-test-compile, download-validate, download-cobertura, extras-commons-logging-prepare, extras-webservices-prepare" />
++          depends="download-compile, download-dist, download-test-compile, download-validate, download-cobertura, extras-webservices-prepare" />
+ 
+   <target name="download-validate"
+           description="Download components necessary to validate source"
+--- apache-tomcat-7.0.94-src/build.xml~	2019-05-08 09:42:27.000000000 +0200
++++ apache-tomcat-7.0.94-src/build.xml	2019-05-08 09:52:06.183789472 +0200
+@@ -1955,7 +1955,7 @@ Apache Tomcat ${version} native binaries
+       encoding="ISO-8859-1"
+       docencoding="ISO-8859-1"
+       charset="ISO-8859-1"
+-      additionalparam="-breakiterator -notimestamp"
++      additionalparam="-Xdoclint:none -breakiterator -notimestamp"
+       maxmemory="512m"
+       failonerror="true"
+       executable="${java.7.home}/bin/javadoc">

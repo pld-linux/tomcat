@@ -1,10 +1,10 @@
 --- apache-tomcat-7.0.63-src/build.xml~	2015-06-30 11:15:44.000000000 +0300
 +++ apache-tomcat-7.0.63-src/build.xml	2015-07-26 21:31:46.613106110 +0300
-@@ -632,7 +574,7 @@
-   <target name="compile" depends="compile-java6,check-java7,compile-java7" />
+@@ -655,7 +655,7 @@
+   <target name="compile" depends="compile-java6, check-java7, compile-java7" />
  
    <target name="compile-java6"
--          depends="build-prepare,download-compile,compile-prepare,validate">
+-          depends="build-prepare, download-compile, compile-prepare, validate">
 +          depends="build-prepare">
      <!-- Compile internal server components -->
      <javac srcdir="java" destdir="${tomcat.classes}"
