@@ -5,7 +5,7 @@
  1catalina.org.apache.juli.FileHandler.prefix = catalina.
  1catalina.org.apache.juli.FileHandler.encoding = UTF-8
 +1catalina.org.apache.juli.FileHandler.rotatable = false
-+1catalina.org.apache.juli.FileHandlers.suffix = log
++1catalina.org.apache.juli.FileHandler.suffix = log
  
  2localhost.org.apache.juli.FileHandler.level = FINE
  2localhost.org.apache.juli.FileHandler.directory = ${catalina.base}/logs
