@@ -11,7 +11,6 @@
 # Java Commons Logging version. Must be >= 1.1.
 %define		jclver	1.2
 
-%include	/usr/lib/rpm/macros.java
 Summary:	Web server and Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP %{jspapiver} API
 Summary(pl.UTF-8):	Serwer www i silnik Servlet/JSP będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
 Name:		tomcat
