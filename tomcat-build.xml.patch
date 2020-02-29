@@ -1,6 +1,6 @@
---- apache-tomcat-7.0.63-src/build.xml~	2015-06-30 11:15:44.000000000 +0300
-+++ apache-tomcat-7.0.63-src/build.xml	2015-07-26 21:31:46.613106110 +0300
-@@ -655,7 +655,7 @@
+--- apache-tomcat-7.0.100-src/build.xml.org	2020-02-11 09:39:54.000000000 +0100
++++ apache-tomcat-7.0.100-src/build.xml	2020-02-29 19:19:42.236875428 +0100
+@@ -683,7 +683,7 @@
    <target name="compile" depends="compile-java6, check-java7, compile-java7" />
  
    <target name="compile-java6"
@@ -9,7 +9,7 @@
      <!-- Compile internal server components -->
      <javac srcdir="java" destdir="${tomcat.classes}"
             debug="${compile.debug}"
-@@ -1198,7 +1198,7 @@
+@@ -1409,7 +1409,7 @@
  
    </target>
  
@@ -18,16 +18,16 @@
      <mkdir dir="${test.classes}"/>
      <!-- Compile -->
      <javac srcdir="test" destdir="${test.classes}"
-@@ -1371,7 +1310,7 @@
-     </path>
+@@ -1621,7 +1621,7 @@
    </target>
  
--  <target name="cobertura-instrument" depends="compile,download-cobertura,cobertura-disabled"
-+  <target name="cobertura-instrument" depends="compile,cobertura-disabled"
-           if="${test.cobertura}"
+   <target name="cobertura-instrument"
+-          depends="compile,download-cobertura,cobertura-disabled,cobertura-disabled-log"
++          depends="compile,cobertura-disabled,cobertura-disabled-log"
+           if="${cobertura.enabled}"
            description="Adds Cobertura instrumentation to the compiled bytecode">
  
-@@ -1556,67 +1556,10 @@
+@@ -1681,67 +1681,10 @@
      <mkdir dir="${tomcat.extras}/webservices"/>
    </target>
  
@@ -96,7 +96,7 @@
      <replace dir="${tomcat.extras}/logging/commons-logging-${commons-logging.version}-src/src/main/java/org/apache/commons"
          encoding="ISO-8859-1">
        <replacefilter token="org.apache.commons"
-@@ -1497,7 +1394,8 @@
+@@ -1763,7 +1706,8 @@
        file="${tomcat.extras}/logging/commons-logging-${commons-logging.version}-src/build.xml" />
  
      <copy todir="${tomcat.extras}/logging/commons-logging-${commons-logging.version}-src">
@@ -106,7 +106,7 @@
        <fileset file="${log4j.jar}" />
        <fileset file="${logkit.jar}" />
        <fileset file="${servletapi.jar}" />
-@@ -1660,24 +1660,6 @@
+@@ -1842,24 +1786,6 @@
            depends="extras-prepare"
            description="Prepare to build web services extras package">
  
@@ -131,7 +131,7 @@
      <copy file="${jaxrpc-lib.jar}"
            tofile="${tomcat.extras}/webservices/jaxrpc.jar" />
      <copy file="${wsdl4j-lib.jar}"
-@@ -1694,7 +1580,7 @@
+@@ -1961,7 +1887,7 @@
  
    </target>
  
@@ -140,7 +140,7 @@
      <mkdir dir="${tomcat.dist}"/>
      <mkdir dir="${tomcat.dist}/bin"/>
      <mkdir dir="${tomcat.dist}/conf"/>
-@@ -1832,13 +1832,6 @@
+@@ -2034,13 +1960,6 @@
        </fileset>
      </copy>
  
@@ -154,4 +154,12 @@
      <echo append="false" file="${tomcat.dist}/bin/x64/README">
  Apache Tomcat ${version} native binaries for Win64 AMD64/EMT64 platform.
      </echo>
-
+@@ -2791,7 +2791,7 @@ skip.installer property in build.propert
+ 
+   <target name="download-deps"
+           description="Download the dependencies required to build and test"
+-          depends="download-compile, download-dist, download-test-compile, download-validate, download-cobertura, extras-commons-logging-prepare, extras-webservices-prepare" />
++          depends="download-compile, download-dist, download-test-compile, download-validate, download-cobertura, extras-webservices-prepare" />
+ 
+   <target name="download-validate"
+           description="Download components necessary to validate source"
