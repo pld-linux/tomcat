@@ -14,12 +14,12 @@
 Summary:	Web server and Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP %{jspapiver} API
 Summary(pl.UTF-8):	Serwer www i silnik Servlet/JSP będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
 Name:		tomcat
-Version:	7.0.106
+Version:	7.0.107
 Release:	1
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
 Source0:	http://www.apache.org/dist/tomcat/tomcat-7/v%{version}/src/apache-%{name}-%{version}-src.tar.gz
-# Source0-md5:	0f40e24aa3ea0a5188ac3973d54d1650
+# Source0-md5:	7b37e6f4000c979fe337f8f1b67961e2
 Source1:	apache-%{name}.init
 Source2:	apache-%{name}.sysconfig
 Source3:	%{name}-build.properties
@@ -483,7 +483,8 @@ fi
 %config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/Catalina/localhost/ROOT.xml
 
 %dir %{_tomcatdir}
-%dir %{_tomcatdir}/conf
+# symlink
+%{_tomcatdir}/conf
 %dir %{_tomcatdir}/bin
 %{_tomcatdir}/bin/catalina-tasks.xml
 %attr(755,root,root) %{_tomcatdir}/bin/*.sh
