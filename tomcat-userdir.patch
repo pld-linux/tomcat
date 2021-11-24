@@ -1,8 +1,9 @@
---- apache-tomcat-6.0.29-src/conf/server.xml~	2010-11-17 17:41:58.451654998 +0100
-+++ apache-tomcat-6.0.29-src/conf/server.xml	2010-11-21 15:05:44.259477500 +0100
-@@ -142,6 +142,46 @@
-         <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"  
-                prefix="localhost_access_log." suffix=".txt" pattern="common" resolveHosts="false"/>
+diff -urNp -x '*.orig' apache-tomcat-7.0.107-src.org/conf/server.xml apache-tomcat-7.0.107-src/conf/server.xml
+--- apache-tomcat-7.0.107-src.org/conf/server.xml	2021-11-24 10:19:04.426573110 +0100
++++ apache-tomcat-7.0.107-src/conf/server.xml	2021-11-24 10:19:04.699920632 +0100
+@@ -137,6 +137,46 @@
+         <!--
+         <Valve className="org.apache.catalina.authenticator.SingleSignOn" />
          -->
 +	<!--
 +		Automatically map a request URI starting with a tilde
@@ -45,5 +46,5 @@
 +		userClass="org.apache.catalina.startup.LDAPUserDatabase"/>
 +	-->
  
-       </Host>
-     </Engine>
+         <!-- Access log processes all example.
+              Documentation at: /docs/config/valve.html
