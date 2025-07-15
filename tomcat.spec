@@ -263,21 +263,21 @@ javax.servlet.http, javax.servlet.jsp i java.servlet.jsp.tagext).
 
 %prep
 %setup -q -a100 -n apache-%{name}-%{version}-src
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
-%patch6 -p1
-%patch7 -p1
+%patch -P0 -p1
+%patch -P1 -p1
+%patch -P2 -p1
+%patch -P3 -p1
+%patch -P4 -p1
+%patch -P5 -p1
+%patch -P6 -p1
+%patch -P7 -p1
 
 # Prepare java-commmons-logging sources
 install -d output/extras/logging
 mv commons-logging-%{jclver}-src output/extras/logging
 cd output/extras/logging/commons-logging-%{jclver}-src
 %undos build.xml
-%patch100 -p1
+%patch -P100 -p1
 cd -
 
 # we don't need those scripts
