@@ -2,22 +2,22 @@
 # Conditional build:
 %bcond_without	javadoc		# skip building javadocs
 
-%define		jspapiver	4.0
-%define		servletapiver	6.1
-%define		elapiver	6.0
-%define		wsapiver	2.2
+%define		jspapiver	2.3
+%define		servletapiver	4.0
+%define		elapiver	3.0
+%define		wsapiver	1.1
 
-%define		tomcatnatver	2.0.12
+%define		tomcatnatver	1.3.5
 
 Summary:	Web server and Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP %{jspapiver} API
 Summary(pl.UTF-8):	Serwer www i silnik Servlet/JSP będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
 Name:		tomcat
-Version:	11.0.18
+Version:	9.0.115
 Release:	1
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
-Source0:	https://archive.apache.org/dist/tomcat/tomcat-11/v%{version}/src/apache-%{name}-%{version}-src.tar.gz
-# Source0-md5:	d1108b6e6b9818dbaeee804e79d4e566
+Source0:	https://archive.apache.org/dist/tomcat/tomcat-9/v%{version}/src/apache-%{name}-%{version}-src.tar.gz
+# Source0-md5:	61faef8bf9d849da8e114460ce034709
 Source1:	apache-%{name}.init
 Source2:	apache-%{name}.sysconfig
 Source3:	%{name}-build.properties
@@ -27,8 +27,8 @@ Source12:	%{name}-context-manager.xml
 Source13:	%{name}-context-host-manager.xml
 Source14:	%{name}-context-examples.xml
 Source15:	%{name}.logrotate
+# Disable OSGi metadata generation and remove bnd annotations
 Patch0:		no-bnd-osgi.patch
-Patch1:		jakartaee-migration-stubs.patch
 URL:		https://tomcat.apache.org/
 BuildRequires:	ant >= 1.10.2
 BuildRequires:	java-commons-daemon >= 1.0
@@ -51,7 +51,7 @@ Requires:	java-%{name}-coyote = %{version}-%{release}
 Requires:	java-%{name}-jasper = %{version}-%{release}
 Requires:	java-servletapi = %{version}-%{release}
 Requires:	jpackage-utils
-Requires:	jre >= 17
+Requires:	jre >= 1.8
 Requires:	jsvc
 Requires:	rc-scripts
 Suggests:	logrotate
@@ -74,9 +74,9 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
 Tomcat is the servlet container that is used in the official Reference
-Implementation for the Jakarta Servlet and Jakarta Pages technologies.
-The Jakarta Servlet and Jakarta Pages specifications are developed
-under the Eclipse Foundation Jakarta EE process.
+Implementation for the Java Servlet and JavaServer Pages technologies.
+The Java Servlet and JavaServer Pages specifications are developed
+under the Java Community Process.
 
 Tomcat is developed in an open and participatory environment and
 released under the Apache Software License. Tomcat is intended to be a
@@ -84,9 +84,9 @@ collaboration of the best-of-breed developers from around the world.
 
 %description -l pl.UTF-8
 Tomcat to kontener serwletowy używany przez oficjalną implementację
-wzorcową technologii Jakarta Servlet i Jakarta Pages. Specyfikacje
-Jakarta Servlet i Jakarta Pages są rozwijane zgodnie z procesem
-Jakarta EE w ramach Eclipse Foundation.
+wzorcową technologii Java Servlet i JavaServer Pages. Specyfikacje
+Java Servlet i JavaServer Pages są rozwijane zgodnie z procesem
+Java Community Process.
 
 %package webapp-docs
 Summary:	The Apache Tomcat Servlet/JSP Container documentation
@@ -148,7 +148,7 @@ Requires:	jpackage-utils
 
 %description -n java-tomcat-catalina
 Catalina is Tomcat's servlet container. Catalina implements the
-Jakarta Servlet and Jakarta Pages (JSP) specifications.
+Java Servlet and JavaServer Pages (JSP) specifications.
 
 %description -n java-tomcat-catalina -l pl.UTF-8
 Bibliotek Javy zawierające silnik servletów i JSP tomcata.
@@ -179,16 +179,16 @@ Obsoletes:	apache-tomcat-jasper
 Obsoletes:	tomcat-jasper
 
 %description -n java-tomcat-jasper
-Jasper is Jakarta ServerPages compiler used by Apache Tomcat servlet
+Jasper is Java ServerPages compiler used by Apache Tomcat servlet
 container.
 
 %description -n java-tomcat-jasper -l pl.UTF-8
-Jasper jest kompilatorem Jakarta ServerPages używanym przez kontener
+Jasper jest kompilatorem Java ServerPages używanym przez kontener
 servletów Apache Tomcat.
 
 %package -n java-servletapi
-Summary:	Jakarta Servlet, Pages, EL, and WebSocket implementation classes
-Summary(pl.UTF-8):	Klasy z implementacją Jakarta Servlet, Pages, EL i WebSocket
+Summary:	Java Servlet, JSP, EL, and WebSocket implementation classes
+Summary(pl.UTF-8):	Klasy z implementacją Java Servlet, JSP, EL i WebSocket
 Group:		Libraries/Java
 Provides:	java(jsp) = %{jspapiver}
 Provides:	java(servlet) = %{servletapiver}
@@ -198,23 +198,24 @@ Obsoletes:	jakarta-servletapi5
 Obsoletes:	java-servletapi5
 
 %description -n java-servletapi
-Implementation classes of the Jakarta Servlet, Pages, Expression
-Language, and WebSocket APIs (packages jakarta.servlet,
-jakarta.servlet.http, jakarta.servlet.jsp, and
-jakarta.servlet.jsp.tagext).
+Implementation classes of the Java Servlet, JavaServer Pages,
+Expression Language, and WebSocket APIs (packages javax.servlet,
+javax.servlet.http, javax.servlet.jsp, and javax.servlet.jsp.tagext).
 
 %description -n java-servletapi -l pl.UTF-8
-Implementacje klas API Jakarta Servlet, Pages, EL i WebSocket (pakiety
-jakarta.servlet, jakarta.servlet.http, jakarta.servlet.jsp i
-jakarta.servlet.jsp.tagext).
+Implementacje klas API Java Servlet, JSP, EL i WebSocket (pakiety
+javax.servlet, javax.servlet.http, javax.servlet.jsp i
+javax.servlet.jsp.tagext).
 
 %prep
 %setup -q -n apache-%{name}-%{version}-src
 %patch -P0 -p1
-%patch -P1 -p1
 
 # we don't need those scripts
 rm bin/*.bat
+
+# Remove webservices support (requires wsdl4j, removed from JDK since Java 11)
+rm -rf java/org/apache/naming/factory/webservices
 
 cp -p %{SOURCE3} build.properties
 
@@ -379,6 +380,7 @@ fi
 # tomcat config has to be writeable because of tomcat-users.xml file and Catalina dir
 %config(noreplace) %attr(660,root,tomcat) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/*.properties
 %config(noreplace) %attr(660,root,tomcat) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/*.xml
+%config(noreplace) %attr(660,root,tomcat) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/catalina.policy
 %{_sysconfdir}/%{name}/*.xsd
 
 %config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/Catalina/localhost/ROOT.xml
@@ -402,10 +404,10 @@ fi
 %{_tomcatdir}/lib/el-api.jar
 %{_tomcatdir}/lib/jasper-el.jar
 %{_tomcatdir}/lib/jasper.jar
+%{_tomcatdir}/lib/jaspic-api.jar
 %{_tomcatdir}/lib/jsp-api.jar
 %{_tomcatdir}/lib/org.eclipse.jdt.core.jar
 %{_tomcatdir}/lib/servlet-api.jar
-%{_tomcatdir}/lib/jaspic-api.jar
 %{_tomcatdir}/lib/tomcat-coyote.jar
 %{_tomcatdir}/lib/tomcat-coyote-ffm.jar
 %{_tomcatdir}/lib/tomcat-dbcp.jar
@@ -424,7 +426,6 @@ fi
 %{_tomcatdir}/lib/util.jar
 %{_tomcatdir}/lib/util-scan.jar
 %{_tomcatdir}/lib/websocket-api.jar
-%{_tomcatdir}/lib/websocket-client-api.jar
 
 %dir %{_tomcatdir}/webapps
 
