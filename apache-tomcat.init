@@ -26,7 +26,14 @@ fi
 set_jvm
 
 # Set default options
-CATALINA_OPTS="-Xmx384M -XX:MaxPermSize=192m -XX:PermSize=128m"
+# --add-opens flags per Tomcat 11 setup docs for jsvc usage:
+# https://tomcat.apache.org/tomcat-11.0-doc/setup.html
+CATALINA_OPTS="-Xmx384M \
+	--add-opens=java.base/java.lang=ALL-UNNAMED \
+	--add-opens=java.base/java.io=ALL-UNNAMED \
+	--add-opens=java.base/java.util=ALL-UNNAMED \
+	--add-opens=java.base/java.util.concurrent=ALL-UNNAMED \
+	--add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED"
 
 # Get service config - may override defaults
 [ -f /etc/sysconfig/tomcat ] && . /etc/sysconfig/tomcat
@@ -35,7 +42,7 @@ unset TMPDIR
 unset TMP
 
 COMMONSDAEMON=$(find-jar commons-daemon)
-TOMCATLIBS=/usr/share/tomcat/bin/bootstrap.jar:$(build-classpath-directory /usr/share/tomcat/lib)
+TOMCATLIBS=/usr/share/tomcat/bin/bootstrap.jar:/usr/share/tomcat/bin/tomcat-juli.jar:$(build-classpath-directory /usr/share/tomcat/lib)
 CLASSPATH=${CLASSPATH:+"$CLASSPATH:"}$COMMONSDAEMON:$TOMCATLIBS
 
 CATALINA_HOME=/usr/share/tomcat
@@ -45,16 +52,6 @@ CATALINA_TMPDIR=/var/lib/tomcat/temp
 JSVC_OPTS="-classpath ${CLASSPATH} \
 	-home ${JAVA_HOME} \
 	-pidfile /var/run/tomcat.pid"
-
-if is_yes "${SECURITY_MANAGER}"; then
-	CATALINA_OPTS="$CATALINA_OPTS \
-		-Djava.security.manager \
-		-Djava.security.policy==${CATALINA_BASE}/conf/catalina.policy"
-	if [ -n "${SECURITY_MANAGER_DEBUG}" ]; then
-		CATALINA_OPTS="$CATALINA_OPTS \
-			-Djava.security.debug=${SECURITY_MANAGER_DEBUG}"
-	fi
-fi
 
 start() {
 	# Check if the service is already running?

@@ -1,0 +1,302 @@
+# Disable OSGi metadata generation and remove bnd annotations.
+# Tomcat doesn't use OSGi at runtime, almost nobody deploys Tomcat as OSGi
+# bundles, and the OSGi ecosystem has largely been superseded by Java 9+
+# modules (JPMS). Not worth packaging bnd/osgi just for unused manifest
+# entries.
+diff -urN apache-tomcat-11.0.18-src.orig/build.xml apache-tomcat-11.0.18-src.bnd/build.xml
+--- apache-tomcat-11.0.18-src.orig/build.xml	2026-01-23 11:22:57.000000000 +0100
++++ apache-tomcat-11.0.18-src.bnd/build.xml	2026-03-10 17:51:48.409984756 +0100
+@@ -1130,7 +1130,7 @@
+       filesDir="${tomcat.classes}"
+       filesId="files.annotations-api"
+       manifest="${tomcat.manifests}/annotations-api.jar.manifest"
+-      addOSGi="true" />
++      addOSGi="false" />
+ 
+     <!-- Servlet Implementation JAR File -->
+     <jarIt jarfile="${servlet-api.jar}"
+@@ -1139,48 +1139,48 @@
+       manifest="${tomcat.manifests}/servlet-api.jar.manifest"
+       notice="${tomcat.manifests}/servlet-api.jar.notice"
+       license="${tomcat.manifests}/servlet-api.jar.license"
+-      addOSGi="true" />
++      addOSGi="false" />
+ 
+     <!-- EL Implementation JAR File -->
+     <jarIt jarfile="${el-api.jar}"
+       filesDir="${tomcat.classes}"
+       filesId="files.el-api"
+       manifest="${tomcat.manifests}/el-api.jar.manifest"
+-      addOSGi="true" />
++      addOSGi="false" />
+ 
+     <!-- JSP Implementation JAR File -->
+     <jarIt jarfile="${jsp-api.jar}"
+       filesDir="${tomcat.classes}"
+       filesId="files.jsp-api"
+       manifest="${tomcat.manifests}/jsp-api.jar.manifest"
+-      addOSGi="true" />
++      addOSGi="false" />
+ 
+     <!-- WebSocket API JAR File -->
+     <jarIt jarfile="${websocket-api.jar}"
+       filesDir="${tomcat.classes}"
+       filesId="files.websocket-api"
+       manifest="${tomcat.manifests}/websocket-api.jar.manifest"
+-      addOSGi="true" />
++      addOSGi="false" />
+ 
+     <!-- WebSocket Client API JAR File -->
+     <jarIt jarfile="${websocket-client-api.jar}"
+       filesDir="${tomcat.classes}"
+       filesId="files.websocket-client-api"
+       manifest="${tomcat.manifests}/websocket-client-api.jar.manifest"
+-      addOSGi="true" />
++      addOSGi="false" />
+ 
+     <!-- JASPIC API JAR File -->
+     <jarIt jarfile="${jaspic-api.jar}"
+       filesDir="${tomcat.classes}"
+       filesId="files.jaspic-api"
+       manifest="${tomcat.manifests}/jaspic-api.jar.manifest"
+-      addOSGi="true" />
++      addOSGi="false" />
+ 
+     <!-- Tomcat-juli JAR File -->
+     <jarIt jarfile="${tomcat-juli.jar}"
+       filesDir="${tomcat.classes}"
+       filesId="files.tomcat-juli"
+-      addOSGi="true" />
++      addOSGi="false" />
+ 
+     <!-- Bootstrap JAR File -->
+     <jarIt jarfile="${bootstrap.jar}"
+@@ -1192,68 +1192,68 @@
+     <jarIt jarfile="${tomcat-util.jar}"
+       filesDir="${tomcat.classes}"
+       filesId="files.tomcat-util"
+-      addOSGi="true" />
++      addOSGi="false" />
+ 
+     <!-- Tomcat API JAR File -->
+     <jarIt jarfile="${tomcat-api.jar}"
+       filesDir="${tomcat.classes}"
+       filesId="files.tomcat-api"
+-      addOSGi="true" />
++      addOSGi="false" />
+ 
+     <!-- Tomcat Util Scan JAR File -->
+     <jarIt jarfile="${tomcat-util-scan.jar}"
+       filesDir="${tomcat.classes}"
+       filesId="files.tomcat-util-scan"
+-      addOSGi="true" />
++      addOSGi="false" />
+ 
+     <jarIt jarfile="${tomcat-jni.jar}"
+       filesDir="${tomcat.classes}"
+       filesId="files.tomcat-jni"
+-      addOSGi="true" />
++      addOSGi="false" />
+ 
+     <!-- Protocol handlers - Coyote -->
+     <jarIt jarfile="${tomcat-coyote.jar}"
+       filesDir="${tomcat.classes}"
+       filesId="files.tomcat-coyote"
+-      addOSGi="true" />
++      addOSGi="false" />
+ 
+     <!-- OpenSSL FFM - Coyote -->
+     <jarIt jarfile="${tomcat-coyote-ffm.jar}"
+       filesDir="${tomcat.classes}"
+       filesId="files.tomcat-coyote-ffm"
+       manifest="${tomcat.manifests}/tomcat-coyote-ffm.jar.manifest"
+-      addOSGi="true" />
++      addOSGi="false" />
+ 
+     <!-- WebSocket implementation JAR File -->
+     <jarIt jarfile="${tomcat-websocket.jar}"
+       filesDir="${tomcat.classes}"
+       filesId="files.tomcat-websocket"
+       meta-inf="${tomcat.manifests}/tomcat-websocket.jar"
+-      addOSGi="true" />
++      addOSGi="false" />
+ 
+     <!-- Catalina GroupCom/Tribes JAR File -->
+     <jarIt jarfile="${catalina-tribes.jar}"
+       filesDir="${tomcat.classes}"
+       filesId="files.catalina-tribes"
+-      addOSGi="true" />
++      addOSGi="false" />
+ 
+     <!-- Catalina Main JAR File -->
+     <jarIt jarfile="${catalina.jar}"
+       filesDir="${tomcat.classes}"
+       filesId="files.catalina"
+-      addOSGi="true" />
++      addOSGi="false" />
+ 
+     <!-- Catalina Cluster/HA JAR File -->
+     <jarIt jarfile="${catalina-ha.jar}"
+       filesDir="${tomcat.classes}"
+       filesId="files.catalina-ha"
+-      addOSGi="true" />
++      addOSGi="false" />
+ 
+     <!-- Server-Side Includes (SSI) -->
+     <jarIt jarfile="${catalina-ssi.jar}"
+       filesDir="${tomcat.classes}"
+       filesId="files.catalina-ssi"
+-      addOSGi="true" />
++      addOSGi="false" />
+ 
+     <!-- Catalina Ant Tasks JAR File -->
+     <jarIt jarfile="${catalina-ant.jar}"
+@@ -1264,27 +1264,27 @@
+     <jarIt jarfile="${catalina-storeconfig.jar}"
+       filesDir="${tomcat.classes}"
+       filesId="files.catalina-storeconfig"
+-      addOSGi="true" />
++      addOSGi="false" />
+ 
+     <!-- Jasper EL Implementation JAR File -->
+     <jarIt jarfile="${jasper-el.jar}"
+       filesDir="${tomcat.classes}"
+       filesId="files.jasper-el"
+       meta-inf="${tomcat.manifests}/jasper-el.jar"
+-      addOSGi="true" />
++      addOSGi="false" />
+ 
+     <!-- Jasper Implementation JAR File -->
+     <jarIt jarfile="${jasper.jar}"
+       filesDir="${tomcat.classes}"
+       filesId="files.jasper"
+       meta-inf="${tomcat.manifests}/jasper.jar"
+-      addOSGi="true" />
++      addOSGi="false" />
+ 
+     <!-- Re-packaged Apache Commons DBCP 2-->
+     <jarIt jarfile="${tomcat-dbcp.jar}"
+       filesDir="${tomcat.classes}"
+       filesId="files.tomcat-dbcp"
+-      addOSGi="true" />
++      addOSGi="false" />
+ 
+     <!-- i18n JARs -->
+     <jar jarfile="${tomcat.build}/lib/tomcat-i18n-cs.jar"
+@@ -1748,7 +1748,7 @@
+            filesId="files.tomcat-embed-core"
+            notice="${tomcat.manifests}/servlet-api.jar.notice"
+            license="${tomcat.manifests}/servlet-api.jar.license"
+-           addOSGi="true"
++           addOSGi="false"
+            addGraal="true"
+            graalPrefix="org.apache.tomcat.embed/tomcat-embed-core"
+            graalFiles="res/graal/tomcat-embed-core/native-image"
+@@ -1756,7 +1756,7 @@
+     <jarIt jarfile="${tomcat-embed-el.jar}"
+            filesDir="${tomcat.classes}"
+            filesId="files.tomcat-embed-el"
+-           addOSGi="true"
++           addOSGi="false"
+            addGraal="true"
+            graalPrefix="org.apache.tomcat.embed/tomcat-embed-el"
+            graalFiles="res/graal/tomcat-embed-el/native-image"
+@@ -1765,7 +1765,7 @@
+            filesDir="${tomcat.classes}"
+            filesId="files.tomcat-embed-jasper"
+            meta-inf="${tomcat.manifests}/jasper.jar"
+-           addOSGi="true"
++           addOSGi="false"
+            addGraal="true"
+            graalPrefix="org.apache.tomcat.embed/tomcat-embed-jasper"
+            graalFiles="res/graal/tomcat-embed-jasper/native-image"
+@@ -1774,7 +1774,7 @@
+            filesDir="${tomcat.classes}"
+            filesId="files.tomcat-embed-websocket"
+            meta-inf="${tomcat.manifests}/tomcat-websocket.jar"
+-           addOSGi="true"
++           addOSGi="false"
+            addGraal="true"
+            graalPrefix="org.apache.tomcat.embed/tomcat-embed-websocket"
+            graalFiles="res/graal/tomcat-embed-websocket/native-image"
+@@ -4243,26 +4243,9 @@
+     <taskdef name="jsign" classname="net.jsign.JsignTask" classpathref="jsign.classpath" />
+   </target>
+ 
+-  <target name="download-bnd" >
+-    <!-- Download bnd -->
+-    <antcall target="downloadfile">
+-      <param name="sourcefile" value="${bnd.loc}"/>
+-      <param name="destfile" value="${bnd.jar}"/>
+-      <param name="destdir" value="${bnd.home}"/>
+-      <param name="checksum.enabled" value="${bnd.checksum.enabled}"/>
+-      <param name="checksum.algorithm" value="${bnd.checksum.algorithm}"/>
+-      <param name="checksum.value" value="${bnd.checksum.value}"/>
+-    </antcall>
+-  </target>
+-
+-  <target name="setup-bnd" depends="download-bnd" unless="${skip.build.java.version}">
+-    <!-- Add bnd tasks to project -->
+-    <path id="bnd.classpath">
+-      <fileset file="${bnd.jar}" />
+-    </path>
++  <target name="download-bnd" />
+ 
+-    <taskdef resource="aQute/bnd/ant/taskdef.properties" classpathref="bnd.classpath" />
+-  </target>
++  <target name="setup-bnd" depends="download-bnd" />
+ 
+   <macrodef name="jarIt" description="utility macro for standard JAR packaging">
+     <attribute name="jarfile"
+diff -urN apache-tomcat-11.0.18-src.orig/java/org/apache/el/ExpressionFactoryImpl.java apache-tomcat-11.0.18-src.bnd/java/org/apache/el/ExpressionFactoryImpl.java
+--- apache-tomcat-11.0.18-src.orig/java/org/apache/el/ExpressionFactoryImpl.java	2026-01-23 11:22:57.000000000 +0100
++++ apache-tomcat-11.0.18-src.bnd/java/org/apache/el/ExpressionFactoryImpl.java	2026-03-10 17:52:05.189984748 +0100
+@@ -31,7 +31,6 @@
+ /**
+  * @see jakarta.el.ExpressionFactory
+  */
+-@aQute.bnd.annotation.spi.ServiceProvider(value = ExpressionFactory.class)
+ public class ExpressionFactoryImpl extends ExpressionFactory {
+ 
+     static {
+diff -urN apache-tomcat-11.0.18-src.orig/java/org/apache/juli/logging/LogFactory.java apache-tomcat-11.0.18-src.bnd/java/org/apache/juli/logging/LogFactory.java
+--- apache-tomcat-11.0.18-src.orig/java/org/apache/juli/logging/LogFactory.java	2026-01-23 11:22:57.000000000 +0100
++++ apache-tomcat-11.0.18-src.bnd/java/org/apache/juli/logging/LogFactory.java	2026-03-10 17:52:05.195443638 +0100
+@@ -21,7 +21,6 @@
+ import java.util.ServiceLoader;
+ import java.util.logging.LogManager;
+ 
+-import aQute.bnd.annotation.spi.ServiceConsumer;
+ 
+ /**
+  * This is a modified LogFactory that uses a simple {@link ServiceLoader} based discovery mechanism with a default of
+@@ -50,7 +49,6 @@
+  * <strong>IMPLEMENTATION NOTE</strong> - This implementation is heavily based on the SAXParserFactory and
+  * DocumentBuilderFactory implementations (corresponding to the JAXP pluggability APIs) found in Apache Xerces.
+  */
+-@ServiceConsumer(value = Log.class)
+ public class LogFactory {
+ 
+     private static final LogFactory singleton = new LogFactory();
+diff -urN apache-tomcat-11.0.18-src.orig/java/org/apache/tomcat/websocket/server/DefaultServerEndpointConfigurator.java apache-tomcat-11.0.18-src.bnd/java/org/apache/tomcat/websocket/server/DefaultServerEndpointConfigurator.java
+--- apache-tomcat-11.0.18-src.orig/java/org/apache/tomcat/websocket/server/DefaultServerEndpointConfigurator.java	2026-01-23 11:22:57.000000000 +0100
++++ apache-tomcat-11.0.18-src.bnd/java/org/apache/tomcat/websocket/server/DefaultServerEndpointConfigurator.java	2026-03-10 17:52:05.193496336 +0100
+@@ -26,7 +26,6 @@
+ import jakarta.websocket.server.HandshakeRequest;
+ import jakarta.websocket.server.ServerEndpointConfig;
+ 
+-@aQute.bnd.annotation.spi.ServiceProvider(value = ServerEndpointConfig.Configurator.class)
+ public class DefaultServerEndpointConfigurator extends ServerEndpointConfig.Configurator {
+ 
+     @Override
+diff -urN apache-tomcat-11.0.18-src.orig/java/org/apache/tomcat/websocket/WsContainerProvider.java apache-tomcat-11.0.18-src.bnd/java/org/apache/tomcat/websocket/WsContainerProvider.java
+--- apache-tomcat-11.0.18-src.orig/java/org/apache/tomcat/websocket/WsContainerProvider.java	2026-01-23 11:22:57.000000000 +0100
++++ apache-tomcat-11.0.18-src.bnd/java/org/apache/tomcat/websocket/WsContainerProvider.java	2026-03-10 17:52:05.193433026 +0100
+@@ -19,7 +19,6 @@
+ import jakarta.websocket.ContainerProvider;
+ import jakarta.websocket.WebSocketContainer;
+ 
+-@aQute.bnd.annotation.spi.ServiceProvider(value = ContainerProvider.class)
+ public class WsContainerProvider extends ContainerProvider {
+ 
+     @Override
