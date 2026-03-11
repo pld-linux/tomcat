@@ -9,6 +9,8 @@
 
 %define		tomcatnatver	2.0.12
 
+%{?use_default_jdk:%use_default_jdk 17}
+
 Summary:	Web server and Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP %{jspapiver} API
 Summary(pl.UTF-8):	Serwer www i silnik Servlet/JSP będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
 Name:		tomcat
@@ -33,11 +35,11 @@ URL:		https://tomcat.apache.org/
 BuildRequires:	ant >= 1.10.2
 BuildRequires:	java-commons-daemon >= 1.0
 BuildRequires:	java-eclipse-jdt >= 4.4.2
-BuildRequires:	jdk >= 17
+%buildrequires_jdk
 BuildRequires:	jpackage-utils
 BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpm-javaprov
-BuildRequires:	rpmbuild(macros) >= 1.657
+BuildRequires:	rpmbuild(macros) >= 2.021
 BuildRequires:	sed >= 4.0
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
