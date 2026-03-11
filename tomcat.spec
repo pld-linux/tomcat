@@ -34,7 +34,7 @@ Patch1:		jakartaee-migration-stubs.patch
 URL:		https://tomcat.apache.org/
 BuildRequires:	ant >= 1.10.2
 BuildRequires:	java-commons-daemon >= 1.0
-BuildRequires:	java-eclipse-jdt >= 4.4.2
+BuildRequires:	java-eclipse-jdt >= 4.34
 %buildrequires_jdk
 BuildRequires:	jpackage-utils
 BuildRequires:	rpm >= 4.4.9-56
@@ -175,7 +175,7 @@ Biblioteki Javy zawierające serwer HTTP 1.1 dla Tomcata.
 Summary:	JSP compiler
 Summary(pl.UTF-8):	Kompilator JSP
 Group:		Libraries/Java
-Requires:	java-eclipse-jdt >= 4.2.2
+Requires:	java-eclipse-jdt >= 4.34
 Requires:	jpackage-utils
 Obsoletes:	apache-tomcat-jasper
 Obsoletes:	tomcat-jasper
