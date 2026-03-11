@@ -9,7 +9,7 @@
 
 %define		tomcatnatver	2.0.12
 
-%{?use_default_jdk:%use_default_jdk 17}
+%{?use_default_jdk:%use_default_jdk 23}
 
 Summary:	Web server and Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP %{jspapiver} API
 Summary(pl.UTF-8):	Serwer www i silnik Servlet/JSP będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
