@@ -49,7 +49,7 @@ Requires(pre):	/usr/sbin/useradd
 Requires:	java-%{name}-catalina = %{version}-%{release}
 Requires:	java-%{name}-coyote = %{version}-%{release}
 Requires:	java-%{name}-jasper = %{version}-%{release}
-Requires:	java-servletapi = %{version}-%{release}
+Requires:	java-servletapi >= %{servletapiver}
 Requires:	jpackage-utils
 Requires:	jre >= 1.8
 Requires:	jsvc
@@ -186,26 +186,6 @@ container.
 Jasper jest kompilatorem Java ServerPages używanym przez kontener
 servletów Apache Tomcat.
 
-%package -n java-servletapi
-Summary:	Java Servlet, JSP, EL, and WebSocket implementation classes
-Summary(pl.UTF-8):	Klasy z implementacją Java Servlet, JSP, EL i WebSocket
-Group:		Libraries/Java
-Provides:	java(jsp) = %{jspapiver}
-Provides:	java(servlet) = %{servletapiver}
-Provides:	java(el) = %{elapiver}
-Provides:	java(websocket) = %{wsapiver}
-Obsoletes:	jakarta-servletapi5
-Obsoletes:	java-servletapi5
-
-%description -n java-servletapi
-Implementation classes of the Java Servlet, JavaServer Pages,
-Expression Language, and WebSocket APIs (packages javax.servlet,
-javax.servlet.http, javax.servlet.jsp, and javax.servlet.jsp.tagext).
-
-%description -n java-servletapi -l pl.UTF-8
-Implementacje klas API Java Servlet, JSP, EL i WebSocket (pakiety
-javax.servlet, javax.servlet.http, javax.servlet.jsp i
-javax.servlet.jsp.tagext).
 
 %prep
 %setup -q -n apache-%{name}-%{version}-src
@@ -287,28 +267,19 @@ done
 
 install -d $RPM_BUILD_ROOT%{_javadir}
 mv $TOMCATDIR/lib/jasper*.jar $RPM_BUILD_ROOT%{_javadir}
-mv $TOMCATDIR/lib/jsp-api.jar $RPM_BUILD_ROOT%{_javadir}/jsp-api-%{jspapiver}.jar
-mv $TOMCATDIR/lib/servlet-api.jar $RPM_BUILD_ROOT%{_javadir}/servlet-api-%{servletapiver}.jar
-mv $TOMCATDIR/lib/el-api.jar $RPM_BUILD_ROOT%{_javadir}/el-api-%{elapiver}.jar
-mv $TOMCATDIR/lib/websocket-api.jar $RPM_BUILD_ROOT%{_javadir}/websocket-api-%{wsapiver}.jar
+# servlet-api comes from java-servletapi package
+rm $TOMCATDIR/lib/servlet-api.jar
 mv $TOMCATDIR/lib/catalina.jar $RPM_BUILD_ROOT%{_javadir}/tomcat-catalina.jar
 mv $TOMCATDIR/lib/tomcat-coyote.jar $RPM_BUILD_ROOT%{_javadir}/tomcat-coyote.jar
 mv $TOMCATDIR/lib/tomcat-util.jar $RPM_BUILD_ROOT%{_javadir}/tomcat-util.jar
 mv $TOMCATDIR/lib/tomcat-util-scan.jar $RPM_BUILD_ROOT%{_javadir}/tomcat-util-scan.jar
 mv $TOMCATDIR/lib/tomcat-api.jar $RPM_BUILD_ROOT%{_javadir}/tomcat-api.jar
 
-ln -s jsp-api-%{jspapiver}.jar $RPM_BUILD_ROOT%{_javadir}/jsp-api.jar
-ln -s servlet-api-%{servletapiver}.jar $RPM_BUILD_ROOT%{_javadir}/servlet-api.jar
-ln -s el-api-%{elapiver}.jar $RPM_BUILD_ROOT%{_javadir}/el-api.jar
-ln -s websocket-api-%{wsapiver}.jar $RPM_BUILD_ROOT%{_javadir}/websocket-api.jar
-
 ln -sf %{_javadir}/jasper-el.jar $TOMCATDIR/lib
 ln -sf %{_javadir}/jasper.jar $TOMCATDIR/lib
 
-ln -sf %{_javadir}/jsp-api-%{jspapiver}.jar $TOMCATDIR/lib/jsp-api.jar
-ln -sf %{_javadir}/servlet-api-%{servletapiver}.jar $TOMCATDIR/lib/servlet-api.jar
-ln -sf %{_javadir}/el-api-%{elapiver}.jar $TOMCATDIR/lib/el-api.jar
-ln -sf %{_javadir}/websocket-api-%{wsapiver}.jar $TOMCATDIR/lib/websocket-api.jar
+# servlet-api from java-servletapi package
+ln -sf %{_javadir}/servlet-api.jar $TOMCATDIR/lib/servlet-api.jar
 
 ln -sf %{_javadir}/tomcat-catalina.jar $TOMCATDIR/lib/catalina.jar
 ln -sf %{_javadir}/tomcat-util.jar $TOMCATDIR/lib/util.jar
@@ -478,9 +449,3 @@ fi
 %defattr(644,root,root,755)
 %{_javadir}/tomcat-coyote.jar
 
-%files -n java-servletapi
-%defattr(644,root,root,755)
-%{_javadir}/jsp-api*.jar
-%{_javadir}/servlet-api*.jar
-%{_javadir}/el-api*.jar
-%{_javadir}/websocket-api*.jar
