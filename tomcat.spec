@@ -11,11 +11,13 @@
 
 %define		orgname		tomcat
 
+%{?use_default_jdk:%use_default_jdk 17}
+
 Summary:	Web server and Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP %{jspapiver} API
 Summary(pl.UTF-8):	Serwer www i silnik Servlet/JSP będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
 Name:		%{orgname}9
 Version:	9.0.115
-Release:	1
+Release:	2
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
 Source0:	https://archive.apache.org/dist/tomcat/tomcat-9/v%{version}/src/apache-%{orgname}-%{version}-src.tar.gz
@@ -34,12 +36,12 @@ Patch0:		no-bnd-osgi.patch
 URL:		https://tomcat.apache.org/
 BuildRequires:	ant >= 1.10.2
 BuildRequires:	java-commons-daemon >= 1.0
-BuildRequires:	java-eclipse-jdt >= 4.4.2
-BuildRequires:	jdk >= 17
+BuildRequires:	java-eclipse-jdt >= 4.34
+%buildrequires_jdk
 BuildRequires:	jpackage-utils
 BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpm-javaprov
-BuildRequires:	rpmbuild(macros) >= 1.657
+BuildRequires:	rpmbuild(macros) >= 2.021
 BuildRequires:	sed >= 4.0
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
@@ -176,7 +178,7 @@ Biblioteki Javy zawierające serwer HTTP 1.1 dla Tomcata.
 Summary:	JSP compiler
 Summary(pl.UTF-8):	Kompilator JSP
 Group:		Libraries/Java
-Requires:	java-eclipse-jdt >= 4.2.2
+Requires:	java-eclipse-jdt >= 4.34
 Requires:	jpackage-utils
 Obsoletes:	apache-tomcat-jasper
 Obsoletes:	tomcat-jasper
