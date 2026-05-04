@@ -9,24 +9,26 @@
 
 %define		tomcatnatver	1.3.5
 
+%define		orgname		tomcat
+
 Summary:	Web server and Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP %{jspapiver} API
 Summary(pl.UTF-8):	Serwer www i silnik Servlet/JSP będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
-Name:		tomcat
+Name:		%{orgname}9
 Version:	9.0.115
 Release:	1
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
-Source0:	https://archive.apache.org/dist/tomcat/tomcat-9/v%{version}/src/apache-%{name}-%{version}-src.tar.gz
+Source0:	https://archive.apache.org/dist/tomcat/tomcat-9/v%{version}/src/apache-%{orgname}-%{version}-src.tar.gz
 # Source0-md5:	61faef8bf9d849da8e114460ce034709
-Source1:	apache-%{name}.init
-Source2:	apache-%{name}.sysconfig
-Source3:	%{name}-build.properties
-Source10:	%{name}-context-ROOT.xml
-Source11:	%{name}-context-docs.xml
-Source12:	%{name}-context-manager.xml
-Source13:	%{name}-context-host-manager.xml
-Source14:	%{name}-context-examples.xml
-Source15:	%{name}.logrotate
+Source1:	apache-%{orgname}.init
+Source2:	apache-%{orgname}.sysconfig
+Source3:	%{orgname}-build.properties
+Source10:	%{orgname}-context-ROOT.xml
+Source11:	%{orgname}-context-docs.xml
+Source12:	%{orgname}-context-manager.xml
+Source13:	%{orgname}-context-host-manager.xml
+Source14:	%{orgname}-context-examples.xml
+Source15:	%{orgname}.logrotate
 # Disable OSGi metadata generation and remove bnd annotations
 Patch0:		no-bnd-osgi.patch
 URL:		https://tomcat.apache.org/
@@ -46,9 +48,9 @@ Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
-Requires:	java-%{name}-catalina = %{version}-%{release}
-Requires:	java-%{name}-coyote = %{version}-%{release}
-Requires:	java-%{name}-jasper = %{version}-%{release}
+Requires:	java-%{orgname}-catalina = %{version}-%{release}
+Requires:	java-%{orgname}-coyote = %{version}-%{release}
+Requires:	java-%{orgname}-jasper = %{version}-%{release}
 Requires:	java-servletapi >= %{servletapiver}
 Requires:	jpackage-utils
 Requires:	jre >= 1.8
@@ -64,9 +66,10 @@ Obsoletes:	jakarta-tomcat
 %if "%{pld_release}" != "ac"
 Conflicts:	logrotate < 3.8.0
 %endif
+Conflicts:	tomcat
 Conflicts:	tomcat-native < %{tomcatnatver}
 BuildArch:	noarch
-BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+BuildRoot:	%{tmpdir}/%{orgname}-%{version}-root-%(id -u -n)
 
 %define		_tomcatdir	%{_datadir}/tomcat
 %define 	_logdir		%{_var}/log
@@ -188,7 +191,7 @@ servletów Apache Tomcat.
 
 
 %prep
-%setup -q -n apache-%{name}-%{version}-src
+%setup -q -n apache-%{orgname}-%{version}-src
 %patch -P0 -p1
 
 # we don't need those scripts
@@ -226,22 +229,22 @@ install -d $TOMCATDIR \
 	$RPM_BUILD_ROOT%{_vardir}/webapps \
 	$RPM_BUILD_ROOT%{_vardir}/work \
 	$RPM_BUILD_ROOT%{_logdir}/{archive/,}tomcat \
-	$RPM_BUILD_ROOT%{_sysconfdir}/%{name}/Catalina/localhost \
+	$RPM_BUILD_ROOT%{_sysconfdir}/%{orgname}/Catalina/localhost \
 	$RPM_BUILD_ROOT/etc/{sysconfig,rc.d/init.d,logrotate.d}
 
 install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/tomcat
 cp -p %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/tomcat
 
-cp -a conf/* $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
-ln -sf $CATALINADIRREV%{_sysconfdir}/%{name} $RPM_BUILD_ROOT%{_vardir}/conf
-cp -p %{SOURCE10} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/Catalina/localhost/ROOT.xml
-cp -p %{SOURCE11} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/Catalina/localhost/docs.xml
-cp -p %{SOURCE12} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/Catalina/localhost/manager.xml
-cp -p %{SOURCE13} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/Catalina/localhost/host-manager.xml
-cp -p %{SOURCE14} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/Catalina/localhost/examples.xml
-cp -p %{SOURCE15} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
+cp -a conf/* $RPM_BUILD_ROOT%{_sysconfdir}/%{orgname}
+ln -sf $CATALINADIRREV%{_sysconfdir}/%{orgname} $RPM_BUILD_ROOT%{_vardir}/conf
+cp -p %{SOURCE10} $RPM_BUILD_ROOT%{_sysconfdir}/%{orgname}/Catalina/localhost/ROOT.xml
+cp -p %{SOURCE11} $RPM_BUILD_ROOT%{_sysconfdir}/%{orgname}/Catalina/localhost/docs.xml
+cp -p %{SOURCE12} $RPM_BUILD_ROOT%{_sysconfdir}/%{orgname}/Catalina/localhost/manager.xml
+cp -p %{SOURCE13} $RPM_BUILD_ROOT%{_sysconfdir}/%{orgname}/Catalina/localhost/host-manager.xml
+cp -p %{SOURCE14} $RPM_BUILD_ROOT%{_sysconfdir}/%{orgname}/Catalina/localhost/examples.xml
+cp -p %{SOURCE15} $RPM_BUILD_ROOT/etc/logrotate.d/%{orgname}
 %if "%{pld_release}" == "ac"
-%{__sed} -i -e '/su/d' $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
+%{__sed} -i -e '/su/d' $RPM_BUILD_ROOT/etc/logrotate.d/%{orgname}
 %endif
 
 cp -a bin lib webapps $TOMCATDIR
@@ -299,18 +302,18 @@ fi
 
 # migrate /var/lib/tomcat/conf to /etc/tomcat
 if [ -d %{_vardir}/conf ] && [ ! -L %{_vardir}/conf ]; then
-	if [ -d %{_sysconfdir}/%{name} ]; then
-		if [ ! -L %{_sysconfdir}/%{name} ]; then
-			mv %{_vardir}/conf/* %{_sysconfdir}/%{name}
+	if [ -d %{_sysconfdir}/%{orgname} ]; then
+		if [ ! -L %{_sysconfdir}/%{orgname} ]; then
+			mv %{_vardir}/conf/* %{_sysconfdir}/%{orgname}
 			rmdir %{_vardir}/conf 2>/dev/null || mv -v %{_vardir}/conf{,.rpmsave}
 		else
-			mv -v %{_sysconfdir}/%{name}{,.rpmsave}
-			mv %{_vardir}/conf %{_sysconfdir}/%{name}
+			mv -v %{_sysconfdir}/%{orgname}{,.rpmsave}
+			mv %{_vardir}/conf %{_sysconfdir}/%{orgname}
 		fi
 	else
-		mv %{_vardir}/conf %{_sysconfdir}/%{name}
+		mv %{_vardir}/conf %{_sysconfdir}/%{orgname}
 	fi
-	ln -s %{_sysconfdir}/%{name} %{_vardir}/conf
+	ln -s %{_sysconfdir}/%{orgname} %{_vardir}/conf
 fi
 exit 0
 
@@ -341,20 +344,20 @@ fi
 %doc KEYS RELEASE-NOTES
 %attr(754,root,root) /etc/rc.d/init.d/tomcat
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/tomcat
-%config(noreplace) %verify(not md5 mtime size) /etc/logrotate.d/%{name}
+%config(noreplace) %verify(not md5 mtime size) /etc/logrotate.d/%{orgname}
 
 # these directory has to be writeable because /admin need to modify config
 # files and create temporary files
-%dir %attr(770,root,tomcat) %{_sysconfdir}/%{name}
-%dir %attr(770,root,tomcat) %{_sysconfdir}/%{name}/Catalina
-%dir %{_sysconfdir}/%{name}/Catalina/localhost
+%dir %attr(770,root,tomcat) %{_sysconfdir}/%{orgname}
+%dir %attr(770,root,tomcat) %{_sysconfdir}/%{orgname}/Catalina
+%dir %{_sysconfdir}/%{orgname}/Catalina/localhost
 # tomcat config has to be writeable because of tomcat-users.xml file and Catalina dir
-%config(noreplace) %attr(660,root,tomcat) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/*.properties
-%config(noreplace) %attr(660,root,tomcat) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/*.xml
-%config(noreplace) %attr(660,root,tomcat) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/catalina.policy
-%{_sysconfdir}/%{name}/*.xsd
+%config(noreplace) %attr(660,root,tomcat) %verify(not md5 mtime size) %{_sysconfdir}/%{orgname}/*.properties
+%config(noreplace) %attr(660,root,tomcat) %verify(not md5 mtime size) %{_sysconfdir}/%{orgname}/*.xml
+%config(noreplace) %attr(660,root,tomcat) %verify(not md5 mtime size) %{_sysconfdir}/%{orgname}/catalina.policy
+%{_sysconfdir}/%{orgname}/*.xsd
 
-%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/Catalina/localhost/ROOT.xml
+%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_sysconfdir}/%{orgname}/Catalina/localhost/ROOT.xml
 
 %dir %{_tomcatdir}
 # symlink
@@ -415,22 +418,22 @@ fi
 
 %files webapp-docs
 %defattr(644,root,root,755)
-%config(noreplace,missingok) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/Catalina/localhost/docs.xml
+%config(noreplace,missingok) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_sysconfdir}/%{orgname}/Catalina/localhost/docs.xml
 %{_tomcatdir}/webapps/docs
 
 %files webapp-manager
 %defattr(644,root,root,755)
-%config(noreplace,missingok) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/Catalina/localhost/manager.xml
+%config(noreplace,missingok) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_sysconfdir}/%{orgname}/Catalina/localhost/manager.xml
 %{_tomcatdir}/webapps/manager
 
 %files webapp-host-manager
 %defattr(644,root,root,755)
-%config(noreplace,missingok) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/Catalina/localhost/host-manager.xml
+%config(noreplace,missingok) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_sysconfdir}/%{orgname}/Catalina/localhost/host-manager.xml
 %{_tomcatdir}/webapps/host-manager
 
 %files webapp-examples
 %defattr(644,root,root,755)
-%config(noreplace,missingok) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/Catalina/localhost/examples.xml
+%config(noreplace,missingok) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_sysconfdir}/%{orgname}/Catalina/localhost/examples.xml
 %{_tomcatdir}/webapps/examples
 
 %files -n java-tomcat-jasper
