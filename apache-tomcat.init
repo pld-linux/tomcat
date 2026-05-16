@@ -26,14 +26,20 @@ fi
 set_jvm
 
 # Set default options
-# --add-opens flags per Tomcat 9 setup docs for jsvc usage:
+CATALINA_OPTS="-Xmx384M"
+
+# --add-opens flags for Java 9+ reflective access per Tomcat 9 setup docs.
+# Java 8 lacks these options and aborts with "Unrecognized option"; detect
+# a modular JDK (Java 9+) by the presence of lib/modules (jimage).
 # https://tomcat.apache.org/tomcat-9.0-doc/setup.html
-CATALINA_OPTS="-Xmx384M \
-	--add-opens=java.base/java.lang=ALL-UNNAMED \
-	--add-opens=java.base/java.io=ALL-UNNAMED \
-	--add-opens=java.base/java.util=ALL-UNNAMED \
-	--add-opens=java.base/java.util.concurrent=ALL-UNNAMED \
-	--add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED"
+if [ -e "$JAVA_HOME/lib/modules" ]; then
+	CATALINA_OPTS="$CATALINA_OPTS \
+		--add-opens=java.base/java.lang=ALL-UNNAMED \
+		--add-opens=java.base/java.io=ALL-UNNAMED \
+		--add-opens=java.base/java.util=ALL-UNNAMED \
+		--add-opens=java.base/java.util.concurrent=ALL-UNNAMED \
+		--add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED"
+fi
 
 # Get service config - may override defaults
 [ -f /etc/sysconfig/tomcat ] && . /etc/sysconfig/tomcat
