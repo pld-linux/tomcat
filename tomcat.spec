@@ -17,7 +17,7 @@ Summary:	Web server and Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP 
 Summary(pl.UTF-8):	Serwer www i silnik Servlet/JSP będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
 Name:		%{orgname}9
 Version:	9.0.115
-Release:	5
+Release:	6
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
 Source0:	https://archive.apache.org/dist/tomcat/tomcat-9/v%{version}/src/apache-%{orgname}-%{version}-src.tar.gz
@@ -217,6 +217,7 @@ export LC_ALL=en_US
 
 %install
 rm -rf $RPM_BUILD_ROOT
+export JAVA_HOME=%{java_home}
 cd output/build
 
 TOMCATDIR=$RPM_BUILD_ROOT%{_tomcatdir}
