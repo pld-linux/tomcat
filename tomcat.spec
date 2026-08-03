@@ -17,7 +17,7 @@ Summary:	Web server and Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP 
 Summary(pl.UTF-8):	Serwer www i silnik Servlet/JSP będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
 Name:		%{orgname}9
 Version:	9.0.115
-Release:	6
+Release:	7
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
 Source0:	https://archive.apache.org/dist/tomcat/tomcat-9/v%{version}/src/apache-%{orgname}-%{version}-src.tar.gz
@@ -59,7 +59,7 @@ Requires:	jre >= 1.8
 Requires:	jsvc
 Requires:	rc-scripts
 Suggests:	logrotate
-Suggests:	tomcat-native >= %{tomcatnatver}
+Suggests:	tomcat-native9 >= %{tomcatnatver}
 Provides:	group(servlet)
 Provides:	group(tomcat)
 Provides:	user(tomcat)
@@ -69,7 +69,7 @@ Obsoletes:	jakarta-tomcat
 Conflicts:	logrotate < 3.8.0
 %endif
 Conflicts:	tomcat
-Conflicts:	tomcat-native < %{tomcatnatver}
+Conflicts:	tomcat-native9 < %{tomcatnatver}
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{orgname}-%{version}-root-%(id -u -n)
 
