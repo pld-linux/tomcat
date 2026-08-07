@@ -15,7 +15,7 @@ Summary:	Web server and Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP 
 Summary(pl.UTF-8):	Serwer www i silnik Servlet/JSP będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
 Name:		tomcat
 Version:	11.0.18
-Release:	3
+Release:	4
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
 Source0:	https://archive.apache.org/dist/tomcat/tomcat-11/v%{version}/src/apache-%{name}-%{version}-src.tar.gz
@@ -270,9 +270,8 @@ done
 
 install -d $RPM_BUILD_ROOT%{_javadir}
 mv $TOMCATDIR/lib/jasper*.jar $RPM_BUILD_ROOT%{_javadir}
-# API jars come from separate packages (java-servletapi6, java-jsp-api4, java-el-api6, java-websocket-api2)
+# API jars come from separate packages (java-jsp-api4, java-el-api6, java-websocket-api2)
 rm $TOMCATDIR/lib/jsp-api.jar
-rm $TOMCATDIR/lib/servlet-api.jar
 rm $TOMCATDIR/lib/el-api.jar
 rm $TOMCATDIR/lib/websocket-api.jar
 mv $TOMCATDIR/lib/catalina.jar $RPM_BUILD_ROOT%{_javadir}/tomcat-catalina.jar
@@ -284,9 +283,10 @@ mv $TOMCATDIR/lib/tomcat-api.jar $RPM_BUILD_ROOT%{_javadir}/tomcat-api.jar
 ln -sf %{_javadir}/jasper-el.jar $TOMCATDIR/lib
 ln -sf %{_javadir}/jasper.jar $TOMCATDIR/lib
 
-# API jars from separate packages
+# API jars from separate packages; servlet-api.jar stays tomcat's own, as only it
+# carries jakarta/servlet/resources/*.dtd,*.xsd needed by DigesterFactory for
+# offline resolution of web.xml/TLD schemas
 ln -sf %{_javadir}/jsp-api.jar $TOMCATDIR/lib/jsp-api.jar
-ln -sf %{_javadir}/servlet-api.jar $TOMCATDIR/lib/servlet-api.jar
 ln -sf %{_javadir}/el-api.jar $TOMCATDIR/lib/el-api.jar
 ln -sf %{_javadir}/websocket-api.jar $TOMCATDIR/lib/websocket-api.jar
 
