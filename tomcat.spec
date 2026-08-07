@@ -17,7 +17,7 @@ Summary:	Web server and Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP 
 Summary(pl.UTF-8):	Serwer www i silnik Servlet/JSP będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
 Name:		%{orgname}9
 Version:	9.0.115
-Release:	7
+Release:	8
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
 Source0:	https://archive.apache.org/dist/tomcat/tomcat-9/v%{version}/src/apache-%{orgname}-%{version}-src.tar.gz
@@ -273,8 +273,6 @@ done
 
 install -d $RPM_BUILD_ROOT%{_javadir}
 mv $TOMCATDIR/lib/jasper*.jar $RPM_BUILD_ROOT%{_javadir}
-# servlet-api comes from java-servletapi package
-rm $TOMCATDIR/lib/servlet-api.jar
 mv $TOMCATDIR/lib/catalina.jar $RPM_BUILD_ROOT%{_javadir}/tomcat-catalina.jar
 mv $TOMCATDIR/lib/tomcat-coyote.jar $RPM_BUILD_ROOT%{_javadir}/tomcat-coyote.jar
 mv $TOMCATDIR/lib/tomcat-util.jar $RPM_BUILD_ROOT%{_javadir}/tomcat-util.jar
@@ -284,8 +282,8 @@ mv $TOMCATDIR/lib/tomcat-api.jar $RPM_BUILD_ROOT%{_javadir}/tomcat-api.jar
 ln -sf %{_javadir}/jasper-el.jar $TOMCATDIR/lib
 ln -sf %{_javadir}/jasper.jar $TOMCATDIR/lib
 
-# servlet-api from java-servletapi package
-ln -sf %{_javadir}/servlet-api.jar $TOMCATDIR/lib/servlet-api.jar
+# keep tomcat's own servlet-api.jar: only it carries javax/servlet/resources/*.dtd,*.xsd,
+# which DigesterFactory needs to resolve web.xml/TLD schemas offline
 
 ln -sf %{_javadir}/tomcat-catalina.jar $TOMCATDIR/lib/catalina.jar
 ln -sf %{_javadir}/tomcat-util.jar $TOMCATDIR/lib/util.jar
