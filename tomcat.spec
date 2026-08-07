@@ -17,7 +17,7 @@ Summary:	Web server and Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP 
 Summary(pl.UTF-8):	Serwer www i silnik Servlet/JSP będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
 Name:		%{orgname}9
 Version:	9.0.115
-Release:	8
+Release:	9
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
 Source0:	https://archive.apache.org/dist/tomcat/tomcat-9/v%{version}/src/apache-%{orgname}-%{version}-src.tar.gz
@@ -53,7 +53,6 @@ Requires(pre):	/usr/sbin/useradd
 Requires:	java-%{orgname}-catalina = %{version}-%{release}
 Requires:	java-%{orgname}-coyote = %{version}-%{release}
 Requires:	java-%{orgname}-jasper = %{version}-%{release}
-Requires:	java-servletapi >= %{servletapiver}
 Requires:	jpackage-utils
 Requires:	jre >= 1.8
 Requires:	jsvc
