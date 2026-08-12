@@ -17,7 +17,7 @@ Summary:	Web server and Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP 
 Summary(pl.UTF-8):	Serwer www i silnik Servlet/JSP będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
 Name:		%{orgname}9
 Version:	9.0.115
-Release:	9
+Release:	10
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
 Source0:	https://archive.apache.org/dist/tomcat/tomcat-9/v%{version}/src/apache-%{orgname}-%{version}-src.tar.gz
@@ -50,9 +50,9 @@ Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
-Requires:	java-%{orgname}-catalina = %{version}-%{release}
-Requires:	java-%{orgname}-coyote = %{version}-%{release}
-Requires:	java-%{orgname}-jasper = %{version}-%{release}
+Requires:	java-%{name}-catalina = %{version}-%{release}
+Requires:	java-%{name}-coyote = %{version}-%{release}
+Requires:	java-%{name}-jasper = %{version}-%{release}
 Requires:	jpackage-utils
 Requires:	jre >= 1.8
 Requires:	jsvc
@@ -144,36 +144,38 @@ The Apache Tomcat Servlet/JSP example applications.
 %description webapp-examples -l pl.UTF-8
 Przykładowe aplikacje dla Tomcata.
 
-%package -n java-tomcat-catalina
+%package -n java-tomcat9-catalina
 Summary:	Tomcat's servlet engine
 Summary(pl.UTF-8):	Silnik servletów dla Tomcata.
 Group:		Libraries/Java
 Requires:	jpackage-utils
+Conflicts:	java-tomcat-catalina
 
-%description -n java-tomcat-catalina
+%description -n java-tomcat9-catalina
 Catalina is Tomcat's servlet container. Catalina implements the
 Java Servlet and JavaServer Pages (JSP) specifications.
 
-%description -n java-tomcat-catalina -l pl.UTF-8
+%description -n java-tomcat9-catalina -l pl.UTF-8
 Bibliotek Javy zawierające silnik servletów i JSP tomcata.
 
-%package -n java-tomcat-coyote
+%package -n java-tomcat9-coyote
 Summary:	Tomcat HTTP connector
 Summary(pl.UTF-8):	Interfejs HTTP dla Tomcata
 Group:		Libraries/Java
 Requires:	jpackage-utils
+Conflicts:	java-tomcat-coyote
 
-%description -n java-tomcat-coyote
+%description -n java-tomcat9-coyote
 Coyote is Tomcat's HTTP Connector component that supports the HTTP 1.1
 protocol for the web server or application container. Coyote listens
 for incoming connections on a specific TCP port on the server and
 forwards the request to the Tomcat Engine to process the request and
 send back a response to the requesting client.
 
-%description -n java-tomcat-coyote -l pl.UTF-8
+%description -n java-tomcat9-coyote -l pl.UTF-8
 Biblioteki Javy zawierające serwer HTTP 1.1 dla Tomcata.
 
-%package -n java-tomcat-jasper
+%package -n java-tomcat9-jasper
 Summary:	JSP compiler
 Summary(pl.UTF-8):	Kompilator JSP
 Group:		Libraries/Java
@@ -181,12 +183,13 @@ Requires:	java-eclipse-jdt8 >= 4.20
 Requires:	jpackage-utils
 Obsoletes:	apache-tomcat-jasper
 Obsoletes:	tomcat-jasper
+Conflicts:	java-tomcat-jasper
 
-%description -n java-tomcat-jasper
+%description -n java-tomcat9-jasper
 Jasper is Java ServerPages compiler used by Apache Tomcat servlet
 container.
 
-%description -n java-tomcat-jasper -l pl.UTF-8
+%description -n java-tomcat9-jasper -l pl.UTF-8
 Jasper jest kompilatorem Java ServerPages używanym przez kontener
 servletów Apache Tomcat.
 
@@ -436,19 +439,19 @@ fi
 %config(noreplace,missingok) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_sysconfdir}/%{orgname}/Catalina/localhost/examples.xml
 %{_tomcatdir}/webapps/examples
 
-%files -n java-tomcat-jasper
+%files -n java-tomcat9-jasper
 %defattr(644,root,root,755)
 %{_javadir}/jasper-el.jar
 %{_javadir}/jasper.jar
 
-%files -n java-tomcat-catalina
+%files -n java-tomcat9-catalina
 %defattr(644,root,root,755)
 %{_javadir}/tomcat-api.jar
 %{_javadir}/tomcat-catalina.jar
 %{_javadir}/tomcat-util.jar
 %{_javadir}/tomcat-util-scan.jar
 
-%files -n java-tomcat-coyote
+%files -n java-tomcat9-coyote
 %defattr(644,root,root,755)
 %{_javadir}/tomcat-coyote.jar
 
