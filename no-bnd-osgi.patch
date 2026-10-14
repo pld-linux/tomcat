@@ -3,9 +3,9 @@
 # bundles, and the OSGi ecosystem has largely been superseded by Java 9+
 # modules (JPMS). Not worth packaging bnd/osgi just for unused manifest
 # entries.
---- a/build.xml	2026-01-21 09:17:26.000000000 +0100
-+++ b/build.xml	2026-03-10 20:18:14.243315621 +0100
-@@ -1124,7 +1124,7 @@
+--- a/build.xml	2026-10-06 20:59:20.000000000 +0200
++++ b/build.xml	2026-10-14 21:22:26.270297697 +0200
+@@ -1134,7 +1134,7 @@
        filesDir="${tomcat.classes}"
        filesId="files.annotations-api"
        manifest="${tomcat.manifests}/annotations-api.jar.manifest"
@@ -14,7 +14,7 @@
  
      <!-- Servlet Implementation JAR File -->
      <jarIt jarfile="${servlet-api.jar}"
-@@ -1133,41 +1133,41 @@
+@@ -1143,41 +1143,41 @@
        manifest="${tomcat.manifests}/servlet-api.jar.manifest"
        notice="${tomcat.manifests}/servlet-api.jar.notice"
        license="${tomcat.manifests}/servlet-api.jar.license"
@@ -62,7 +62,7 @@
  
      <!-- Bootstrap JAR File -->
      <jarIt jarfile="${bootstrap.jar}"
-@@ -1179,68 +1179,68 @@
+@@ -1189,68 +1189,68 @@
      <jarIt jarfile="${tomcat-util.jar}"
        filesDir="${tomcat.classes}"
        filesId="files.tomcat-util"
@@ -142,7 +142,7 @@
  
      <!-- Catalina Ant Tasks JAR File -->
      <jarIt jarfile="${catalina-ant.jar}"
-@@ -1251,27 +1251,27 @@
+@@ -1261,27 +1261,27 @@
      <jarIt jarfile="${catalina-storeconfig.jar}"
        filesDir="${tomcat.classes}"
        filesId="files.catalina-storeconfig"
@@ -174,7 +174,7 @@
  
      <!-- i18n JARs -->
      <jar jarfile="${tomcat.build}/lib/tomcat-i18n-cs.jar"
-@@ -1724,7 +1724,7 @@
+@@ -1734,7 +1734,7 @@
             filesId="files.tomcat-embed-core"
             notice="${tomcat.manifests}/servlet-api.jar.notice"
             license="${tomcat.manifests}/servlet-api.jar.license"
@@ -183,7 +183,7 @@
             addGraal="true"
             graalPrefix="org.apache.tomcat.embed/tomcat-embed-core"
             graalFiles="res/graal/tomcat-embed-core/native-image"
-@@ -1732,7 +1732,7 @@
+@@ -1742,7 +1742,7 @@
      <jarIt jarfile="${tomcat-embed-el.jar}"
             filesDir="${tomcat.classes}"
             filesId="files.tomcat-embed-el"
@@ -192,7 +192,7 @@
             addGraal="true"
             graalPrefix="org.apache.tomcat.embed/tomcat-embed-el"
             graalFiles="res/graal/tomcat-embed-el/native-image"
-@@ -1741,7 +1741,7 @@
+@@ -1751,7 +1751,7 @@
             filesDir="${tomcat.classes}"
             filesId="files.tomcat-embed-jasper"
             meta-inf="${tomcat.manifests}/jasper.jar"
@@ -201,7 +201,7 @@
             addGraal="true"
             graalPrefix="org.apache.tomcat.embed/tomcat-embed-jasper"
             graalFiles="res/graal/tomcat-embed-jasper/native-image"
-@@ -1750,7 +1750,7 @@
+@@ -1760,7 +1760,7 @@
             filesDir="${tomcat.classes}"
             filesId="files.tomcat-embed-websocket"
             meta-inf="${tomcat.manifests}/tomcat-websocket.jar"
@@ -210,7 +210,7 @@
             addGraal="true"
             graalPrefix="org.apache.tomcat.embed/tomcat-embed-websocket"
             graalFiles="res/graal/tomcat-embed-websocket/native-image"
-@@ -4307,25 +4307,12 @@
+@@ -4419,25 +4419,12 @@
      <taskdef name="jsign" classname="net.jsign.JsignTask" classpathref="jsign.classpath" />
    </target>
  
@@ -240,28 +240,28 @@
    </target>
  
    <macrodef name="jarIt" description="utility macro for standard JAR packaging">
---- a/java/org/apache/tomcat/websocket/WsContainerProvider.java	2026-01-21 09:17:26.000000000 +0100
-+++ b/java/org/apache/tomcat/websocket/WsContainerProvider.java	2026-03-10 20:18:29.099982280 +0100
-@@ -19,7 +19,6 @@
- import javax.websocket.ContainerProvider;
- import javax.websocket.WebSocketContainer;
- 
+--- a/java/org/apache/tomcat/websocket/WsContainerProvider.java	2026-10-06 20:59:20.000000000 +0200
++++ b/java/org/apache/tomcat/websocket/WsContainerProvider.java	2026-10-14 21:22:32.963732273 +0200
+@@ -22,7 +22,6 @@
+ /**
+  * WebSocket container provider for Tomcat.
+  */
 -@aQute.bnd.annotation.spi.ServiceProvider(value = ContainerProvider.class)
  public class WsContainerProvider extends ContainerProvider {
  
-     @Override
---- a/java/org/apache/tomcat/websocket/server/DefaultServerEndpointConfigurator.java	2026-01-21 09:17:26.000000000 +0100
-+++ b/java/org/apache/tomcat/websocket/server/DefaultServerEndpointConfigurator.java	2026-03-10 20:18:42.896648945 +0100
-@@ -26,7 +26,6 @@
- import javax.websocket.server.HandshakeRequest;
- import javax.websocket.server.ServerEndpointConfig;
- 
+     /**
+--- a/java/org/apache/tomcat/websocket/server/DefaultServerEndpointConfigurator.java	2026-10-06 20:59:20.000000000 +0200
++++ b/java/org/apache/tomcat/websocket/server/DefaultServerEndpointConfigurator.java	2026-10-14 21:22:32.963926075 +0200
+@@ -30,7 +30,6 @@
+  * Default implementation of {@link ServerEndpointConfig.Configurator} for WebSocket server endpoints.
+  */
+ @SuppressWarnings("javadoc") // Eclipse bug - the Javadoc is fine
 -@aQute.bnd.annotation.spi.ServiceProvider(value = ServerEndpointConfig.Configurator.class)
  public class DefaultServerEndpointConfigurator extends ServerEndpointConfig.Configurator {
  
-     @Override
---- a/java/org/apache/juli/logging/LogFactory.java	2026-01-21 09:17:26.000000000 +0100
-+++ b/java/org/apache/juli/logging/LogFactory.java	2026-03-10 20:18:58.029982275 +0100
+     /**
+--- a/java/org/apache/juli/logging/LogFactory.java	2026-10-06 20:59:20.000000000 +0200
++++ b/java/org/apache/juli/logging/LogFactory.java	2026-10-14 21:22:26.272301803 +0200
 @@ -21,8 +21,6 @@
  import java.util.ServiceLoader;
  import java.util.logging.LogManager;
@@ -271,7 +271,7 @@
  /**
   * This is a modified LogFactory that uses a simple {@link ServiceLoader} based discovery mechanism with a default of
   * using JDK based logging. An implementation that uses the full Commons Logging discovery mechanism is available as
-@@ -50,7 +48,6 @@
+@@ -48,7 +46,6 @@
   * <strong>IMPLEMENTATION NOTE</strong> - This implementation is heavily based on the SAXParserFactory and
   * DocumentBuilderFactory implementations (corresponding to the JAXP pluggability APIs) found in Apache Xerces.
   */
@@ -279,13 +279,13 @@
  public class LogFactory {
  
      private static final LogFactory singleton = new LogFactory();
---- a/java/org/apache/el/ExpressionFactoryImpl.java	2026-01-21 09:17:26.000000000 +0100
-+++ b/java/org/apache/el/ExpressionFactoryImpl.java	2026-03-10 20:19:06.806648937 +0100
+--- a/java/org/apache/el/ExpressionFactoryImpl.java	2026-10-06 20:59:20.000000000 +0200
++++ b/java/org/apache/el/ExpressionFactoryImpl.java	2026-10-14 21:22:26.272708343 +0200
 @@ -31,7 +31,6 @@
  /**
-  * @see javax.el.ExpressionFactory
+  * Implementation of {@link javax.el.ExpressionFactory}.
   */
 -@aQute.bnd.annotation.spi.ServiceProvider(value = ExpressionFactory.class)
  public class ExpressionFactoryImpl extends ExpressionFactory {
  
-     static {
+     /**

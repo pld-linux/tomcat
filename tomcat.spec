@@ -7,7 +7,8 @@
 %define		elapiver	3.0
 %define		wsapiver	1.1
 
-%define		tomcatnatver	1.3.5
+# TCN_REQUIRED_* in AprLifecycleListener; older tomcat-native is refused at startup
+%define		tomcatnatver	1.3.9
 
 %define		orgname		tomcat
 
@@ -16,12 +17,12 @@
 Summary:	Web server and Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP %{jspapiver} API
 Summary(pl.UTF-8):	Serwer www i silnik Servlet/JSP będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
 Name:		%{orgname}9
-Version:	9.0.115
-Release:	10
+Version:	9.0.123
+Release:	1
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
 Source0:	https://archive.apache.org/dist/tomcat/tomcat-9/v%{version}/src/apache-%{orgname}-%{version}-src.tar.gz
-# Source0-md5:	61faef8bf9d849da8e114460ce034709
+# Source0-md5:	5548bae41efe4b5f8a4dd587fe33bf57
 Source1:	apache-%{orgname}.init
 Source2:	apache-%{orgname}.sysconfig
 Source3:	%{orgname}-build.properties
@@ -254,6 +255,14 @@ cp -p %{SOURCE15} $RPM_BUILD_ROOT/etc/logrotate.d/%{orgname}
 
 cp -a bin lib webapps $TOMCATDIR
 cp -a temp $CATALINADIR
+
+%if %{with javadoc}
+# output/build carries only "install fulldocs" placeholders, ant javadoc writes to output/dist
+for api in annotationapi api elapi jaspicapi jspapi servletapi websocketapi; do
+	rm -r $TOMCATDIR/webapps/docs/$api
+	cp -a ../dist/webapps/docs/$api $TOMCATDIR/webapps/docs
+done
+%endif
 
 ln -sf $CATALINADIRREV%{_logdir}/tomcat $CATALINADIR/logs
 ln -sf $TOMCATDIRREV%{_logdir}/tomcat $TOMCATDIR/logs
