@@ -7,19 +7,19 @@
 %define		elapiver	6.0
 %define		wsapiver	2.2
 
-%define		tomcatnatver	2.0.12
+%define		tomcatnatver	2.0.16
 
 %{?use_default_jdk:%use_default_jdk 23}
 
 Summary:	Web server and Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP %{jspapiver} API
 Summary(pl.UTF-8):	Serwer www i silnik Servlet/JSP będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
 Name:		tomcat
-Version:	11.0.18
-Release:	6
+Version:	11.0.27
+Release:	1
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
 Source0:	https://archive.apache.org/dist/tomcat/tomcat-11/v%{version}/src/apache-%{name}-%{version}-src.tar.gz
-# Source0-md5:	d1108b6e6b9818dbaeee804e79d4e566
+# Source0-md5:	a02dc863bc857fd181775a0074cdbfa3
 Source1:	apache-%{name}.init
 Source2:	apache-%{name}.sysconfig
 Source3:	%{name}-build.properties
@@ -34,7 +34,7 @@ Patch1:		jakartaee-migration-stubs.patch
 URL:		https://tomcat.apache.org/
 BuildRequires:	ant >= 1.10.2
 BuildRequires:	java-commons-daemon >= 1.0
-BuildRequires:	java-eclipse-jdt >= 4.34
+BuildRequires:	java-eclipse-jdt >= 4.40
 %buildrequires_jdk
 BuildRequires:	jpackage-utils
 BuildRequires:	rpm >= 4.4.9-56
@@ -177,7 +177,7 @@ Biblioteki Javy zawierające serwer HTTP 1.1 dla Tomcata.
 Summary:	JSP compiler
 Summary(pl.UTF-8):	Kompilator JSP
 Group:		Libraries/Java
-Requires:	java-eclipse-jdt >= 4.34
+Requires:	java-eclipse-jdt >= 4.40
 Requires:	jpackage-utils
 Obsoletes:	apache-tomcat-jasper
 Obsoletes:	tomcat-jasper
