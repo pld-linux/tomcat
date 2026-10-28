@@ -18,7 +18,7 @@ Summary:	Web server and Servlet/JSP Engine, RI for Servlet %{servletapiver}/JSP 
 Summary(pl.UTF-8):	Serwer www i silnik Servlet/JSP będący wzorcową implementacją API Servlet %{servletapiver}/JSP %{jspapiver}
 Name:		%{orgname}9
 Version:	9.0.123
-Release:	1
+Release:	2
 License:	Apache v2.0
 Group:		Networking/Daemons/Java
 Source0:	https://archive.apache.org/dist/tomcat/tomcat-9/v%{version}/src/apache-%{orgname}-%{version}-src.tar.gz
@@ -150,6 +150,7 @@ Summary:	Tomcat's servlet engine
 Summary(pl.UTF-8):	Silnik servletów dla Tomcata.
 Group:		Libraries/Java
 Requires:	jpackage-utils
+Obsoletes:	java-tomcat-catalina < 10
 Conflicts:	java-tomcat-catalina
 
 %description -n java-tomcat9-catalina
@@ -164,6 +165,7 @@ Summary:	Tomcat HTTP connector
 Summary(pl.UTF-8):	Interfejs HTTP dla Tomcata
 Group:		Libraries/Java
 Requires:	jpackage-utils
+Obsoletes:	java-tomcat-coyote < 10
 Conflicts:	java-tomcat-coyote
 
 %description -n java-tomcat9-coyote
@@ -184,6 +186,7 @@ Requires:	java-eclipse-jdt8 >= 4.20
 Requires:	jpackage-utils
 Obsoletes:	apache-tomcat-jasper
 Obsoletes:	tomcat-jasper
+Obsoletes:	java-tomcat-jasper < 10
 Conflicts:	java-tomcat-jasper
 
 %description -n java-tomcat9-jasper
